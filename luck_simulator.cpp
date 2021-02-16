@@ -8,7 +8,7 @@ const int sampleSize = 10000;
 
 float strength[sampleSize], luck[sampleSize];
 float result[sampleSize];
-
+g
 void initArray(){
   srand(time(NULL));
   for (int i=0; i < sampleSize; i++){
@@ -54,7 +54,7 @@ void printRes(int num) {
         cout << "Luck: " << luck[i] << endl << endl << endl;
         if (luck[i]<50) xui++;
     }
-    cout << "Total xui: " << xui<< endl;
+    cout << "Number of unlucky people: " << xui<< endl;
 }
 
 int main() {
