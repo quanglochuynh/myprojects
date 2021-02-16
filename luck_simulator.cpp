@@ -8,7 +8,6 @@ const int sampleSize = 10000;
 
 float strength[sampleSize], luck[sampleSize];
 float result[sampleSize];
-int id[sampleSize];
 
 void initArray(){
   srand(time(NULL));
@@ -41,7 +40,6 @@ void sort(){
     for (int j=i+1; j<=sampleSize; j++){
       if (result[i] < result[j]){
         swapRes(i,j);
-        swap(id[i], id[j]);
       }
     }
   }
