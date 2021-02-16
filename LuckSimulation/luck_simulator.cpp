@@ -12,7 +12,6 @@ float result[sampleSize];
 void initArray(){
   srand(time(NULL));
   for (int i=0; i < sampleSize; i++){
-  	id[i]=i;
     strength[i] = (rand()%10000)/(float)100;
     luck[i] = (rand()%10000)/(float)100;
     result[i] = ((strength[i] * 0.95) + (luck[i] * 0.05));
