@@ -5,10 +5,10 @@
 using namespace std;
 
 const int sampleSize = 10000;
-
+const int chosenNum = 20;
 float strength[sampleSize], luck[sampleSize];
 float result[sampleSize];
-g
+
 void initArray(){
   srand(time(NULL));
   for (int i=0; i < sampleSize; i++){
@@ -46,20 +46,20 @@ void sort(){
 }
 
 void printRes(int num) {
-    int xui=0;
+    int unlucky=0;
     for (int i=0; i<num; i++){
         cout << i+1 << ": \n";
         cout << "Result: " << result[i]<< endl;
         cout << "Strength: " << strength[i] << endl;
         cout << "Luck: " << luck[i] << endl << endl << endl;
-        if (luck[i]<50) xui++;
+        if (luck[i]<50) unlucky++;
     }
-    cout << "Number of unlucky people: " << xui<< endl;
+    cout << "Number of unlucky people: " << unlucky<< endl;
 }
 
 int main() {
   initArray();
   sort();
-  printRes(20);
+  printRes(chosenNum);
   return 0;
 }
