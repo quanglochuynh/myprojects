@@ -1,0 +1,49 @@
+float bX, bY;
+int vel;
+float rad;
+boolean dir=true;
+float slope;
+
+void initialize(){
+    bX = random(width);
+    bY = random(height);
+    rad = random(100) + 50;
+    slope = (1 + random(100))/100;
+    vel = 70;
+    ellipse(bX, bY, rad, rad);
+}
+
+void setup(){
+    size(800,600);
+    frameRate(30);
+    noStroke();
+    background(50);
+    initialize();
+}
+
+void draw(){
+    background(50);
+    if ((bX < rad/2) && (dir = false)){
+        dir = true;
+    }
+    if ((bX > width-rad/2) && (dir = true)){
+        dir = false;
+    }
+
+    if ((bY < rad/2) || (bY > height - rad/2)){
+        slope *= -1;
+    }
+
+    if (dir==true){
+        bX += slope * vel * cos(atan(slope));
+        if (bX > width - rad/2) bX = width - rad/2;
+        bY += slope * vel * sin(atan(slope));
+        if (bY > height - rad/2) bY = height - rad/2;
+    }else{
+        bX -= slope * vel * cos(atan(slope));
+        if (bX < rad/2) bX = rad/2;
+        bY -= slope * vel * sin(atan(slope));
+        if (bY < rad/2) bY = rad/2;
+    }
+    ellipse(bX, bY, rad, rad);
+}
