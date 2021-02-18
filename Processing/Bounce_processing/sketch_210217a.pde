@@ -14,7 +14,7 @@ void initialize(){
 }
 
 void setup(){
-    size(800,600);
+    size(1000,600);
     frameRate(60);
     noStroke();
     background(50);
