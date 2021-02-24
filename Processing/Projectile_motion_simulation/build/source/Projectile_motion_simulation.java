@@ -14,10 +14,10 @@ import java.io.IOException;
 
 public class Projectile_motion_simulation extends PApplet {
 
-final float diameter = 20;
+final float diameter = 30;
 float px, py, vx, vy;
-final float vel = 20;
-final float angle = 45;
+final float vel = 30;
+final float angle = 30;
 final float gravity = -1;
 int t=0;
 
@@ -40,13 +40,14 @@ public void reset(){
   strokeWeight(2);
   line(0, height/2 + diameter/2, width, py);
   noStroke();
+  fill(255,125);
 }
 
 public void setup(){
   
   background(50);
   stroke(255);
-  frameRate(10);
+  frameRate(30);
   initialize();
 }
 
@@ -59,7 +60,7 @@ public void draw(){
   ellipse(px, h, diameter, diameter);
   t++;
 }
-  public void settings() {  size(800,600); }
+  public void settings() {  size(1920,1000); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "Projectile_motion_simulation" };
     if (passedArgs != null) {
