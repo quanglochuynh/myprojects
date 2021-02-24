@@ -38,7 +38,7 @@ public void setup(){
 }
 
 public void draw(){
-    background(50);
+    //background(50);
     if (dir==true){
         bX += vel * cos(atan(slope));
         bY += vel * sin(atan(slope));

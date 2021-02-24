@@ -69,9 +69,9 @@ void gaussian(){
 }
 
 int main() {
-    // Doc_file();
-    // gaussian();
-    // cout << "Det = " << det << endl;
-    Ghi_file();
+    Doc_file();
+    gaussian();
+    cout << "Det = " << det << endl;
+  //  Ghi_file();
     return 0;
 }
