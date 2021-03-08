@@ -24,15 +24,15 @@ class Particle{
 }
 
 final int diameter=10;
-final int spacing = 50;
+final int spacing = 25;
 final float interval = 0.02;
-final float omega = 1*3.141592654;
+final float omega = 2*3.141592654;
 final float amplitude = 45;
 final float phi = 3.141592654/4;
 float t=0;
 Particle[] array;
 int countH, countV;
-float px;
+float py;
 
 void setup(){
   size (1200,800);
@@ -52,10 +52,8 @@ void setup(){
 void draw(){
   background(0);
   for (int i=0; i<countH; i++){
-    px = array[i].x + amplitude*sin(omega*t + phi*i);
-    for (int j=-countV/2; j<countV/2; j++){
-      ellipse(px, array[i].y + spacing * j+ spacing/2, diameter, diameter);
-    }
+    py = array[i].y + amplitude*sin(omega*t + phi*i);
+    ellipse(array[i].x, py, diameter, diameter);
   }
   t=t+interval;
 }

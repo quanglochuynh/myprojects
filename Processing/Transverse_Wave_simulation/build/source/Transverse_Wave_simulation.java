@@ -12,7 +12,7 @@ import java.io.InputStream;
 import java.io.OutputStream; 
 import java.io.IOException; 
 
-public class Longitudinal_Wave_simulation extends PApplet {
+public class Transverse_Wave_simulation extends PApplet {
 
 class Particle{
   float x, y;
@@ -40,15 +40,15 @@ class Particle{
 }
 
 final int diameter=10;
-final int spacing = 50;
+final int spacing = 25;
 final float interval = 0.02f;
-final float omega = 1*3.141592654f;
+final float omega = 2*3.141592654f;
 final float amplitude = 45;
 final float phi = 3.141592654f/4;
 float t=0;
 Particle[] array;
 int countH, countV;
-float px;
+float py;
 
 public void setup(){
   
@@ -68,16 +68,14 @@ public void setup(){
 public void draw(){
   background(0);
   for (int i=0; i<countH; i++){
-    px = array[i].x + amplitude*sin(omega*t + phi*i);
-    for (int j=-countV/2; j<countV/2; j++){
-      ellipse(px, array[i].y + spacing * j+ spacing/2, diameter, diameter);
-    }
+    py = array[i].y + amplitude*sin(omega*t + phi*i);
+    ellipse(array[i].x, py, diameter, diameter);
   }
   t=t+interval;
 }
   public void settings() {  size (1200,800); }
   static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "Longitudinal_Wave_simulation" };
+    String[] appletArgs = new String[] { "Transverse_Wave_simulation" };
     if (passedArgs != null) {
       PApplet.main(concat(appletArgs, passedArgs));
     } else {
