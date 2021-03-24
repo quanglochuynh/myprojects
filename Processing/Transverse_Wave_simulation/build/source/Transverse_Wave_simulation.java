@@ -15,26 +15,10 @@ import java.io.IOException;
 public class Transverse_Wave_simulation extends PApplet {
 
 class Particle{
-  float x, y;
+  float x, y, displace;
 
-  Particle(float xpos, float ypos){
+  Particle(float xpos, float ypos, float displace){
     x = xpos;
-    y = ypos;
-  }
-
-  public float getX(){
-    return x;
-  }
-
-  public float getY(){
-    return y;
-  }
-
-  public void setX(float xpos){
-    x = xpos;
-  }
-
-  public void setY(float ypos){
     y = ypos;
   }
 }
@@ -45,6 +29,8 @@ final float interval = 0.02f;
 final float omega = 2*3.141592654f;
 final float amplitude = 45;
 final float phi = 3.141592654f/4;
+final int active = 0;
+final float velocity = 50;
 float t=0;
 Particle[] array;
 int countH, countV;
@@ -58,20 +44,26 @@ public void setup(){
   frameRate(50);
   noStroke();
   fill(255);
-  array = new Particle[50];
+  array = new Particle[100];
   for (int i=0; i<countH; i++){
-    array[i] = new Particle((i)*spacing+spacing/2,height/2);
+    array[i] = new Particle((i)*spacing+spacing/2,height/2, 0);
     ellipse(array[i].x, array[i].y, diameter, diameter);
   }
 }
 
 public void draw(){
-  background(0);
-  for (int i=0; i<countH; i++){
-    py = array[i].y + amplitude*sin(omega*t + phi*i);
-    ellipse(array[i].x, py, diameter, diameter);
+  background(50);
+  array[0].displace = sin(omega*t);
+  ellipse(array[0].x, array[0].y + amplitude*array[0].displace , diameter, diameter);
+  for (int i = 1; i<countH; i++){
+    ellipse(array[i].x, getY(i), diameter, diameter);
   }
-  t=t+interval;
+  t+=interval;
+}
+
+public float getY(int p){
+  array[p].displace = sin(asin(array[p-1].displace)-phi);
+  return array[p].y + amplitude * array[p].displace;
 }
   public void settings() {  size (1200,800); }
   static public void main(String[] passedArgs) {
