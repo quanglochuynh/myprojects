@@ -43,7 +43,7 @@ void init(){
 }
 
 void BFS(){
-  while (d<c){
+  while (!empty()){
     int v = pop();
     cout << v << " ";
     for (int i=1; i<=n; i++){
