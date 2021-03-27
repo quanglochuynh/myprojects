@@ -84,10 +84,6 @@ void FindLF(){
   }
 }
 
-// char numToChar(int n){
-//
-// }
-
 void printOut(){
     cout << fixed << setw(4);
     cout << fixed << setw(5) << "no.";
