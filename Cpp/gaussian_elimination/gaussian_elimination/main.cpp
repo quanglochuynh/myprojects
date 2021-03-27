@@ -72,6 +72,6 @@ int main() {
     Doc_file();
     gaussian();
     cout << "Det = " << det << endl;
-    //Ghi_file();
+  //  Ghi_file();
     return 0;
 }

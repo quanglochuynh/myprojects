@@ -122,14 +122,14 @@ Procedure Try(i:shortint); 	//thu tu
 				y:=PositionY(i);
 				for j:=1 to 9 do
 					begin
-                        b:=test(i,j);
+            b:=test(i,j);
 						if (b=true) then
 						begin
 							line[i]:=j;
 							desk[y,x]:=j;
 							visit[i]:=true;
 							inc(n);
-                            Try(i+1);
+              Try(i+1);
 							dec(n);
 							visit[i]:=false;
 							desk[y,x]:=0;
