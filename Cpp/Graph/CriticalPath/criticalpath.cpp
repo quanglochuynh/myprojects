@@ -8,7 +8,7 @@ const int numOfVertex=100;
 bool vertex[numOfVertex][numOfVertex];
 int q[numOfVertex*2];
 int n, m, d=0, c=0;
-int du[numOfVertex], es[numOfVertex], lf[numOfVertex], short[numOfVertex];
+int du[numOfVertex], es[numOfVertex], lf[numOfVertex], sh[numOfVertex];
 
 void doc_file(){
   ifstream fi;
@@ -50,7 +50,7 @@ void FindES(){
   while (!empty()){
     int v = pop();
     for (int i=0; i<n; i++){
-      if ((true) && (vertex[v][i]==1)){
+      if (vertex[v][i]==1){
         add(i);
         if (es[i] < es[v] + du[v]){
             es[i] = es[v] + du[v];
@@ -72,8 +72,8 @@ void FindLF(){
         if (lf[i]==0){
             lf[i] = lf[v] - du[v];
         }else{
-            if (lf[i] < lf[v] - du[v]){
-                short[i] = lf[v] - du[v] - lf[i];
+            if (lf[i] > lf[v] - du[v]){
+                sh[i] = lf[i] + du[v] - lf[v];
                 lf[i] = lf[v] - du[v];
             }
         }
@@ -86,7 +86,7 @@ void printOut(){
     cout << fixed << setw(4);
     cout << fixed << setw(5) << "no.";
     cout << fixed << setw(4) << "ES";
-    cout << fixed << setw(4) << "LS" << endl;
+    cout << fixed << setw(4) << "LF" << endl;
     for (int i=1; i<n-1; i++){
         cout << fixed << setw(4) << (char)(i+64) << ":";
         cout << fixed << setw(4) << es[i];
@@ -95,7 +95,9 @@ void printOut(){
     cout << endl << "Critical Path is: \n";
     for (int i=1; i<n-1; i++){
         if (lf[i]-du[i] == es[i]){
-            cout << fixed << setw(4) << (char)(i+64)<< setw(4) << short[i] << "\n";
+            //cout << (char)(i+64) << "   " << sh[i] << endl;
+            cout << (char)(i+64) << "   ";
+            //cout << i << " ";
         }
     }
     // for (int i=0; i<n; i++){
