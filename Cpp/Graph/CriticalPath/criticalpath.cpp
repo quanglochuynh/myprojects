@@ -6,14 +6,13 @@ using namespace std;
 const int numOfVertex=100;
 
 bool vertex[numOfVertex][numOfVertex];
-int q[numOfVertex];
+int q[numOfVertex*2];
 int n, m, d=0, c=0;
-
-int du[numOfVertex], es[numOfVertex], lf[numOfVertex];
+int du[numOfVertex], es[numOfVertex], lf[numOfVertex], short[numOfVertex];
 
 void doc_file(){
   ifstream fi;
-  fi.open("C:/Users/quang_000/github/myprojects/Cpp/CriticalPath/input.txt", ios::in);
+  fi.open("/Users/huynhquangloc/github/myprojects/Cpp/Graph/CriticalPath/input.txt", ios::in);
   fi >> n >> m;
   int s, f;
   for (int i=0; i<m; i++){
@@ -50,7 +49,6 @@ void init(){
 void FindES(){
   while (!empty()){
     int v = pop();
-    //cout << v << " ";
     for (int i=0; i<n; i++){
       if ((true) && (vertex[v][i]==1)){
         add(i);
@@ -63,19 +61,19 @@ void FindES(){
 }
 
 void FindLF(){
-    d=c;
-    add(n-1);
-    lf[n-1] = es[n-1];
+  d=c;
+  add(n-1);
+  lf[n-1] = es[n-1];
   while (!empty()){
     int v = pop();
-    //cout << v << " ";
     for (int i=0; i < n; i++){
       if ((vertex[i][v]==1)){
         add(i);
-        if (lf[i]=0){
+        if (lf[i]==0){
             lf[i] = lf[v] - du[v];
         }else{
             if (lf[i] < lf[v] - du[v]){
+                short[i] = lf[v] - du[v] - lf[i];
                 lf[i] = lf[v] - du[v];
             }
         }
@@ -94,10 +92,10 @@ void printOut(){
         cout << fixed << setw(4) << es[i];
         cout << fixed << setw(4) << lf[i] << endl;
     }
-    cout << endl << "Critical Path is: ";
+    cout << endl << "Critical Path is: \n";
     for (int i=1; i<n-1; i++){
         if (lf[i]-du[i] == es[i]){
-            cout << (char)(i+64) << "  ";
+            cout << fixed << setw(4) << (char)(i+64)<< setw(4) << short[i] << "\n";
         }
     }
     // for (int i=0; i<n; i++){
