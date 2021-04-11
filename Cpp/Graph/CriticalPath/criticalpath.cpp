@@ -95,9 +95,7 @@ void printOut(){
     cout << endl << "Critical Path is: \n";
     for (int i=1; i<n-1; i++){
         if (lf[i]-du[i] == es[i]){
-            //cout << (char)(i+64) << "   " << sh[i] << endl;
             cout << (char)(i+64) << "   ";
-            //cout << i << " ";
         }
     }
     // for (int i=0; i<n; i++){
