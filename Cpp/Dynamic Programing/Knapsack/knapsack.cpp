@@ -53,7 +53,7 @@ void backtrack(){
         if (ks[k][g] != ks[k-1][g]){
             cout << setw(3) << left << k;
             g = g - w[k];
-        }        
+        }
         k--;
     }
 }
