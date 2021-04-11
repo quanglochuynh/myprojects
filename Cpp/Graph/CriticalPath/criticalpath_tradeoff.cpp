@@ -13,27 +13,26 @@ int dumin[numOfVertex], cost[numOfVertex], a[numOfVertex];
 
 void doc_file(){
   ifstream fi;
-  fi.open("input2.txt", ios::in);
+  fi.open("/Users/huynhquangloc/github/myprojects/Cpp/Graph/CriticalPath/input2.txt", ios::in);
   fi >> n >> m;
   int s, f;
   for (int i=0; i<m; i++){
-      fi >> s; 
+      fi >> s;
       fi >> f;
       vertex[s][f] = 1;
-      cout << s << "  " << f << "\n";
   }
   for (int i = 0; i<n; i++){
       fi >> du[i];
   }
-  // for (int i = 0; i<n; i++){
-  //     fi >> dumin[i];
-  // }
-  // for (int i = 0; i<n; i++){
-  //     fi >> cost[i];
-  // }
-  // for (int i = 0; i<n; i++){
-  //     fi >> a[i];
-  // }
+  for (int i = 0; i<n; i++){
+      fi >> dumin[i];
+  }
+  for (int i = 0; i<n; i++){
+      fi >> cost[i];
+  }
+  for (int i = 0; i<n; i++){
+      fi >> a[i];
+  }
   fi.close();
 }
 
@@ -94,39 +93,39 @@ void FindLF(){
 }
 
 void printOut(){
-    // cout << fixed << setw(4);
-    // cout << fixed << setw(5) << "no.";
-    // cout << fixed << setw(4) << "ES";
-    // cout << fixed << setw(4) << "LF" << endl;
-    // for (int i=1; i<n-1; i++){
-    //     cout << fixed << setw(4) << i << ":";
-    //     cout << fixed << setw(4) << es[i];
-    //     cout << fixed << setw(4) << lf[i] << endl;
-    // }
-    // cout << endl << "Critical Path is: \n";
-    // for (int i=1; i<n-1; i++){
-    //     if (lf[i]-du[i] == es[i]){
-    //         cout << i << "   ";
-    //     }
-    // }
+    cout << fixed << setw(4);
+    cout << fixed << setw(5) << "no.";
+    cout << fixed << setw(4) << "ES";
+    cout << fixed << setw(4) << "LF" << endl;
+    for (int i=1; i<n-1; i++){
+        cout << fixed << setw(4) << i << ":";
+        cout << fixed << setw(4) << es[i];
+        cout << fixed << setw(4) << lf[i] << endl;
+    }
+    cout << endl << "Critical Path is: \n";
+    for (int i=1; i<n-1; i++){
+        if (lf[i]-du[i] == es[i]){
+            cout << i << "   ";
+        }
+    }
     cout << endl;
-    for (int i=0; i<n; i++){
-      for (int j=0; j<n; j++){
-        cout << vertex[i][j] << "  ";
-      }
-      cout << endl;
-    }
-    for (int i = 0; i<n; i++){
-       cout << du[i] << "  " << cost[i] << "  " << a[i] << endl;
-    }
+    // for (int i=0; i<n; i++){
+    //   for (int j=0; j<n; j++){
+    //     cout << vertex[i][j] << "  ";
+    //   }
+    //   cout << endl;
+    // }
+    // for (int i = 0; i<n; i++){
+    //    cout << du[i] << "  " << cost[i] << "  " << a[i] << endl;
+    // }
 
 }
 
 int main(){
   doc_file();
   init();
-  //FindES();
-  //FindLF();
+  FindES();
+  FindLF();
   printOut();
   return 0;
 }
