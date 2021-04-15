@@ -11,6 +11,7 @@ float available[maxLabour], ucost[maxLabour];
 int requireskills[maxJob][maxSkills];
 bool labourskills[maxLabour][maxSkills];
 bool z[maxJob];
+float x[maxJob][maxLabour][maxSkills];
 
 
 void docfile(){
@@ -40,9 +41,21 @@ void docfile(){
     fi.close();
 }
 
+// void calculateProfit(){
+//     for (int i=1; i<=n; i++){
+//         for (int j=1; j<=m; j++){
+//             for (int k=1; k<=p; k++){
+//                 x[i][j][k] +=
+//             }
+//         }
+//     }
+// }
+
+void try()
 
 
 int main(){
     docfile();
+    //calculateProfit();
     return 0;
 }
