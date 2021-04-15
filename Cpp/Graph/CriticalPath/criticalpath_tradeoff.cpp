@@ -13,7 +13,7 @@ int dumin[numOfVertex], cost[numOfVertex], a[numOfVertex];
 
 void doc_file(){
   ifstream fi;
-  fi.open("/Users/huynhquangloc/github/myprojects/Cpp/Graph/CriticalPath/input2.txt", ios::in);
+  fi.open("input2.txt", ios::in);
   fi >> n >> m;
   int s, f;
   for (int i=0; i<m; i++){
@@ -118,7 +118,6 @@ void printOut(){
     // for (int i = 0; i<n; i++){
     //    cout << du[i] << "  " << cost[i] << "  " << a[i] << endl;
     // }
-
 }
 
 int main(){
