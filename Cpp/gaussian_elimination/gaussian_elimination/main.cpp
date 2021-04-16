@@ -17,7 +17,7 @@ float det = 1;
 
 void Doc_file(){
     fstream inp;
-    inp.open("input.txt", ios::in);
+    inp.open("/Users/huynhquangloc/github/myprojects/Cpp/gaussian_elimination/gaussian_elimination/input.txt", ios::in);
     inp >> n;
     for (int i=1; i<=n; i++){
         for (int j=1; j<=n; j++){
@@ -72,6 +72,5 @@ int main() {
     Doc_file();
     gaussian();
     cout << "Det = " << det << endl;
-  //  Ghi_file();
     return 0;
 }
