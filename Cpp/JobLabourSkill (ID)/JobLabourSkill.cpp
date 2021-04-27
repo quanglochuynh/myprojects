@@ -100,7 +100,7 @@ float min(float a, float b){
 
 void Try(int j){
   if (j==m){
-
+    checkMax();
   }else{
     for (int i=1; i<=n; i++){
       for (int k=1; k<=p; k++){
@@ -110,7 +110,6 @@ void Try(int j){
           profit = profit + (income[i] - ucost[j] * min(requireskills[i][k], available[j]));
           available[j] -= min(requireskills[i][k], available[j]);
           x[i][j][k] += min(requireskills[i][k], available[j]);
-          checkMax();
           Try(j+1);
           x[i][j][k] -= min(requireskills[i][k], available[j]);
           available[j] += min(requireskills[i][k], available[j]);
