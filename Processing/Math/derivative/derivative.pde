@@ -2,7 +2,7 @@ static int  spacingX = 40,
             spacingY = 20,
             dotDia = 5;
 float  dx = 0.1;
-point[] val;
+point[] val, dr;
 int n=0;
 
 public class point{
@@ -27,8 +27,12 @@ void drawSeg(point u, point v){
     noStroke();
 }
 
+void drawPoint(point u){
+    ellipse(posX(u.x), posY(u.y), dotDia, dotDia);
+}
+
 void addVal(point u){
-  val[n] = u;
+  val[n] = new point(u.x,u.y);
   n++;
 }
 
@@ -58,8 +62,7 @@ void setup(){
     
     //create the value;
     float fx;
-    point u,v,d;
-    v = new point(0,0);
+    point u;
     float sX = ((-1)*width/2)/spacingX;
     for (float x = sX; x <= (width/2)/spacingX; x+=dx){
         fx = pow(x,3) - 2 * pow(x,2) - 5 * pow(x,1) + 6;
@@ -68,19 +71,13 @@ void setup(){
     }
 
     //create derivative value
-    point e = new point(0,0);
-    for (float x = sX; x <= (width/2)/spacingX; x+=dx){
-        fx = pow(x,3) - 2 * pow(x,2) - 5 * pow(x,1) + 6;
-        u = new point(x,fx);
-        if (x==sX) {
-            v = u;
-            continue;
-        }
-        d = new point(x, (u.y-v.y)/dx);
-        drawSeg(e,d);
-        e = d;
-        ellipse(posX(d.x), posY(d.y),dotDia, dotDia);
-        v = u;
+    for (int i=1; i<=n; i++){
+        dr[i] = new point(val[i-1].x, (val[i].y - val[i-1].y)/dx);
     }
     
+    //draw
+    for (int i=0; i<=n; i++){
+        drawPoint(val[i]);
+    }
+
 }
