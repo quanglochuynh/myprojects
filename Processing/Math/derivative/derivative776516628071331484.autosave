@@ -1,9 +1,8 @@
 int spacingX = 40,
-    spacingY = 20,
+    spacingY = 40,
     dotDia = 5;
-int xOffset=0, yOffset=0;
 float  dx = 0.1;
-int tX = 0, tY = 0;
+float stX, stY;
 
 public class point{
     float x=0,y=0;
@@ -27,26 +26,26 @@ void drawGrid(){
     stroke(50);
 
     for (int i=0; i<=width/2; i+=spacingX){
-        line(i + tX, height,i + tX, 0);
-        line(tX-i,height,tX-i,0);
+        line(i+width/2,height,i+width/2,0);
+        line(width/2-i,height,width/2-i,0);
     }
     for (int j=0; j<=height/2; j+=spacingY){
-        line(0, j + tY, width, j + tY);
-        line(0, tY-j, width, tY - j);
+        line(0, j+height/2,width,j+height/2);
+        line(0, height/2-j,width,height/2-j);
     }
     //major grid
     strokeWeight(2);
     stroke(255);
-    line(0,tY,width,tY);
-    line(tX,0,tX,height);
+    line(0,height/2,width,height/2);
+    line(width/2,0,width/2,height);
 }
 
 float posX(float x){
-    return (x * spacingX) + tX;
+    return (x * spacingX) + width/2;
 }
 
 float posY(float y){
-    return -1 * (y * spacingY) + tY;
+    return -1 * ((y * spacingY) - height/2);
 }
 
 void drawSeg(point u, point v){
@@ -94,8 +93,7 @@ void setup(){
     background(0);
     frameRate(30);
     fill(255);
-    tX = width/2;
-    tY = height/2;
+
     //INITIALIZATION
     drawGrid();
     
@@ -108,21 +106,4 @@ void setup(){
     //draw
     plot(value,color(255,180,50));
     plot(dr,color(100,150,255));
-}
-
-void draw(){
-    background(0);
-    drawGrid();
-    plot(value,color(255,180,50));
-    plot(dr,color(100,150,255));
-}
-
-void mousePressed(){
-    xOffset = mouseX - tX;
-    yOffset = mouseY - tY;
-}
-
-void mouseDragged() {
-    tX = mouseX - xOffset;
-    tY = mouseY - yOffset;
 }
