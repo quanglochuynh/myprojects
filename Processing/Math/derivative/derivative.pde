@@ -1,8 +1,7 @@
 static int  spacingX = 40,
-            spacingY = 20,
+            spacingY = 40,
             dotDia = 5;
 float  dx = 0.1;
-point[] val, dr;
 int n=0;
 
 public class point{
@@ -11,7 +10,17 @@ public class point{
         x = px;
         y = py;
     }
+    
+    void set(float u, float v){
+        x=u;
+        y=v;
+    }
 }
+
+ArrayList<point> value = new ArrayList<point>();
+ArrayList<point> dr = new ArrayList<point>();
+
+
 
 float posX(float x){
   return (x * spacingX) + width/2;
@@ -22,18 +31,41 @@ float posY(float y){
 }
 
 void drawSeg(point u, point v){
-    stroke(255,150,80);
     line (posX(u.x),posY(u.y), posX(v.x), posY(v.y));
-    noStroke();
 }
 
 void drawPoint(point u){
     ellipse(posX(u.x), posY(u.y), dotDia, dotDia);
 }
 
-void addVal(point u){
-  val[n] = new point(u.x,u.y);
-  n++;
+void calculateValue(){
+    float fx;
+    point u;
+    float sX = ((-1)*width/2)/spacingX;
+    for (float x = sX; x <= (width/2)/spacingX; x+=dx){
+        fx = pow(x,3) - 2 * pow(x,2) - 5 * pow(x,1) + 6;
+        u = new point(x,fx);
+        value.add(u);
+    }
+}
+
+void derive(){
+    float fx;
+    point u;
+    float sX = ((-1)*width/2)/spacingX;
+    for (int i=1; i<value.size(); i++){
+        u = new point(value.get(i-1).x, (value.get(i).y - value.get(i-1).y)/dx);
+        dr.add(k);
+    }
+}
+
+void drawValue(ArrayList<point> arraylist, color c){
+    for (int i=1; i<arraylist.size(); i++){
+        drawSeg(arraylist.get(i-1), arraylist.get(i));
+    }
+    for (int i=1; i<arraylist.size(); i++){
+        drawPoint(arraylist.get(i));
+    }
 }
 
 void setup(){
@@ -61,23 +93,18 @@ void setup(){
     line(width/2,0,width/2,height);
     
     //create the value;
-    float fx;
-    point u;
-    float sX = ((-1)*width/2)/spacingX;
-    for (float x = sX; x <= (width/2)/spacingX; x+=dx){
-        fx = pow(x,3) - 2 * pow(x,2) - 5 * pow(x,1) + 6;
-        u = new point(x,fx);
-        addVal(u);
-    }
+    calculateValue();
 
     //create derivative value
-    for (int i=1; i<=n; i++){
-        dr[i] = new point(val[i-1].x, (val[i].y - val[i-1].y)/dx);
-    }
+    derive();
     
     //draw
-    for (int i=0; i<=n; i++){
-        drawPoint(val[i]);
+    for (int i=1; i<dr.size(); i++){
+        drawSeg(value.get(i-1),value.get(i));
+        drawSeg(dr.get(i-1), dr.get(i));
     }
-
+    for (int i=0; i<dr.size(); i++){
+        drawPoint(value.get(i));
+        drawPoint(dr.get(i));
+    }
 }
