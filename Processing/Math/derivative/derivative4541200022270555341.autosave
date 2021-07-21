@@ -26,20 +26,19 @@ void drawGrid(){
     strokeWeight(1);
     stroke(50);
 
-    for (int i=tX; i<=width; i+=spacingX){
-        line(i, height,i , 0);
+    for (int i=0; i<=width/2; i+=spacingX){
+        line(i + tX, height,i + tX, 0);
+        //line(tX-i,height,tX-i,0);
     }
-    for (int i=tX; i>0; i-=spacingX){
-        line(i, height,i , 0);
+    int k=tX;
+    while (k>0){
+        line(tX-k,height,tX-k,0);
+        k -= spacingX;
     }
-    
-    for (int j=tY; j<=height; j+=spacingY){
-        line(0, j, width, j);
+    for (int j=0; j<=height/2; j+=spacingY){
+        line(0, j + tY, width, j + tY);
+        line(0, tY-j, width, tY - j);
     }
-    for (int j=tY; j>0; j-=spacingY){
-        line(0, j, width, j);
-    }
-
     //major grid
     strokeWeight(2);
     stroke(255);
@@ -69,7 +68,7 @@ void calculateValue(){
     float sX = ((-1)*width/2)/spacingX;
     for (float x = sX; x <= (width/2)/spacingX; x+=dx){
         //fx = pow(x,3) - 2 * pow(x,2) - 5 * pow(x,1) + 6;
-        fx = sin(x);
+        fx = tan(x);
         u = new point(x,fx);
         value.add(u);
     }
