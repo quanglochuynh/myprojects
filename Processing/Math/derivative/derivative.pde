@@ -133,3 +133,30 @@ void mouseDragged() {
     tX = mouseX - xOffset;
     tY = mouseY - yOffset;
 }
+
+void keyPressed(){
+    switch (key) {
+        case 'x' :
+            spacingX +=10;
+        break;	
+        case 'y' :
+            spacingY +=10;
+        break;	
+        case 'z' :{
+            spacingX +=10;
+            spacingY +=10;
+        }
+        break;	
+        case 'X' :
+            spacingX -=10;
+        break;	
+        case 'Y' :
+            spacingY -=10;
+        break;	
+        case 'Z' :{
+            spacingX -=10;
+            spacingY -=10;
+        }
+        break;	
+    }
+}
