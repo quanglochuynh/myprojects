@@ -5,10 +5,15 @@ function setup (){
   }
   
   function draw(){
-    background(100);
+    background(50);
     fill(255);
     noStroke();
     rectMode(CENTER);
-    rect(mouseX, mouseY, 50, 50);
+    if (mouseX > width/2){
+        fill(255,100,200);
+    }
+    else {
+        fill(255)
+    }
+    ellipse(mouseX, mouseY, 50, 50);
   }
-  
