@@ -2,9 +2,9 @@
 
 function setup (){
     createCanvas (800, 600);
-  }
+}
   
-  function draw(){
+function draw(){
     background(50);
     fill(255);
     noStroke();
@@ -16,4 +16,4 @@ function setup (){
         fill(255)
     }
     ellipse(mouseX, mouseY, 50, 50);
-  }
+}
