@@ -3,7 +3,7 @@ let poleSpacing = 200;
 let poleWidth = 80
 let hole = 300;
 let birdY;
-let birdX = 150;
+let birdX = 200;
 let vs = 0;
 let a = 1;
 let t=0;
@@ -34,36 +34,18 @@ function check() {
     }
     let px = polePosition[0].x;
     let py = polePosition[0].y;
-    if ((birdX < px) && ((birdY > py) || (birdY < py - hole))){
+    if ((birdX < px) && ((birdY> py)||(birdY < py - hole))){
         //s1
-        //console.log('s1');
-        if (birdX + 25 >= px){
+        if (birdX + 25 > px){
             lose = true;
-            
         }
-    }else if ((birdY < py) && (birdX <= px) && (birdY > py - hole) ){
-        //s2
-        //console.log('s2');
-        if ((dist(birdX, birdY, px, py) < 25) || (dist(birdX, birdY, px, py+hole) < 25)){
-            lose = true
-            
-        }
-    }else if ((birdY < py) && (birdX > px) && (birdX < px + poleWidth)){
-        //s3
-        //console.log('s3');
-        if ((birdY +15 > py) || (birdY-15 < py -hole)){
+    }else if ((birdX > px) && (birdX < px + poleWidth)){
+        if ((birdY > py) || (birdY < py - hole)){
             lose = true;
-            
-        }
-    }else if (birdX > px + poleWidth){
-        //s4
-        //console.log('s4');
-        if ((dist(birdX, birdY, px+poleWidth, py) < 20) || (dist(birdX, birdY, px+poleWidth, py - hole)< 20)){
-            lose = true;
-            
-        }
+        }    
+    }if ((dist(birdX, birdY, px, py) < 10) || (dist(birdX, birdY, px, py+hole) < 10) || (dist(birdX, birdY, px+poleWidth, py) < 10) || (dist(birdX, birdY, px+poleWidth, py - hole)< 10)){
+        lose = true;
     }
-
 }
 
 function updatePosition(){
