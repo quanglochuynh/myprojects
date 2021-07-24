@@ -40,7 +40,7 @@ function check() {
             lose = true;
             console.log('s1');
         }
-    }else if ((birdY < py) && (birdX < px)){
+    }else if ((birdY < py) && (birdX <= px) && (birdY > py - hole) ){
         //s2
         if ((dist(birdX, birdY, px, py) < 25) || (dist(birdX, birdY, px, py+hole) < 25)){
             lose = true
@@ -48,13 +48,13 @@ function check() {
         }
     }else if ((birdY < py) && (birdX > px) && (birdX < px + poleWidth)){
         //s3
-        if ((birdY +25 > py) || (birdY-25 < py -hole)){
+        if ((birdY +15 > py) || (birdY-15 < py -hole)){
             lose = true;
             console.log('s3');
         }
     }else if (birdX > px + poleWidth){
         //s4
-        if ((dist(birdX, birdY, px+poleWidth, py) < 25) || (dist(birdX, birdY, px+poleWidth, py - hole)< 25)){
+        if ((dist(birdX, birdY, px+poleWidth, py) < 20) || (dist(birdX, birdY, px+poleWidth, py - hole)< 20)){
             lose = true;
             console.log('s4');
         }
