@@ -1,7 +1,7 @@
 let numOfpole = 3;
 let poleSpacing = 200;
-let poleWidth = 80
-let hole = 300;
+let poleWidth = 120;
+let hole = 250;
 let birdY;
 let birdX = 200;
 let vs = 0;
@@ -10,6 +10,11 @@ let t=0;
 let allow = true;
 let play = false;
 let lose = false;
+
+let bg;
+let poleColor1;
+let poleColor2;
+let birdColor;
 
 class pole{
     constructor(x){
@@ -25,6 +30,10 @@ let polePosition = [pole];
 function setup (){
     createCanvas (600, 800);
     noStroke();
+    bg = color(80,220,255);
+    poleColor1 = color(100,255,100);
+    poleColor2 = color(90, 180, 50);
+    birdColor = color(255,232,66);
     reset();
 }
 
@@ -69,20 +78,26 @@ function updatePosition(){
 
 function drawPole(){
     for (let i=0; i<polePosition.length; i++){
-        rect(polePosition[i].x, polePosition[i].y, polePosition[i].w, polePosition[i].h);
-        rect(polePosition[i].x, 0, poleWidth, height-polePosition[i].h - hole);
+        fill(poleColor2);
+        rect(polePosition[i].x+10, polePosition[i].y, polePosition[i].w-20, polePosition[i].h);
+        rect(polePosition[i].x+10, 0, poleWidth-20, height-polePosition[i].h - hole);
+        fill(poleColor1);
+        rect(polePosition[i].x, polePosition[i].y, polePosition[i].w, 50);
+        rect(polePosition[i].x, polePosition[i].y - hole - 50, poleWidth, 50);
     }
+    fill(birdColor);
     ellipse(birdX,birdY, 50, 50);
 }
 
 function reset() {
-    background(50);
-    fill(255);
+    background(bg);
+    fill(poleColor1);
     //INITIALIZATION
     birdY = height/2;
     for (let i=0; i < numOfpole; i++){
         polePosition[i] = new pole(width + 100 + i*(poleSpacing+poleWidth));
     }
+    fill(birdColor);
     ellipse(birdX, birdY, 50, 50);
     play = false;
     allow = true;
@@ -95,7 +110,7 @@ function draw(){
         allow = true;
     }
     if (play && !lose){
-        background(50);
+        background(bg);
         drawPole();
         if ((keyIsPressed == true && allow)){
             //console.log(birdY);
