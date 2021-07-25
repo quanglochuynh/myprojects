@@ -8,7 +8,7 @@ let tbH = dimY * pixSize;
 
 let dir =3;
 let ldir = 2;
-let speed = 15;
+let speed = 20;
 let t=0;
 let lose = false;
 
@@ -111,6 +111,9 @@ function check(){
         } while (!checkApple(apple.x, apple.y));
         snake[snake.length] = new point( snake[snake.length-1].x, snake[snake.length-1].y);
         n++;
+        if (n%10 == 0){
+            speed -=2;
+        }
     }
     if (snake[0].x < 0){
         snake[0].x = dimX-1;
@@ -185,7 +188,7 @@ function draw(){
 
     t++;
     if (!lose){
-        if (t%20 == 0){
+        if (t%speed == 0){
             updatePosition();
             background(50);
             drawApple();
