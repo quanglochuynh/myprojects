@@ -25,6 +25,8 @@ let n = 4;
 
 function init(){
     let m = Math.floor(dimY/2);
+    snake = [];
+    n=4;
     for (let i=0; i<n; i++){
         snake[i] = new point(Math.floor(dimX/2)-i, m);
     }
@@ -32,6 +34,8 @@ function init(){
 
 function reset(){
     background(50);
+    textSize(20);
+    init();
     text('Score: ' + n, margin, margin + tbH + 30);
     apple = new point(Math.floor(random(0, dimX-1)), Math.floor(random(0, dimY-1)));
     drawApple();
@@ -43,7 +47,6 @@ function drawSnake(){
     fill(255);
     noStroke(); 
     for (let i=0; i < snake.length; i++){
-        //console.log(t + snake[i].x + "  " + snake[i].y);
         rect(margin + snake[i].x * pixSize, margin + tbH - snake[i].y * pixSize, pixSize, pixSize);
     }
 }
@@ -92,9 +95,20 @@ function drawApple(){
     rect(margin + apple.x*pixSize, margin + tbH - apple.y*pixSize, pixSize, pixSize);
 }
 
+function checkApple(x,y){
+    for (let i=0; i< snake.length; i++){
+        if ((x == snake[i].x) && (y == snake[i].y)){
+            return false;
+        }
+    }
+    return true;
+}
+
 function check(){
     if ((snake[0].x == apple.x) && (snake[0].y == apple.y)){
-        apple = new point(Math.floor(random(1, dimX)), Math.floor(random(1, dimY)));
+        do {
+            apple = new point(Math.floor(random(1, dimX)), Math.floor(random(1, dimY)));
+        } while (!checkApple(apple.x, apple.y));
         snake[snake.length] = new point( snake[snake.length-1].x, snake[snake.length-1].y);
         n++;
     }
@@ -107,14 +121,16 @@ function check(){
     }else if (snake[0].y > dimY){
         snake[0].y = 1;
     }
-    
+    for (let i=1; i< snake.length; i++){
+        if ((snake[i].x == snake[0].x) && (snake[i].y == snake[0].y)){
+            lose = true;
+        }
+    }
 
 }
 
 function setup(){
     createCanvas(tbW + 2 * margin, tbH + 2 * margin);
-    textSize(20);
-    init();
     reset();
 }
 
@@ -122,17 +138,38 @@ function draw(){
     if (keyIsPressed){
         switch (key){
             case 'a': 
-                dir = 1; 
+                if (dir != 3){
+                    dir = 1; 
+                }
                 break;
             case 'w': 
-                dir = 2; 
+                if (dir != 4){
+                    dir = 2; 
+                }
                 break;
             case 'd': 
-                dir = 3; 
+                if (dir != 1){
+                    dir = 3; 
+                }
                 break;
             case 's': 
-                dir = 4; 
+                if (dir != 2){
+                    dir = 4; 
+                }
                 break;
+        }
+        switch (keyCode){
+            case LEFT_ARROW: 
+                dir = 1;
+                break;
+            case UP_ARROW:
+                dir = 2;
+                break;
+            case RIGHT_ARROW:
+                dir = 3;
+                break;
+            case DOWN_ARROW:
+                dir = 4;
         }
         //console.log(dir);
     }
@@ -150,6 +187,15 @@ function draw(){
             text('Score: ' + n, margin, margin + tbH + 30);
             //console.log('done');
         }
-    } 
+    }else{
+        background(0);
+        textSize(72);
+        textAlign(CENTER);
+        text('LOSE!!!', width/2, height/2);
+        if (keyIsPressed){
+            reset();
+            lose = false;
+        }
+    }
 }
 
