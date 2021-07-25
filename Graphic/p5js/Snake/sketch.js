@@ -160,16 +160,25 @@ function draw(){
         }
         switch (keyCode){
             case LEFT_ARROW: 
-                dir = 1;
+                if (dir != 3){
+                    dir = 1; 
+                }
                 break;
             case UP_ARROW:
-                dir = 2;
+                if (dir != 4){
+                    dir = 2; 
+                }
                 break;
             case RIGHT_ARROW:
-                dir = 3;
+                if (dir != 1){
+                    dir = 3; 
+                }
                 break;
             case DOWN_ARROW:
-                dir = 4;
+                if (dir != 2){
+                    dir = 4; 
+                }
+                break;
         }
         //console.log(dir);
     }
