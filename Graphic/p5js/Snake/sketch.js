@@ -11,6 +11,7 @@ let ldir = 2;
 let speed = 20;
 let t=0;
 let lose = false;
+let win = false;
 
 class point{
     constructor(px,py){
@@ -114,6 +115,9 @@ function check(){
         n++;
         if (n%10 == 0){
             speed -=2;
+            if (speed==0){
+                win = true;
+            }
         }
         console.log(speed);
     }
@@ -189,7 +193,7 @@ function draw(){
     }
 
     t++;
-    if (!lose){
+    if ((!lose) && (!win)){
         if (t%speed == 0){
             updatePosition();
             background(50);
@@ -202,11 +206,20 @@ function draw(){
             
             //console.log('done');
         }
-    }else{
+    }else if (lose){
         background(0);
         textSize(72);
         textAlign(CENTER);
         text('LOSE!!!', width/2, height/2);
+        if (keyIsPressed){
+            reset();
+            lose = false;
+        }
+    }else if (win){
+        background(0);
+        textSize(72);
+        textAlign(CENTER);
+        text('WIN!!!', width/2, height/2);
         if (keyIsPressed){
             reset();
             lose = false;
