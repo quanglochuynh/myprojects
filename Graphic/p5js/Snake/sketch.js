@@ -27,6 +27,7 @@ function init(){
     let m = Math.floor(dimY/2);
     snake = [];
     n=4;
+    speed = 20;
     for (let i=0; i<n; i++){
         snake[i] = new point(Math.floor(dimX/2)-i, m);
     }
@@ -114,6 +115,7 @@ function check(){
         if (n%10 == 0){
             speed -=2;
         }
+        console.log(speed);
     }
     if (snake[0].x < 0){
         snake[0].x = dimX-1;
@@ -197,6 +199,7 @@ function draw(){
             fill(255);
             noStroke(); 
             text('Score: ' + n, margin, margin + tbH + 30);
+            
             //console.log('done');
         }
     }else{
