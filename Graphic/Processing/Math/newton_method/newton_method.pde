@@ -5,6 +5,9 @@ int xOffset=0, yOffset=0;
 float  dx = 0.1;
 int tX = 0, tY = 0;
 
+float ref = 1.2;
+float result=0;
+
 public class point{
     float x=0,y=0;
     point(float px, float py){
@@ -19,7 +22,7 @@ public class point{
 }
 
 ArrayList<point> value = new ArrayList<point>();
-ArrayList<point> dr = new ArrayList<point>();
+ArrayList<point> root = new ArrayList<point>();
 
 void drawGrid(){
     //minor grid
@@ -63,23 +66,33 @@ void drawPoint(point u){
     ellipse(posX(u.x), posY(u.y), dotDia, dotDia);
 }
 
+float function(float x){
+    //fx = pow(x,3) - 2 * pow(x,2) - 5 * pow(x,1) + 6;
+    return (sin(x));
+}
+
 void calculateValue(){
-    float fx;
     point u;
     float sX = ((-1)*width/2)/spacingX;
     for (float x = sX; x <= (width/2)/spacingX; x+=dx){
-        //fx = pow(x,3) - 2 * pow(x,2) - 5 * pow(x,1) + 6;
-        fx = sin(x);
-        u = new point(x,fx);
+        u = new point(x,function(x));
         value.add(u);
     }
 }
 
-void derive(){
-    point u;
-    for (int i=1; i<value.size(); i++){
-        u = new point(value.get(i-1).x, (value.get(i).y - value.get(i-1).y)/dx);
-        dr.add(u);
+float derive(float t){
+    return ((function(t+dx)-function(t))/(dx));
+}
+
+float calculateRoot(int i, float x){
+    if (i == 0){
+        return x;
+    }else{
+        i--;
+        float res = x - function(x)/derive(x);
+        point u = new point(res, 0);
+        root.add(u);
+        return calculateRoot(i, res);
     }
 }
 
@@ -96,6 +109,22 @@ void plot(ArrayList<point> arraylist, color c){
     fill(255);
 }
 
+void newtonPlot(){
+    strokeWeight(2);
+    stroke(50,237,120);
+    point u = new point(ref, function(ref));
+    drawPoint(u);
+    for (int i = 0; i< root.size(); i++){
+        drawSeg(root.get(i), u);
+        u = new point (root.get(i).x, function(root.get(i).x));
+    }
+    stroke(255);
+    for (int i = 0; i< root.size(); i++){
+        u = new point (root.get(i).x, function(root.get(i).x));
+        drawSeg(root.get(i), u);
+    }
+}
+
 void setup(){
     size(1000,800);
     background(0);
@@ -105,23 +134,20 @@ void setup(){
     tY = height/2;
     //INITIALIZATION
     drawGrid();
-    
-    //create the value;
     calculateValue();
-
-    //create derivative value
-    derive();
-    
-    //draw
+    point k = new point(ref, function(ref));
+    root.add(k);
+    result = calculateRoot(8, ref);
+    println(result);
     plot(value,color(255,180,50));
-    plot(dr,color(100,150,255));
+    newtonPlot();
 }
 
 void draw(){
     background(0);
     drawGrid();
     plot(value,color(255,180,50));
-    plot(dr,color(100,150,255));
+    newtonPlot();
 }
 
 void mousePressed(){
