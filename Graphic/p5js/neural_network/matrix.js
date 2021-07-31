@@ -15,13 +15,12 @@ class Matrix{
     randomize(){
         for (let i=0; i<this.rows; i++){
             for (let j=0; j<this.cols; j++){
-                this.data[i][j] = Math.floor(Math.random()*10);
+                this.data[i][j] = Math.random()*2 - 1;
             }
         }
     }
     
     add(n){
-    
         if (n instanceof Matrix){
             for (let i=0; i<this.rows; i++){
                 for (let j=0; j<this.cols; j++){
@@ -37,18 +36,17 @@ class Matrix{
         }
     }
 
-    static multiply(n){
-        if (this.cols !== n.rows){
+    static multiply(m, n){
+        if (m.cols !== n.rows){
             console.log('cannot multiply');
             return undefined;
         }else{
-            let result = new Matrix(this.rows, n.cols);
+            let result = new Matrix(m.rows, n.cols);
             for (let i=0; i<result.rows; i++){
                 for (let j=0; j<result.cols; j++){
                     let sum = 0;
-                    for (let k=0; k<this.cols; k++){
-                        console.log(this.data[i][k] + " * " + n.data[k][j]);
-                        sum += this.data[i][k] * n.data[k][j];
+                    for (let k=0; k<m.cols; k++){
+                        sum += m.data[i][k] * n.data[k][j];
                     }
                     result.data[i][j] = sum;
                 }
@@ -57,10 +55,11 @@ class Matrix{
         }
     }
     
-    multiply(n){
+    map(fn){
         for (let i=0; i<this.rows; i++){
             for (let j=0; j<this.cols; j++){
-                this.data[i][j] *= n;
+                let val = this.data[i][j];
+                this.data[i][j] = fn(val);
             }
         }
         return this;
@@ -78,6 +77,24 @@ class Matrix{
 
     print(){
         console.table(this.data);
+    }
+
+    static fromArr(a){
+        let m = new Matrix(a.length,1);
+        for (let i=0; i<a.length; i++){
+            m.data[i][0] = a[i];
+        }
+        return m;
+    }
+
+    toArr(){
+        let a = [];
+        for (let i=0; i<this.rows; i++){
+            for (let j=0; j<this.cols; j++){
+                a.push(this.data[i][j]);
+            }
+        }
+        return a;
     }
 
 }

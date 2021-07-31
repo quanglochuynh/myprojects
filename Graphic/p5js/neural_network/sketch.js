@@ -1,15 +1,8 @@
 
 
-
 function setup(){
-    let m1 = new Matrix(3,3);
-    m1.randomize();
-    m1.print();
-    let m2 = new Matrix(3,3);
-    m2.randomize();
-    m2.print();
-    let m3 = m1.multiply(-1);
-    m3.print();
-    m3 = Matrix.multiply(m1,m2);
-    m3.print();
+    let nn = new NeuralNetwork(2,2,1);
+    let input = [1,0];
+    let output = nn.feedforward(input);
+    console.log(output);
 }
