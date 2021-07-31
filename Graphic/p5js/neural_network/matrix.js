@@ -36,6 +36,16 @@ class Matrix{
         }
     }
 
+    static subtract(a,b){
+        let result = new Matrix(a.rows, a.cols);
+        for (let i=0; i<result.rows; i++){
+            for (let j=0; j<result.cols; j++){
+                result.data[i][j] = a.data[i][j] - b.data[i][j];
+            }
+        }
+        return result;
+    }
+
     static multiply(m, n){
         if (m.cols !== n.rows){
             console.log('cannot multiply');
@@ -65,11 +75,11 @@ class Matrix{
         return this;
     }
 
-    transpose(){
-        let result = new Matrix(this.cols, this.rows);
-        for (let i=0; i<this.rows; i++){
-            for (let j=0; j<this.cols; j++){
-                result.data[j][i] = this.data[i][j];
+    static transpose(a){
+        let result = new Matrix(a.cols, a.rows);
+        for (let i=0; i<a.rows; i++){
+            for (let j=0; j<a.cols; j++){
+                result.data[j][i] = a.data[i][j];
             }
         }
         return result;

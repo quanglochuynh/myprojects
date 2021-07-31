@@ -32,4 +32,15 @@ class NeuralNetwork{
         return output.toArr();
     }
 
+    train(inputs, target){
+        let output = this.feedforward(inputs);
+
+        output = Matrix.fromArr(output);
+        target = Matrix.fromArr(target);
+        //Error = target - output
+        let output_error = Matrix.subtract(target,output);
+        let weight_ho_transposed = Matrix.transpose(this.weigth_ho);
+        let hidden_error = Matrix.multiply(weight_ho_transposed, output_error); 
+    }
+
 }
