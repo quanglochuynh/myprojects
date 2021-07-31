@@ -24,9 +24,9 @@ void draw() {
     for (Point pt:points){
         float[] input = {pt.x, pt.y};
         int target = pt.label;
-        //p.train(input, pt.label);
+        p.train(input, pt.label);
 
-        int guess = p.guess(input);
+        int guess = p.guess(input); 
         if (guess == target){
             fill(0,255,0);    
         }else{

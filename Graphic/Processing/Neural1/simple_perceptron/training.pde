@@ -7,7 +7,7 @@ class Point{
         x = random(width);
         y = random(height);
 
-        if (x>y){
+        if (0.5*x>y){
             label =1;
         }else{
             label = -1;
