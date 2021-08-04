@@ -63,14 +63,15 @@ void drawPoint(point u){
     ellipse(posX(u.x), posY(u.y), dotDia, dotDia);
 }
 
+float fn(float x){
+    return (1/(1+exp(-x)));
+}
+
 void calculateValue(){
-    float fx;
     point u;
     float sX = ((-1)*width/2)/spacingX;
     for (float x = sX; x <= (width/2)/spacingX; x+=dx){
-        //fx = pow(x,3) - 2 * pow(x,2) - 5 * pow(x,1) + 6;
-        fx = sin(x);
-        u = new point(x,fx);
+        u = new point(x,fn(x));
         value.add(u);
     }
 }

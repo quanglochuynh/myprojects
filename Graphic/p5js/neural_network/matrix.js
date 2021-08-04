@@ -64,6 +64,26 @@ class Matrix{
             return result;
         }
     }
+
+    multiply(m){
+        if (this.cols !== m.rows){
+            console.log('khong the multiply');
+            return undefined;
+        }else{
+            let result = new Matrix(this.rows, m.cols);
+            for (let i=0; i<result.rows; i++){
+                for (let j=0; j<result.cols; j++){
+                    let sum = 0;
+                    for (let k=0; k<this.cols; k++){
+                        sum += this.data[i][k] * m.data[k][j];
+                        //console.log('sum = ' + sum);
+                    }
+                    result.data[i][j] = sum;
+                }
+            }
+            return result;
+        }
+    }
     
     map(fn){
         for (let i=0; i<this.rows; i++){
@@ -73,6 +93,17 @@ class Matrix{
             }
         }
         return this;
+    }
+
+    static map(matrix, fn){
+        let result = new Matrix(matrix.rows, matrix.cols);
+        for (let i=0; i<this.rows; i++){
+            for (let j=0; j<this.cols; j++){
+                let val = result.data[i][j];
+                result.data[i][j] = fn(val);
+            }
+        }
+        return result;
     }
 
     static transpose(a){
