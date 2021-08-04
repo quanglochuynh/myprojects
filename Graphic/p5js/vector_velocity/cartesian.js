@@ -40,6 +40,38 @@ class OXY{
             this.offsetX += dx;
             this.offsetY += dy;
         }
+        if (keyIsPressed){
+            switch (key) {
+                case 'x' :
+                    this.spacingX +=1;
+                break;	
+                case 'y' :
+                    this.spacingY +=1;
+                break;	
+                case 'z' :{
+                    this.spacingX +=1;
+                    this.spacingY +=1;
+                }
+                break;	
+                case 'X' :
+                    if (this.spacingX>5){
+                        this.spacingX -=1;
+                    }
+                break;	
+                case 'Y' :
+                    if (this.spacingY>5){
+                        this.spacingY -=1;
+                    }                
+                break;	
+                case 'Z' :{
+                    if ((this.spacingX>5) && (this.spacingY>5)){
+                        this.spacingX -=1;
+                        this.spacingY -=1;
+                    }
+                }
+                break;	
+            }
+        }
         //minor grid
         strokeWeight(1);
         stroke(100);
@@ -55,6 +87,7 @@ class OXY{
         for(let j=this.offsetY; j> 0; j -= this.spacingY){
             line(0, j, width, j);
         }
+        //major grid
         stroke(255);
         strokeWeight(2);
         line(this.offsetX,0,this.offsetX, this.height);   //Oy
@@ -78,6 +111,21 @@ class OXY{
             let u = new Point(k, fn(k));
             //this.drawPoint(u);
             line(mapX(t.x, this.spacingX, this.offsetX), mapY(t.y, this.spacingY, this.offsetY), mapX(k, this.spacingX, this.offsetX), mapY(fn(k), this.spacingY, this.offsetY));
+            t = u;
+        }
+    }
+
+    derivePlot(fn,c){
+        let dx = 0.01;
+        let res;
+        stroke(c);
+        let t = new Point();
+        for (let i = 0; i<this.width; i+=1){
+            let k = unMapX(i, this.spacingX, this.offsetX);
+            res = (fn(k+dx)-fn(k))/dx;
+            let u = new Point(k, res);
+            //this.drawPoint(u);
+            line(mapX(t.x, this.spacingX, this.offsetX), mapY(t.y, this.spacingY, this.offsetY), mapX(k, this.spacingX, this.offsetX), mapY(res, this.spacingY, this.offsetY));
             t = u;
         }
     }

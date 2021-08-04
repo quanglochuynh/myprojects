@@ -3,10 +3,11 @@ let offsetX = 0, offsetY = 0, mX, mY;
 let plane; 
 let u = new Point(5,7);
 let v = new Point(3,-5);
-let c;
+let c, d;
 
 function myFx(x){
-    return (1/(1+Math.exp(-x)));
+    //return (1/(1+Math.exp(-x)));
+    return Math.sin(x);
 }
 
 function init(){
@@ -22,15 +23,16 @@ function reset(){
 
 function setup(){
     createCanvas(600,600);
-    frameRate(5);
+    frameRate(30);
     init();
     reset();
     c = color(random(100, 255), random(100, 255), random(100, 255));
-    
+    d = color(random(100, 255), random(100, 255), random(100, 255));
+
 }
 
 function draw(){
     plane.drawPlane();
-    
     plane.plot(myFx,c);
+    plane.derivePlot(myFx, d);
 }
