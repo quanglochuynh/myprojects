@@ -1,8 +1,10 @@
 class Particle{
-    constructor(p,v,a){
+    constructor(p,v,a,f,m){
         this.position = p;
         this.velocity = v;
         this.accelaration = a;
+        this.force = f;
+        this.mass = m;
     }
 
     setAccelaration(v){
@@ -52,7 +54,11 @@ class Vector{
         return res;
     }
 
-
+    static setLength(v, l){
+        let ang = angle(v);
+        let res = new Vector(l * Math.cos(ang), l * Math.sin(ang));
+        return res;
+    }
 }
 
 
@@ -139,20 +145,20 @@ class OXY{
             }
         }
         //minor grid
-        // strokeWeight(1);
-        // stroke(100);
-        // for(let i=this.offsetX; i< this.width; i+=this.spacingX){
-        //     line(i, this.height,i , 0);
-        // }
-        // for(let i=this.offsetX; i> 0; i -= this.spacingX){
-        //     line(i, this.height,i , 0);
-        // }
-        // for(let j=this.offsetY; j< this.height; j+=this.spacingY){
-        //     line(0, j, width, j);
-        // }
-        // for(let j=this.offsetY; j> 0; j -= this.spacingY){
-        //     line(0, j, width, j);
-        // }
+        strokeWeight(1);
+        stroke(100);
+        for(let i=this.offsetX; i< this.width; i+=this.spacingX){
+            line(i, this.height,i , 0);
+        }
+        for(let i=this.offsetX; i> 0; i -= this.spacingX){
+            line(i, this.height,i , 0);
+        }
+        for(let j=this.offsetY; j< this.height; j+=this.spacingY){
+            line(0, j, width, j);
+        }
+        for(let j=this.offsetY; j> 0; j -= this.spacingY){
+            line(0, j, width, j);
+        }
         //major grid
         stroke(255);
         strokeWeight(2);
