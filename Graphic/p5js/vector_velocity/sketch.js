@@ -6,32 +6,30 @@ function myFx(x){
 }
 
 function init(){
-    plane = new OXY(height, width, 10);
-    p = new Vector(0,4);
-    v = new Vector(0,1);
-    a = new Vector(0,-0.1);
+    plane = new OXY(height, width, 30);
+    p = new Vector(0,5);
+    v = new Vector(-0.2,0);
+    a = new Vector(0,0);
     s = new Particle(p, v, a, 1, 1);
 }
 
 function setup(){
     createCanvas(600,600);
-    frameRate(20);
+    frameRate(60);
     init();
     
     
 }
 
 function draw(){
+    background(0)
+    // s.accelaration = Vector.setLength(s.position,-0.008);
+    // s.velocity = Vector.add(s.velocity, s.accelaration);
+    // s.position = Vector.add(s.position, s.velocity);
     plane.drawPlane();
-    plane.circle(0,0,0.5,'PINK');
-    plane.drawVector(s.position, 0.1, 'ORANGE');
-    plane.drawVector(s.velocity, 1, 'Green');
-    plane.drawVector(s.accelaration, 10, 'RED');
-    plane.drawParticle(s);
-    s.position = Vector.add(s.position, s.velocity);
-    s.velocity = Vector.add(s.velocity, s.accelaration);
-
-    let va = Vector.setLength(s.position,-0.1)
-    
-    s.accelaration = va;
+    plane.plot(myFx, 'PINK');
+    plane.derivePlot(myFx,'green');
+    plane.drawPoint(2,5);
+    // plane.circle(0,0,0.5,'PINK');
+    // plane.drawParticle(s);
 }

@@ -103,7 +103,7 @@ class OXY{
     }
 
     drawPlane(){
-        background(50); 
+        background(10); 
         let dx = mouseX - this.mX;
         let dy = mouseY - this.mY;
         this.mX = mouseX;
@@ -147,16 +147,44 @@ class OXY{
         //minor grid
         strokeWeight(1);
         stroke(100);
+        let t=0;
         for(let i=this.offsetX; i< this.width; i+=this.spacingX){
+            t++;
+            if (t%10==0){
+                stroke(200);
+            }else{
+                stroke(100);
+            }
             line(i, this.height,i , 0);
         }
+        t=0;
         for(let i=this.offsetX; i> 0; i -= this.spacingX){
+            t++;
+            if (t%10==0){
+                stroke(200);
+            }else{
+                stroke(100);
+            }
             line(i, this.height,i , 0);
         }
+        t=0;
         for(let j=this.offsetY; j< this.height; j+=this.spacingY){
+            t++;
+            if (t%10==0){
+                stroke(200);
+            }else{
+                stroke(100);
+            }
             line(0, j, width, j);
         }
+        t=0;
         for(let j=this.offsetY; j> 0; j -= this.spacingY){
+            t++;
+            if (t%10==0){
+                stroke(200);
+            }else{
+                stroke(100);
+            }
             line(0, j, width, j);
         }
         //major grid
@@ -168,8 +196,11 @@ class OXY{
 
     drawPoint(u){
         fill(255);
-        ellipse(mapX(u.x, this.spacingX, this.offsetX), mapY(u.y, this.spacingY, this.offsetY), 10);
-        //this.circle(u.x, u.y, 0.5, 'BLUE');
+        let v = this.map(u);
+        //ellipse(mapX(u.x, this.spacingX, this.offsetX), mapY(u.y, this.spacingY, this.offsetY), 10);
+        ellipse(v.x, v.y, 10);
+        this.circle(v.x, v.y, 0.5, 'BLUE');
+        
     }
 
     drawSegment(u,v){
@@ -182,7 +213,10 @@ class OXY{
         for (let i = 0; i<this.width; i+=1){
             let k = unMapX(i, this.spacingX, this.offsetX);
             let u = new Point(k, fn(k));
-            line(mapX(t.x, this.spacingX, this.offsetX), mapY(t.y, this.spacingY, this.offsetY), mapX(k, this.spacingX, this.offsetX), mapY(fn(k), this.spacingY, this.offsetY));
+            u = this.map(u);
+            if (i>0){
+                line(t.x, t.y, u.x, u.y);
+            }
             t = u;
         }
     }
@@ -196,7 +230,10 @@ class OXY{
             let k = unMapX(i, this.spacingX, this.offsetX);
             res = (fn(k+dx)-fn(k))/dx;
             let u = new Point(k, res);
-            line(mapX(t.x, this.spacingX, this.offsetX), mapY(t.y, this.spacingY, this.offsetY), mapX(k, this.spacingX, this.offsetX), mapY(res, this.spacingY, this.offsetY));
+            u = this.map(u);
+            if (i>0){
+                line(t.x, t.y, u.x, u.y);
+            }
             t = u;
         }
     }
@@ -235,16 +272,17 @@ class OXY{
         return res;
     }
 
-    drawArrow(o,p){
-        // console.log(angle(p));
-        let a = angle(p);
+    drawParticle(p){
+        fill(255);
+        noStroke();
+        let a = angle(p.velocity);
         let v1 = new Vector(0.6,0);
         v1 = Vector.rotate(v1, -a);
         let v2 = Vector.rotate(v1, 2*PI/3);
         let v3 = Vector.rotate(v2, 2*PI/3);
-        v1 = Vector.add(v1, o);
-        v2 = Vector.add(v2, o);
-        v3 = Vector.add(v3, o);
+        v1 = Vector.add(v1, p.position);
+        v2 = Vector.add(v2, p.position);
+        v3 = Vector.add(v3, p.position);
         v1 = this.map(v1);
         v2 = this.map(v2);
         v3 = this.map(v3);
@@ -252,17 +290,6 @@ class OXY{
         triangle(v1.x, v1.y, v2.x, v2.y, v3.x, v3.y);
         fill('PINK');
         ellipse(v1.x, v1.y, 10);
-    }
-
-    drawParticle(p){
-        fill(255);
-        noStroke();
-        //console.log(p);
-        let a = p.position;
-        let v = p.velocity;
-        //triangle(x+20, y, x-10, y-14, x-10, y+14);
-        this.drawArrow(a,v);
-
     }
 
     static getAngle(v){
