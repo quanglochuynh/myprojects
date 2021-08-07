@@ -54,8 +54,17 @@ class Vector{
         return res;
     }
 
+    static Angle(v){
+        let x = v.x;
+        let y = v.y;
+        if (x < 0){
+            return atan(y/x)+PI;
+        }
+        return atan(y/x);
+    }
+
     static setLength(v, l){
-        let ang = angle(v);
+        let ang = Vector.Angle(v);
         let res = new Vector(l * Math.cos(ang), l * Math.sin(ang));
         return res;
     }
@@ -69,25 +78,8 @@ class Point{
     }
 }
 
-function mapX(x, sp, of){
-    return (x * sp + of);
-}
-
-function mapY(y, sp, of){
-    return (-1)*(y * sp - of);
-}
-
 function unMapX(i, sp, of){
     return (i-of)/sp;
-}
-
-function angle(v){
-    let x = v.x;
-    let y = v.y;
-    if (x < 0){
-        return atan(y/x)+PI;
-    }
-    return atan(y/x);
 }
 
 class OXY{
@@ -244,7 +236,6 @@ class OXY{
         let u = new Point(x,y);
         u = this.map(u);
         ellipse(u.x, u.y, d * this.spacingX);
-        //ellipse(mapX(x,this.spacingX,this.offsetX), mapY(y, this.spacingY, this.offsetY), mapX(d, this.spacingX,0));
     }
 
     map(u){
@@ -254,14 +245,14 @@ class OXY{
         return res;
     }
 
-    drawVector(a, s, c){
-        stroke(c);
-        let u = Vector.scale(a,s);
-        u = this.map(a);
+    drawVector(a, scale, color){
+        stroke(color);
+        let u = Vector.scale(a,scale);
+        u = this.map(u);
         let v = new Point(0,0);
         v = this.map(v);
         line(u.x,u.y,v.x, v.y);
-        fill(c);
+        fill(color);
         ellipse(u.x, u.y,10);
     }
 
@@ -279,7 +270,7 @@ class OXY{
     drawParticle(p){
         fill(255);
         noStroke();
-        let a = angle(p.velocity);
+        let a = Vector.Angle(p.velocity);
         let v1 = new Vector(0.6,0);
         v1 = Vector.rotate(v1, -a);
         let v2 = Vector.rotate(v1, 2*PI/3);
@@ -295,9 +286,4 @@ class OXY{
         fill('PINK');
         ellipse(v1.x, v1.y, 10);
     }
-
-    static getAngle(v){
-        return angle(v);
-    }
-
 }
