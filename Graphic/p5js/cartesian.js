@@ -22,20 +22,17 @@ class Vector{
     static add(a,b){
         let c = a.x + b.x;
         let d = a.y + b.y;
-        let res = new Vector(c, d);
-        return res;
+        return new Vector(c, d);
     }
 
     static subtract(a,b){
-        let c = new Vector(a.x - b.x, a.y - b.y);
-        return c;
+        return new Vector(a.x - b.x, a.y - b.y);
     }
 
     static scale(a, c){
         let x = a.x * c;
         let y = a.y * c;
-        let res = new Vector(x,y);
-        return res;
+        return new Vector(x,y);
     }
 
     static rotate(v, a){
@@ -43,15 +40,11 @@ class Vector{
         let y= v.y;
         let resX = x * cos(a) + y * sin(a);
         let resY = y*cos(a) - x*sin(a);
-        let res = new Vector(resX, resY);
-        return res;
+        return new Vector(resX, resY);
     }
 
     len(){
-        let xsq = this.x * this.x;
-        let ysq = this.y * this.y;
-        let res = Math.sqrt(xsq+ysq); 
-        return res;
+        return dist(this.x, this.y, 0, 0);
     }
 
     static Angle(v){
@@ -63,23 +56,17 @@ class Vector{
         return atan(y/x);
     }
 
-    static setLength(v, l){
+    static parallel(v, l){
         let ang = Vector.Angle(v);
-        let res = new Vector(l * Math.cos(ang), l * Math.sin(ang));
-        return res;
+        return new Vector(l * Math.cos(ang), l * Math.sin(ang));
     }
 }
-
 
 class Point{
     constructor(px,py){
         this.x = px;
         this.y = py;
     }
-}
-
-function unMapX(i, sp, of){
-    return (i-of)/sp;
 }
 
 class OXY{
@@ -92,6 +79,14 @@ class OXY{
         this.mY = 0;
         this.spacingX = sp;
         this.spacingY = sp;
+    }
+
+    unMapX(u){
+        return (u-this.offsetX)/this.spacingX; 
+    }
+
+    unMapY(u){
+        return -(u-this.offsetY)/this.spacingY; 
     }
 
     drawPlane(){
@@ -204,7 +199,7 @@ class OXY{
         stroke(c);
         let t = new Point();
         for (let i = 0; i<this.width; i+=1){
-            let k = unMapX(i, this.spacingX, this.offsetX);
+            let k = this.unMapX(i);
             let u = new Point(k, fn(k));
             u = this.map(u);
             if (i>0){
@@ -220,7 +215,7 @@ class OXY{
         stroke(c);
         let t = new Point();
         for (let i = 0; i<this.width; i+=1){
-            let k = unMapX(i, this.spacingX, this.offsetX);
+            let k = this.unMapX(i);
             res = (fn(k+dx)-fn(k))/dx;
             let u = new Point(k, res);
             u = this.map(u);
@@ -257,14 +252,13 @@ class OXY{
     }
 
     randomVector(){
-        let l = unMapX(0, this.spacingX, this.offsetX);
-        let r = unMapX(width, this.spacingX, this.offsetX);
-        let t = unMapX(0, this.spacingY, this.offsetY);
-        let b = unMapX(height, this.spacingY, this.offsetY);
+        let l = this.unMapX(0);
+        let r = this.unMapX(width);
+        let t = this.unMapX(0);
+        let b = this.unMapX(height);
         let rx = random(l,r);
         let ry = random(t,b);
-        let res = new Vector(rx,ry);
-        return res;
+        return new Vector(rx,ry);
     }
 
     drawParticle(p){
