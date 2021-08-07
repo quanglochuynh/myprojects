@@ -27,9 +27,11 @@ function draw(){
     // s.velocity = Vector.add(s.velocity, s.accelaration);
     // s.position = Vector.add(s.position, s.velocity);
     plane.drawPlane();
-    plane.plot(myFx, 'PINK');
-    plane.derivePlot(myFx,'green');
-    plane.drawPoint(2,5);
+    //plane.plot(myFx, 'PINK');
+    //plane.derivePlot(myFx,'green');
+    plane.drawPoint(new Point(2,5));
+    plane.circle(-2, 3, 0.35, 'WHITE');
+    plane.drawSegment(new Point(2,5), new Point(-2,3), 'WHITE');
     // plane.circle(0,0,0.5,'PINK');
     // plane.drawParticle(s);
 }

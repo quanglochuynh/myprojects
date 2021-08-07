@@ -196,15 +196,16 @@ class OXY{
 
     drawPoint(u){
         fill(255);
+        noStroke();
         let v = this.map(u);
-        //ellipse(mapX(u.x, this.spacingX, this.offsetX), mapY(u.y, this.spacingY, this.offsetY), 10);
         ellipse(v.x, v.y, 10);
-        this.circle(v.x, v.y, 0.5, 'BLUE');
-        
     }
 
-    drawSegment(u,v){
-        line(mapX(u.x, this.spacingX, this.offsetX), mapY(u.y, this.spacingY, this.offsetY), mapX(v.x, this.spacingX, this.offsetX), mapY(v.y, this.spacingY, this.offsetY));
+    drawSegment(u,v, c){
+        stroke(c)
+        let a = this.map(u);
+        let b = this.map(v);
+        line(a.x, a.y, b.x, b.y);
     }
 
     plot(fn, c){
@@ -240,7 +241,10 @@ class OXY{
 
     circle(x,y,d,c){
         fill(c);
-        ellipse(mapX(x,this.spacingX,this.offsetX), mapY(y, this.spacingY, this.offsetY), mapX(d, this.spacingX,0));
+        let u = new Point(x,y);
+        u = this.map(u);
+        ellipse(u.x, u.y, d * this.spacingX);
+        //ellipse(mapX(x,this.spacingX,this.offsetX), mapY(y, this.spacingY, this.offsetY), mapX(d, this.spacingX,0));
     }
 
     map(u){
