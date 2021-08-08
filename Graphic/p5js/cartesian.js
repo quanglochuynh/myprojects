@@ -1,14 +1,20 @@
+
+/*
+    Writen by Loc Q. Huynh
+*/
+
 class Particle{
-    constructor(p,v,a,f,m){
-        this.position = p;
-        this.velocity = v;
-        this.accelaration = a;
-        this.force = f;
-        this.mass = m;
+    constructor(position, velocity, accelaration, color){
+        this.position = position;
+        this.velocity = velocity;
+        this.accelaration = accelaration;
+        this.color = color;
     }
 
-    setAccelaration(v){
-        this.accelaration = v;
+    updateAccelaration(ac){
+        this.accelaration = ac;
+        this.velocity = Vector.add(this.velocity, this.accelaration);
+        this.position = Vector.add(this.position, this.velocity);
     }
 
 }
@@ -140,7 +146,7 @@ class OXY{
             if (t%10==0){
                 stroke(200);
             }else{
-                stroke(100);
+                stroke(75);
             }
             line(i, this.height,i , 0);
         }
@@ -150,7 +156,7 @@ class OXY{
             if (t%10==0){
                 stroke(200);
             }else{
-                stroke(100);
+                stroke(75);
             }
             line(i, this.height,i , 0);
         }
@@ -160,7 +166,7 @@ class OXY{
             if (t%10==0){
                 stroke(200);
             }else{
-                stroke(100);
+                stroke(75);
             }
             line(0, j, width, j);
         }
@@ -170,7 +176,7 @@ class OXY{
             if (t%10==0){
                 stroke(200);
             }else{
-                stroke(100);
+                stroke(75);
             }
             line(0, j, width, j);
         }
@@ -262,7 +268,6 @@ class OXY{
     }
 
     drawParticle(p){
-        fill(255);
         noStroke();
         let a = Vector.Angle(p.velocity);
         let v1 = new Vector(0.6,0);
@@ -275,9 +280,9 @@ class OXY{
         v1 = this.map(v1);
         v2 = this.map(v2);
         v3 = this.map(v3);
-        fill(200,255,255);
+        fill(p.color);
         triangle(v1.x, v1.y, v2.x, v2.y, v3.x, v3.y);
-        fill('PINK');
+        fill('WHITE');
         ellipse(v1.x, v1.y, 10);
     }
 }

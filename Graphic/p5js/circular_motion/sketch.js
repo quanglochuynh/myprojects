@@ -10,7 +10,7 @@ function init(){
     p = new Vector(0,5);
     v = new Vector(0,0);
     a = new Vector(0,0);
-    s = new Particle(p, v, a, 1, 1);
+    s = new Particle(p, v, a, 'Cyan');
     m = new Vector();
 }
 
@@ -24,11 +24,8 @@ function draw(){
     m.x = plane.unMapX(mouseX);
     m.y = plane.unMapY(mouseY);
     let sub = Vector.subtract(s.position, m);
-    s.accelaration = Vector.parallel(sub,-0.008);
-    s.velocity = Vector.add(s.velocity, s.accelaration);
-    s.position = Vector.add(s.position, s.velocity);
+    s.updateAccelaration(Vector.parallel(sub,-0.008));
     plane.drawPlane();
     plane.circle(m.x, m.y,0.5,'WHITE');
-    plane.circle(0,0,0.5,'PINK');
     plane.drawParticle(s);
 }
