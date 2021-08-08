@@ -140,45 +140,64 @@ class OXY{
         //minor grid
         strokeWeight(1);
         stroke(100);
+        fill(255);
         let t=0;
         for(let i=this.offsetX; i< this.width; i+=this.spacingX){
             t++;
             if (t%10==0){
                 stroke(200);
+                line(i, this.height,i , 0);
+                text(t, i, this.offsetY + 15);
             }else{
                 stroke(75);
+                if (this.spacingX > 10){
+                    line(i, this.height,i , 0);
+                }
             }
-            line(i, this.height,i , 0);
+            
         }
         t=0;
         for(let i=this.offsetX; i> 0; i -= this.spacingX){
             t++;
             if (t%10==0){
                 stroke(200);
+                line(i, this.height,i , 0);
+                text(-t, i, this.offsetY + 15);
             }else{
                 stroke(75);
+                if (this.spacingX > 10){
+                    line(i, this.height,i , 0);
+                }
             }
-            line(i, this.height,i , 0);
         }
         t=0;
         for(let j=this.offsetY; j< this.height; j+=this.spacingY){
             t++;
             if (t%10==0){
                 stroke(200);
+                line(0, j, width, j);
+                text(-t, this.offsetX + 5, j+15);
             }else{
                 stroke(75);
+                if (this.spacingY > 10){
+                    line(0, j, width, j);
+                }
             }
-            line(0, j, width, j);
+            
         }
         t=0;
         for(let j=this.offsetY; j> 0; j -= this.spacingY){
             t++;
             if (t%10==0){
                 stroke(200);
+                line(0, j, width, j);
+                text(t, this.offsetX + 5, j-5);
             }else{
                 stroke(75);
+                if (this.spacingY > 10){
+                    line(0, j, width, j);
+                }
             }
-            line(0, j, width, j);
         }
         //major grid
         stroke(255);
