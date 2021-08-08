@@ -122,7 +122,7 @@ function draw(){
         play = true;
         vs = -10 ;
     }else if (lose){
-        if (keyIsPressed && allow && key === ' '){
+        if (keyIsPressed && allow && key == ' '){
             reset();
         }
     }
