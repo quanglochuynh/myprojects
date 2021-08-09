@@ -183,7 +183,6 @@ class OXY{
                     line(0, j, width, j);
                 }
             }
-            
         }
         t=0;
         for(let j=this.offsetY; j> 0; j -= this.spacingY){
@@ -204,6 +203,7 @@ class OXY{
         strokeWeight(2);
         line(this.offsetX,0,this.offsetX, this.height);   //Oy
         line(0, this.offsetY,this.width, this.offsetY);   //Ox
+        text('o', this.offsetX - 15, this.offsetY + 15)
     }
 
     drawPoint(u){
@@ -267,13 +267,22 @@ class OXY{
 
     drawVector(a, scale, color){
         stroke(color);
+        let v1 = Vector.parallel(a, a.len() * -scale * 0.2);
+        let v2 = v1;
+        v1 = Vector.rotate(v1, PI/6);
+        v2 = Vector.rotate(v2, -PI/6);
         let u = Vector.scale(a,scale);
+        v1 = Vector.add(v1, u);
+        v2 = Vector.add(v2, u);
         u = this.map(u);
         let v = new Point(0,0);
         v = this.map(v);
+        v1 = this.map(v1);
+        v2 = this.map(v2)
         line(u.x,u.y,v.x, v.y);
-        fill(color);
-        ellipse(u.x, u.y,10);
+        line(u.x, u.y, v1.x, v1.y);
+        line(u.x, u.y, v2.x, v2.y);
+
     }
 
     randomVector(){
@@ -288,20 +297,20 @@ class OXY{
 
     drawParticle(p){
         noStroke();
-        let a = Vector.Angle(p.velocity);
-        let v1 = new Vector(0.6,0);
-        v1 = Vector.rotate(v1, -a);
-        let v2 = Vector.rotate(v1, 2*PI/3);
-        let v3 = Vector.rotate(v2, 2*PI/3);
+        let ang = Vector.Angle(p.velocity);
+        let v0 = new Vector(0,0);
+        let v1 = new Vector(0.8,0);
+        v1 = Vector.rotate(v1, -ang - 5*PI/6);
+        let v2 = Vector.rotate(v1, -2*PI/6);
+        v0 = Vector.add(v0, p.position);
         v1 = Vector.add(v1, p.position);
         v2 = Vector.add(v2, p.position);
-        v3 = Vector.add(v3, p.position);
+        v0 = this.map(v0);
         v1 = this.map(v1);
         v2 = this.map(v2);
-        v3 = this.map(v3);
         fill(p.color);
-        triangle(v1.x, v1.y, v2.x, v2.y, v3.x, v3.y);
+        triangle(v1.x, v1.y, v2.x, v2.y, v0.x, v0.y);
         fill('WHITE');
-        ellipse(v1.x, v1.y, 10);
+        ellipse(v0.x, v0.y, 10);
     }
 }

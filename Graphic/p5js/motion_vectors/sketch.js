@@ -2,7 +2,7 @@ let  plane;
 let dot;
 
 function reset(){
-    plane = new OXY(height, width, 15);
+    plane = new OXY(height, width, 50);
     dot = new Particle();
     dot.position = new Vector(0,0);
     dot.velocity = new Vector(0.1, 0);
@@ -11,13 +11,19 @@ function reset(){
 }
 
 function setup(){
-    createCanvas(600,600);
+    createCanvas(600, 600);
     background(50);
+    frameRate(60);
     reset();
 }
 
-function draw(){
-    dot.updateAccelaration(dot.accelaration);
+function draw(){    
+    dot.updateAccelaration(new Vector(0,0));
+    if (dot.position.x > plane.unMapX(width)){
+        dot.position = new Vector(0,0);
+        dot.velocity = new Vector(0.1,0);
+    }
     plane.drawPlane();
     plane.drawParticle(dot);
+    plane.drawVector(dot.velocity,10, 'Magenta');
 }
