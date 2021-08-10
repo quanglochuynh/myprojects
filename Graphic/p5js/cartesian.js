@@ -143,60 +143,67 @@ class OXY{
         fill(255);
         let t=0;
         for(let i=this.offsetX; i< this.width; i+=this.spacingX){
-            t++;
             if (t%10==0){
                 stroke(200);
                 line(i, this.height,i , 0);
-                text(t, i, this.offsetY + 15);
+                if (t>1){
+                    text(t, i, this.offsetY + 15);
+                }
             }else{
                 stroke(75);
                 if (this.spacingX > 10){
                     line(i, this.height,i , 0);
                 }
             }
-            
+            t++;
         }
         t=0;
         for(let i=this.offsetX; i> 0; i -= this.spacingX){
-            t++;
             if (t%10==0){
                 stroke(200);
                 line(i, this.height,i , 0);
-                text(-t, i, this.offsetY + 15);
+                if (t>1){
+                    text(-t, i, this.offsetY + 15);
+                }
             }else{
                 stroke(75);
                 if (this.spacingX > 10){
                     line(i, this.height,i , 0);
                 }
             }
+            t++;
         }
         t=0;
         for(let j=this.offsetY; j< this.height; j+=this.spacingY){
-            t++;
             if (t%10==0){
                 stroke(200);
                 line(0, j, width, j);
-                text(-t, this.offsetX + 5, j+15);
+                if (t>1){
+                    text(-t, this.offsetX + 5, j+15);
+                }
             }else{
                 stroke(75);
                 if (this.spacingY > 10){
                     line(0, j, width, j);
                 }
             }
+            t++;
         }
         t=0;
         for(let j=this.offsetY; j> 0; j -= this.spacingY){
-            t++;
             if (t%10==0){
                 stroke(200);
                 line(0, j, width, j);
-                text(t, this.offsetX + 5, j-5);
+                if (t>1){
+                    text(t, this.offsetX + 5, j-5);
+                }
             }else{
                 stroke(75);
                 if (this.spacingY > 10){
                     line(0, j, width, j);
                 }
             }
+            t++;
         }
         //major grid
         stroke(255);
@@ -312,5 +319,85 @@ class OXY{
         triangle(v1.x, v1.y, v2.x, v2.y, v0.x, v0.y);
         fill('WHITE');
         ellipse(v0.x, v0.y, 10);
+    }
+
+    drawDynamicPlane(particle){
+        let mapped = (particle.velocity.x * this.spacingX);
+        this.offsetX -= mapped;
+        //minor grid
+        strokeWeight(1);
+        stroke(100);
+        fill(255);
+        textSize(32);
+        let t=0;
+        for(let i=this.offsetX; i< this.width; i+=this.spacingX){
+            if (t%10==0){
+                stroke(200);
+                line(i, this.height,i , 0);
+                if (t>1){
+                    text(t, i, this.offsetY + 15);
+                }
+            }else{
+                stroke(75);
+                if (this.spacingX > 10){
+                    line(i, this.height,i , 0);
+                }
+            }
+            t++;
+        }
+        t=0;
+        for(let i=this.offsetX; i> 0; i -= this.spacingX){
+            if (t%10==0){
+                stroke(200);
+                line(i, this.height,i , 0);
+                if (t>1){
+                    text(-t, i, this.offsetY + 15);
+                }
+            }else{
+                stroke(75);
+                if (this.spacingX > 10){
+                    line(i, this.height,i , 0);
+                }
+            }
+            t++;
+        }
+        t=0;
+        for(let j=this.offsetY; j< this.height; j+=this.spacingY){
+            if (t%10==0){
+                stroke(200);
+                line(0, j, width, j);
+                if (t>1){
+                    text(-t, this.offsetX + 5, j+15);
+                }
+            }else{
+                stroke(75);
+                if (this.spacingY > 10){
+                    line(0, j, width, j);
+                }
+            }
+            t++;
+        }
+        t=0;
+        for(let j=this.offsetY; j> 0; j -= this.spacingY){
+            if (t%10==0){
+                stroke(200);
+                line(0, j, width, j);
+                if (t>1){
+                    text(t, this.offsetX + 5, j-5);
+                }
+            }else{
+                stroke(75);
+                if (this.spacingY > 10){
+                    line(0, j, width, j);
+                }
+            }
+            t++;
+        }
+        //major grid
+        stroke(255);
+        strokeWeight(2);
+        line(this.offsetX,0,this.offsetX, this.height);   //Oy
+        line(0, this.offsetY,this.width, this.offsetY);   //Ox
+        text('o', this.offsetX - 30, this.offsetY + 30)
     }
 }

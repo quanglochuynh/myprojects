@@ -11,19 +11,21 @@ function reset(){
 }
 
 function setup(){
-    createCanvas(600, 600);
-    background(50);
-    frameRate(60);
+    createCanvas(1600, 900);
+    frameRate(25);
     reset();
 }
 
-function draw(){    
+function draw(){
+    background(10);
     dot.updateAccelaration(new Vector(0,0));
-    if (dot.position.x > plane.unMapX(width)){
+    if (dot.position.x > 100){
         dot.position = new Vector(0,0);
         dot.velocity = new Vector(0.1,0);
+        plane.offsetX = width/2;
     }
-    plane.drawPlane();
+    plane.drawDynamicPlane(dot);
     plane.drawParticle(dot);
-    plane.drawVector(dot.velocity,10, 'Magenta');
+    text(round(dot.position.x, 3), width/2, height/2+50);
+
 }
