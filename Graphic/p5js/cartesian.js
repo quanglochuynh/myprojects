@@ -322,8 +322,10 @@ class OXY{
     }
 
     drawDynamicPlane(particle){
-        let mapped = (particle.velocity.x * this.spacingX);
-        this.offsetX -= mapped;
+        let mappedX = (particle.velocity.x * this.spacingX);
+        this.offsetX -= mappedX;
+        let mappedY = (particle.velocity.y * this.spacingY);
+        this.offsetY -= mappedY;
         //minor grid
         strokeWeight(1);
         stroke(100);
