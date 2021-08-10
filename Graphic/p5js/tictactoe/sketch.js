@@ -16,11 +16,10 @@ function initArray(){
             table[i][j] = 0;
         }
     }
-    table[5][7] = 1;
-    table[6][9] = 2;
 }
 
 function drawTable(){
+    background(240);
     strokeWeight(2);
     stroke(150);
     for (let i = margin+spacing; i<width - margin; i+=spacing){
@@ -75,30 +74,120 @@ function check (x, y){
         table[x][y] = 1;
         userTurn = false;
         userChecked.push([x, y]);
-        console.table(userChecked);
     }else{
         table[x][y] = 2;
         userTurn = true;
         machineChecked.push([x, y]);
-        console.table(machineChecked);
     }
+    winOrLose();
+    console.log('win = ' + win);
 }
 
 function winOrLose(){
-    if (userTurn === true){
+    if (userTurn != true){
         for (let i =0; i < userChecked.length; i++){
             let x = userChecked[i][0]
             let y = userChecked[i][1]
             let count = 1;
             for (k = 1; k < 5; k++){
-                if (table[x-k][y] != 1){
-                    break;
-                }else{
+                if (table[x-k][y] == 1){
                     count++;
+                    console.log('cout = ' + count);
+                }else{
+                    break;
                 }
             }
             if (count == 5){
                 win = 1;
+            }
+            count = 1;
+            for (k = 1; k < 5; k++){
+                if (table[x-k][y-k] == 1){
+                    count++;
+                    console.log('cout = ' + count);
+                }else{
+                    break;
+                }
+            }
+            if (count == 5){
+                win = 1;
+            }
+            count = 1;
+            for (k = 1; k < 5; k++){
+                if (table[x][y-k] == 1){
+                    count++;
+                    console.log('cout = ' + count);
+                }else{
+                    break;
+                }
+            }
+            if (count == 5){
+                win = 1;
+            }
+            count = 1;
+            for (k = 1; k < 5; k++){
+                if (table[x+k][y-k] == 1){
+                    count++;
+                    console.log('cout = ' + count);
+                }else{
+                    break;
+                }
+            }
+            if (count == 5){
+                win = 1;
+            }
+        }
+    }else{
+        for (let i =0; i < machineChecked.length; i++){
+            let x = machineChecked[i][0]
+            let y = machineChecked[i][1]
+            let count = 1;
+            for (k = 1; k < 5; k++){
+                if (table[x-k][y] == 2){
+                    count++;
+                    console.log('cout = ' + count);
+                }else{
+                    break;
+                }
+            }
+            if (count == 5){
+                win = 2;
+            }
+            count = 1;
+            for (k = 1; k < 5; k++){
+                if (table[x-k][y-k] == 2){
+                    count++;
+                    console.log('cout = ' + count);
+                }else{
+                    break;
+                }
+            }
+            if (count == 5){
+                win = 2;
+            }
+            count = 1;
+            for (k = 1; k < 5; k++){
+                if (table[x][y-k] == 2){
+                    count++;
+                    console.log('cout = ' + count);
+                }else{
+                    break;
+                }
+            }
+            if (count == 5){
+                win = 2;
+            }
+            count = 1;
+            for (k = 1; k < 5; k++){
+                if (table[x+k][y-k] == 2){
+                    count++;
+                    console.log('cout = ' + count);
+                }else{
+                    break;
+                }
+            }
+            if (count == 5){
+                win = 2;
             }
         }
     }
@@ -115,22 +204,33 @@ function draw(){
     if (mouseIsPressed){
         let x = userMovedX();
         let y = userMovedY();
-        console.log(x + "  " + y);
+
         if (table[x][y] == 0){
             check(x, y);
         }
-        win = winOrLose();
     }
     if (win == 1){
         background(255);
         noStroke();
         fill('RED');
+        textSize(48);
         text('YOU WIN', margin, height/2);
     }else if (win === 2){
         background(255);
+        noStroke();
         fill('BLACK');
+        textSize(48);
         text('YOU LOSE', margin, height/2);
     }else{
         drawTable();
+        textSize(24);
+        noStroke();
+        if (userTurn == true){
+            fill('RED');
+            text('Your turn', margin, height-15);
+        }else{
+            fill('BLUE');
+            text('Machine turn', margin, height-15);
+        }
     }
 }
