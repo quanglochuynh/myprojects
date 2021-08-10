@@ -8,7 +8,6 @@ function reset(){
     v = Vector.scale(v, 0.05);
     a = new Vector(0, -1 / frameRate());
     let rc = 'hsl(' + round(random(0,255)) + ', 100%, 50%)';
-    console.log(rc);
     s = new Particle(p, v, a, rc);
 }
 
