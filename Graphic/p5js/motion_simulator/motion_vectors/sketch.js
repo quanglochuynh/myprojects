@@ -18,8 +18,8 @@ function setup(){
 
 function draw(){
     background(10);
-    dot.updateAccelaration(new Vector(0,0));
-    if (dot.position.x > 100){
+    dot.updateAccelaration(new Vector(0.001,0));
+    if (dot.position.x > 1000){
         dot.position = new Vector(0,0);
         dot.velocity = new Vector(0.1,0);
         plane.offsetX = width/2;
