@@ -96,7 +96,7 @@ class OXY{
     }
 
     drawPlane(){
-        background(10); 
+        //background(10); 
         textSize(16);
         let dx = mouseX - this.mX;
         let dy = mouseY - this.mY;
