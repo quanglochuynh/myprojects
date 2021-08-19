@@ -16,13 +16,14 @@ function init(){
 
 function setup(){
     createCanvas(600,600);
+    frameRate(30);
     init();
 }
 
 function draw(){
     background(color('rgba(0,0,0,1)'));
-    m.x = plane.unMapX(mouseX);
-    m.y = plane.unMapY(mouseY);
+    //m.x = plane.unMapX(mouseX);
+    //m.y = plane.unMapY(mouseY);
     let sub = Vector.subtract(s.position, m);
     s.updateAccelaration(Vector.parallel(sub,-0.01));
     plane.drawPlane();
