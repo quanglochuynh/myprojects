@@ -15,7 +15,7 @@ class Particle{
         this.accelaration = ac;
         this.velocity = Vector.add(this.velocity, this.accelaration);
         this.position = Vector.add(this.position, this.velocity);
-    }
+   }
 
 }
 
