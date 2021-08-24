@@ -1,9 +1,10 @@
 let graph;
 let tree;
+let stage = true;
 
 function init(){
-    let s = new Point(3, 3);
-    let d = new Point(9, 0);
+    let s = new Point(7, 4);
+    let d = new Point(8, 7);
     let obstacle = [];
     obstacle.push(new Point(5,0));
     obstacle.push(new Point(5,1));
@@ -15,14 +16,14 @@ function init(){
     obstacle.push(new Point(5,8));
     obstacle.push(new Point(5,9));
     graph = new Map(width, height, 10, 10, obstacle, s, d);
-    let node = [new Point(s.y * graph.spacing + graph.margin + graph.spacing/2, s.x * graph.spacing + graph.margin + graph.spacing/2)];
+    let node = [new Point(s.x * graph.spacing + graph.margin + graph.spacing/2, s.y * graph.spacing + graph.margin + graph.spacing/2)];
     let edges = [new Edge(0,1)];
     tree = new Tree(node, edges, node[0]);
 }
 
 function setup(){
     createCanvas(600,600);
-    frameRate(1);
+    frameRate(20);
     background(0);
     init();
     
@@ -54,54 +55,49 @@ function angle(x,y){
 }
 
 function draw(){
-    background(0);
-    graph.show();
-
-    //random node
-    let rw = random(graph.margin, graph.margin + graph.m*graph.spacing);
-    let rh = random(graph.margin, graph.margin + graph.n*graph.spacing);
-    fill('Cyan');
-    ellipse(rw, rh, 10);
-    let u = nearest(rw,rh);
-    let dx = rw - tree.node[u].x;
-    let dy = rh - tree.node[u].y;
-    let ang = angle(dx, dy);
-    let newX = tree.node[u].x + 20*Math.cos(ang);
-    let newY = tree.node[u].y + 20*Math.sin(ang);
-    let v = new Point(newX, newY);
-    //scan for obstacles
-    for (let i in graph.obstacle){
-        let x = graph.obstacle[i].x;
-        let y = graph.obstacle[i].y;
-        x = x * graph.spacing + graph.margin;
-        y = y * graph.spacing + graph.margin;
-        let p1 = new Point(x,y);
-        let p2 = new Point(x + graph.spacing, y);
-        let p3 = new Point(x + graph.spacing, y + graph.spacing);
-        let p4 = new Point(x, y + graph.spacing);
-        if (Point.segmentCut(tree.node[u], v, p1, p2) === false){
-            if (Point.segmentCut(tree.node[u], v, p2, p3) === false){
-                if (Point.segmentCut(tree.node[u], v, p3, p4) === false){
-                    if (Point.segmentCut(tree.node[u], v, p4, p1) === false){
-                        tree.addNode(v,u);
-                    }else{
-                        console.log(i);
-                        break
-                    }
-                }else{
-                    console.log(i);
-                    break
-                }
-            }else{
-                console.log(i);
-                break
+    let v;
+    if (stage){
+        background(0);
+        graph.show();
+        //random node
+        let rw = random(graph.margin, graph.margin + graph.m*graph.spacing);
+        let rh = random(graph.margin, graph.margin + graph.n*graph.spacing);
+        fill('Cyan');
+        ellipse(rw, rh, 10);
+        let u = nearest(rw,rh);
+        let dx = rw - tree.node[u].x;
+        let dy = rh - tree.node[u].y;
+        let ang = angle(dx, dy);
+        let newX = tree.node[u].x + 20*Math.cos(ang);
+        let newY = tree.node[u].y + 20*Math.sin(ang);
+        v = new Point(newX, newY);
+        ellipse(v.x, v.y, 5);
+        //scan for obstacles
+        let add = true;
+        for (let i in graph.obstacle){
+            let x = graph.obstacle[i].x;
+            let y = graph.obstacle[i].y;
+            x = x * graph.spacing + graph.margin;
+            y = y * graph.spacing + graph.margin;
+            let p1 = new Point(x, y);
+            let p2 = new Point(x, y + graph.spacing);
+            let p3 = new Point(x + graph.spacing, y + graph.spacing);
+            let p4 = new Point(x + graph.spacing, y);
+            if ((Point.segmentCut(tree.node[u], v, p1, p2) !== false) || (Point.segmentCut(tree.node[u], v, p2, p3) !== false) || (Point.segmentCut(tree.node[u], v, p3, p4) !== false) || (Point.segmentCut(tree.node[u], v, p4, p1) !== false)){
+                add = false;
+                break;
             }
-        }else{
-            console.log(i);
-            break
         }
+        if ((add==true) && !graph.hitObstacle(v)){
+            tree.addNode(v,u);
+        }
+        //checking
+        if (graph.reachDestination(v)){
+            stage = false;
+            //tree.showTrace();
+        }
+        tree.show();
+    }else{
+        
     }
-
-
-    tree.show();
 }

@@ -27,34 +27,24 @@ class Point{
 
     static segmentCut(p1, p2, p3, p4){
         let p = this.lineCut(p1, p2, p3, p4);
-        // console.log(p);
-        // console.log(p3);
-        // console.log(p4);
+        //ellipse(p3.x, p3.y, 10);
+        stroke('rgba(255,0,0,0.5)')
+        line(p3.x, p3.y, p4.x, p4.y);
         if (((p.x >= p1.x) && (p.x <= p2.x)) || ((p.x <= p1.x) && (p.x >= p2.x))){
             if (((p.y >= p1.y) && (p.y <= p2.y)) || ((p.y <= p1.y) && (p.y >= p2.y))){
                 if (((p.x >= p3.x) && (p.x <= p4.x)) || ((p.x <= p3.x) && (p.x >= p4.x))){
                     if (((p.y >= p3.y) && (p.y <= p4.y)) || ((p.y < p3.y) && (p.y >= p4.y))){
-                        console.log('trueeeee')
-                        console.log(p1);
-                        console.log(p2);
-                        console.log(p3);
-                        console.log(p4);
                         return true;
-                    }else{
-                        console.log(4);
                     }
-                }else{
-                    console.log(3);
                 }
-            }else{
-                console.log(2);
             }
-        }else{
-            console.log(1);
         }
         return false;
     }
 
+    static map(p){
+        return new Point(p.y, p.x);
+    }
 }
 
 class Edge{
@@ -70,10 +60,12 @@ class Tree{
         this.edge = edges;
         this.n = this.node.length;
         this.start = start;
+        this.trace = [];
     }
 
     show(){
         fill(255);
+        noStroke();
         for (let i in this.node){
             ellipse(this.node[i].x, this.node[i].y, 5);
         }
@@ -87,6 +79,21 @@ class Tree{
         this.node.push(nod);
         this.n++;
         this.edge.push(new Edge(origin, this.node.length-1));
+        this.trace[n]=origin;
+    }
+
+    showTrace(){
+        stroke('CYAN');
+        let v;
+        let u = this.trace.length-1;
+        console.log(u);
+
+        while(u != 0){
+            //console.log(u);
+            v = this.trace[u];
+            //line(this.node[u].x, this.node[u].y, this.node[v].x, this.node[v].y);
+            u = v;
+        }
     }
 }
 
@@ -131,12 +138,12 @@ class Map{
         fill(150);
         noStroke();
         for(let i =0; i< this.obstacle.length; i++){
-            rect(this.obstacle[i].y * this.spacing + this.margin, this.obstacle[i].x * this.spacing + this.margin, this.spacing, this.spacing)
+            rect(this.obstacle[i].x * this.spacing + this.margin, this.obstacle[i].y * this.spacing + this.margin, this.spacing, this.spacing)
         }
         fill('RED');
-        rect(this.start.y*this.spacing+this.margin, this.start.x * this.spacing + this.margin, this.spacing, this.spacing);
+        rect(this.start.x*this.spacing+this.margin, this.start.y * this.spacing + this.margin, this.spacing, this.spacing);
         fill(0,255,0);
-        rect(this.destination.y*this.spacing+this.margin, this.destination.x * this.spacing + this.margin, this.spacing, this.spacing);
+        rect(this.destination.x*this.spacing+this.margin, this.destination.y * this.spacing + this.margin, this.spacing, this.spacing);
         
         //draw border
         noFill();
@@ -145,13 +152,21 @@ class Map{
         rect(this.margin, this.margin, this.m * this.spacing, this.n * this.spacing);
     }
 
-    hitObstacle(p, r, m){
-        if ((p.x + m*Math.cos(r) < this.margin) || (p.x + m*Math.cos(r) > this.spacing*this.m + this.margin)){
+    hitObstacle(p){
+        if ((p.x < this.margin) || (p.x > this.spacing*this.m + this.margin)){
             return true;
-        }else if ((p.y - m*Math.sin(r) < this.margin) || (p.y - m*Math.sin(r) > this.spacing*this.n + this.margin)){
+        }else if ((p.y < this.margin) || (p.y > this.spacing*this.n + this.margin)){
             return true;
         }
-        //console.log(m*Math.sin(r));
+        return false;
+    }
+
+    reachDestination(p){
+        let x = this.destination.x * this.spacing + this.margin;
+        let y = this.destination.y * this.spacing + this.margin;
+        if ((p.x >= x) && (p.x <= x + this.margin) && (p.y >= y) && (p.y <= y + this.margin)){
+            return true;
+        }
         return false;
     }
 }
