@@ -25,7 +25,7 @@ function init(){
 
 function setup(){
     createCanvas(600,600);
-    frameRate(20);
+    frameRate(60);
     background(0);
     init();
     
@@ -87,7 +87,6 @@ function draw(){
                 break;
             }
         }
-        console.log(add);
         if ((add==true) && !graph.hitObstacle(v)){
             tree.addNode(v,u);
         }
