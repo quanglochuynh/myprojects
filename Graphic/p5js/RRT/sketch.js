@@ -3,18 +3,20 @@ let tree;
 let stage = true;
 
 function init(){
-    let s = new Point(7, 4);
-    let d = new Point(8, 7);
+    let s = new Point(8, 2);
+    let d = new Point(1, 7);
     let obstacle = [];
     obstacle.push(new Point(5,0));
-    obstacle.push(new Point(5,1));
+    obstacle.push(new Point(3,1));
     obstacle.push(new Point(5,2));
-    obstacle.push(new Point(5,3));
+    obstacle.push(new Point(3,3));
     obstacle.push(new Point(5,4));
-    obstacle.push(new Point(5,5));
+    obstacle.push(new Point(3,5));
     obstacle.push(new Point(5,6));
+    obstacle.push(new Point(3,7));
     obstacle.push(new Point(5,8));
-    obstacle.push(new Point(5,9));
+    obstacle.push(new Point(3,9));
+    obstacle.push(new Point(5,5));
     graph = new Map(width, height, 10, 10, obstacle, s, d);
     let node = [new Point(s.x * graph.spacing + graph.margin + graph.spacing/2, s.y * graph.spacing + graph.margin + graph.spacing/2)];
     let edges = [new Edge(0,1)];
@@ -79,24 +81,22 @@ function draw(){
             let y = graph.obstacle[i].y;
             x = x * graph.spacing + graph.margin;
             y = y * graph.spacing + graph.margin;
-            let p1 = new Point(x, y);
-            let p2 = new Point(x, y + graph.spacing);
-            let p3 = new Point(x + graph.spacing, y + graph.spacing);
-            let p4 = new Point(x + graph.spacing, y);
-            if ((Point.segmentCut(tree.node[u], v, p1, p2) !== false) || (Point.segmentCut(tree.node[u], v, p2, p3) !== false) || (Point.segmentCut(tree.node[u], v, p3, p4) !== false) || (Point.segmentCut(tree.node[u], v, p4, p1) !== false)){
+            let p = new Point(x, y);
+            if (graph.isBlocked(p , v)){
                 add = false;
                 break;
             }
         }
+        console.log(add);
         if ((add==true) && !graph.hitObstacle(v)){
             tree.addNode(v,u);
         }
+        tree.show();
         //checking
         if (graph.reachDestination(v)){
             stage = false;
-            //tree.showTrace();
+            tree.showTrace();
         }
-        tree.show();
     }else{
         
     }

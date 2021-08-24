@@ -3,48 +3,6 @@ class Point{
         this.x = x;
         this.y = y;
     }
-
-    static lineCut(p1, p2, p3, p4){
-        let a1, a2;
-        if (p1.x == p2.x){
-            a1 = Number.MAX_SAFE_INTEGER;
-        }else{
-            a1 = (p1.y - p2.y)/(p1.x - p2.x);
-        }
-        if (p3.x == p4.x){
-            a2 = Number.MAX_SAFE_INTEGER;
-        }else{
-            a2 = (p3.y - p4.y)/(p3.x - p4.x);
-        }
-        let b1 = p1.y - a1*p1.x;
-        let b2 = p3.y - a2*p3.x;
-        let c = a1 - a2;
-        let d = b1 - b2;
-        let x = -d/c;
-        let y = a1*x + b1;
-        return new Point(Math.round(x,6),y);
-    }
-
-    static segmentCut(p1, p2, p3, p4){
-        let p = this.lineCut(p1, p2, p3, p4);
-        //ellipse(p3.x, p3.y, 10);
-        stroke('rgba(255,0,0,0.5)')
-        line(p3.x, p3.y, p4.x, p4.y);
-        if (((p.x >= p1.x) && (p.x <= p2.x)) || ((p.x <= p1.x) && (p.x >= p2.x))){
-            if (((p.y >= p1.y) && (p.y <= p2.y)) || ((p.y <= p1.y) && (p.y >= p2.y))){
-                if (((p.x >= p3.x) && (p.x <= p4.x)) || ((p.x <= p3.x) && (p.x >= p4.x))){
-                    if (((p.y >= p3.y) && (p.y <= p4.y)) || ((p.y < p3.y) && (p.y >= p4.y))){
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-    static map(p){
-        return new Point(p.y, p.x);
-    }
 }
 
 class Edge{
@@ -58,7 +16,7 @@ class Tree{
     constructor(nodes, edges, start){
         this.node = nodes;
         this.edge = edges;
-        this.n = this.node.length;
+        this.n = 1;
         this.start = start;
         this.trace = [];
     }
@@ -79,19 +37,16 @@ class Tree{
         this.node.push(nod);
         this.n++;
         this.edge.push(new Edge(origin, this.node.length-1));
-        this.trace[n]=origin;
+        this.trace[this.n-1]=origin;
     }
 
     showTrace(){
         stroke('CYAN');
         let v;
         let u = this.trace.length-1;
-        console.log(u);
-
         while(u != 0){
-            //console.log(u);
             v = this.trace[u];
-            //line(this.node[u].x, this.node[u].y, this.node[v].x, this.node[v].y);
+            line(this.node[u].x, this.node[u].y, this.node[v].x, this.node[v].y);
             u = v;
         }
     }
@@ -165,6 +120,13 @@ class Map{
         let x = this.destination.x * this.spacing + this.margin;
         let y = this.destination.y * this.spacing + this.margin;
         if ((p.x >= x) && (p.x <= x + this.margin) && (p.y >= y) && (p.y <= y + this.margin)){
+            return true;
+        }
+        return false;
+    }
+
+    isBlocked(pO, v){
+        if ((v.x > pO.x) && (v.x  <= pO.x + this.spacing) && (v.y >= pO.y) && (v.y <= pO.y + this.spacing)){
             return true;
         }
         return false;
