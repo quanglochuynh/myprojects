@@ -2,13 +2,7 @@ class Point{
     constructor(x,y){
         this.x = x;
         this.y = y;
-    }
-}
-
-class Edge{
-    constructor(u,v){
-        this.u = u;
-        this.v = v;
+        this.traced = false;
     }
 }
 
@@ -22,30 +16,37 @@ function angle(x,y){
 
 
 class Tree{
-    constructor(nodes, edges, start){
+    constructor(nodes, samplingrad, maxNumOfPoint){
         this.node = nodes;
-        this.edge = edges;
         this.n = 1;
-        this.start = start;
-        this.trace = [];
+        this.samplingrad = samplingrad;
+        this.maxNumOfPoint = maxNumOfPoint;
+        this.trace = [0];
         this.distance = [0];
     }
 
     show(){
         fill(255);
         noStroke();
+        ellipse(this.node[0].x, this.node[0].y, 15);
         for (let i in this.node){
-            ellipse(this.node[i].x, this.node[i].y, 5);
+            this.node[i].traced = false;
         }
-        stroke('ORANGE');
-        for (let i in this.edge){
+        for (let i in this.node){
             if (i!=0){
-                line(this.node[this.edge[i].u].x, this.node[this.edge[i].u].y, this.node[this.edge[i].v].x, this.node[this.edge[i].v].y);
+                this.showTrace(i, color('PINK'));
+                ellipse(this.node[i].x, this.node[i].y, 5);
             }
         }
     }
 
-    sampling(p){
+    adjustRadius(){
+        if ((this.n > this.maxNumOfPoint / (50 * this.samplingrad)) && (this.samplingrad > 30)){
+            this.samplingrad /=2;
+        }
+    }
+
+    findNearestID(p){
         let mindist = Number.MAX_SAFE_INTEGER;
         let u=0;
         for (let i in this.node){
@@ -55,18 +56,23 @@ class Tree{
                 u=i;
             }
         }
-        let ang = angle(p.x - tree.node[u].x, p.y - tree.node[u].y);
-        //ellipse(v.x, v.y, 5);
-        return new Point(this.node[u].x + 20*Math.cos(ang), this.node[u].y + 20*Math.sin(ang));
+        return u;
     }
 
-    addNode(nod, origin){
-        this.node.push(nod);
+    getSamplingPoint(p,u){
+        let ang = angle(p.x - tree.node[u].x, p.y - tree.node[u].y);
+        let res = new Point(this.node[u].x + this.samplingrad*Math.cos(ang), this.node[u].y + this.samplingrad*Math.sin(ang));
+        ellipse(res.x, res.y, 5);
+        return res;
+    }
+
+    addNode(sample, nearestID){
+        this.node.push(sample);
         this.n++;
-        this.edge.push(new Edge(origin, this.node.length-1));
-        this.trace[this.n-1] = origin;
-        this.distance[this.n-1] = dist(nod.x, nod.y, this.node[origin].x, this.node[origin].y);
-        //console.log(this.distance[this.n-1]);
+        this.trace[this.n-1] = nearestID;
+        this.distance[this.n-1] = dist(sample.x, sample.y, this.node[nearestID].x, this.node[nearestID].y);
+        this.adjustRadius();
+        return sample;
     }
 
     optimizeSuround(rad){
@@ -82,22 +88,19 @@ class Tree{
         }
     }
 
-    showTrace(i){
-        stroke('CYAN');
+    showTrace(i, c){
+        stroke(c);
         let v;
         let u = i;
-        let dis=0;
-        while(u != 0){
+        //let dis=0;
+        while((u != 0) && (this.node[u].traced == false)){
             v = this.trace[u];
             line(this.node[u].x, this.node[u].y, this.node[v].x, this.node[v].y);
-            dis += dist(this.node[u].x, this.node[u].y, this.node[v].x, this.node[v].y);
+            this.node[u].traced = true;
+            //dis += dist(this.node[u].x, this.node[u].y, this.node[v].x, this.node[v].y);
             u = v;
         }
-        console.log(dis)
-        return dis;
     }
-
-
 }
 
 class Map{
@@ -109,7 +112,7 @@ class Map{
         this.obstacle = obstacle;
         this.start = start;
         this.destination = destination;
-        this.margin = 50;
+        this.margin = 25;
         this.spacing = min((this.w - 2*this.margin)/this.m, (this.h - 2*this.margin)/this.n);
         this.bgc = bgc;
         this.oc = oc
@@ -118,6 +121,7 @@ class Map{
     show(){
         background(this.bgc);
         //draw grid
+        let k=0;
         for (let i=this.margin; i< this.margin+this.n*this.spacing; i+= this.spacing){
             stroke(100);
             strokeWeight(1);
@@ -126,8 +130,9 @@ class Map{
             noStroke();
             fill(255);
             textSize(16);
-            text(i/this.spacing-1, this.margin-20, i+this.spacing/2);
+            text(k++, this.margin-20, i+this.spacing/2);
         }
+        k = 0
         for (let i=this.margin; i< this.spacing*this.m + this.margin; i+= this.spacing){
             stroke(100);
             strokeWeight(1);
@@ -136,7 +141,7 @@ class Map{
             noStroke();
             fill(255);
             textSize(16);
-            text(i/this.spacing-1, i+this.spacing/2, this.margin-8);
+            text(k++, i+this.spacing/2, this.margin-8);
         }
 
         //draw obstacles
@@ -157,7 +162,7 @@ class Map{
         rect(this.margin, this.margin, this.m * this.spacing, this.n * this.spacing);
     }
 
-    static getRandomPoint(){
+    getRandomPoint(){
         let rw = random(graph.margin, graph.margin + graph.m*graph.spacing);
         let rh = random(graph.margin, graph.margin + graph.n*graph.spacing);
         fill('Cyan');
@@ -166,12 +171,12 @@ class Map{
     }
 
     checkForValidity(p){
-        if (this.hitObstacle(p) == false){
+        if (this.hitObstacle(p) == true){
             return false;
         }
         for (let i in this.obstacle){
-            let p = new Point(this.obstacle[i].x * this.spacing + this.margin, this.obstacle[i].y * this.spacing + this.margin);
-            if (this.isBlocked(p , v)){
+            let ob = new Point(this.obstacle[i].x * this.spacing + this.margin, this.obstacle[i].y * this.spacing + this.margin);
+            if (this.isBlocked(ob , p)){
                 return false;
             }
         }
@@ -179,6 +184,7 @@ class Map{
     }
 
     hitObstacle(p){
+        //console.log(p.x+ '  ' + this.margin)
         if ((p.x < this.margin) || (p.x > this.spacing*this.m + this.margin)){
             return true;
         }else if ((p.y < this.margin) || (p.y > this.spacing*this.n + this.margin)){
@@ -190,7 +196,7 @@ class Map{
     reachDestination(p){
         let x = this.destination.x * this.spacing + this.margin;
         let y = this.destination.y * this.spacing + this.margin;
-        if ((p.x >= x) && (p.x <= x + this.margin) && (p.y >= y) && (p.y <= y + this.margin)){
+        if ((p.x >= x) && (p.x <= x + this.spacing) && (p.y >= y) && (p.y <= y + this.spacing)){
             return true;
         }
         return false;
@@ -202,4 +208,9 @@ class Map{
         }
         return false;
     }
+
+    map(p){
+        return new Point(p.x * this.m * this.spacing + this.margin + this.spacing/2, p.y * this.n* this.spacing + this.margin + this.spacing/2);
+    }
+
 }

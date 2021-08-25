@@ -6,10 +6,11 @@ let found = false;
 let bestDist = Number.MAX_SAFE_INTEGER;
 let backgroundColor;
 let obstacleColor;
+let samplingDistance=40;
 
 function init(){
     backgroundColor = color(0);
-    obstacleColor = color(255);
+    obstacleColor = color(150);
     let s = new Point(8, 2);
     let d = new Point(1, 7);
     let obstacle = [];
@@ -26,87 +27,42 @@ function init(){
     obstacle.push(new Point(5,5));
     graph = new Map(width, height, 10, 10, obstacle, s, d, backgroundColor, obstacleColor);
     let node = [new Point(s.x * graph.spacing + graph.margin + graph.spacing/2, s.y * graph.spacing + graph.margin + graph.spacing/2)];
-    let edges = [new Edge(0,1)];
-    tree = new Tree(node, edges, node[0]);
+    tree = new Tree(node, samplingDistance, height*width);
 }
 
 function setup(){
     createCanvas(600,600);
-    frameRate(50);
+    frameRate(5);
     background(0);
     init();
-    
-    //console.log(graph.hitObstacle(new Point(200,100), 1.5*PI, 400));
-    //console.log(Point.segmentCut(new Point(-4,0), new Point(5,5), new Point(0,-2), new Point(0,5)));
-    //console.log(Point.segmentCut(new Point(-4,-4), new Point(5,5), new Point(-1,0), new Point(5,0)));
-
 }
-
-function nearest(x,y){
-    let mindist = Number.MAX_SAFE_INTEGER;
-    let u=0;
-    for (let i in tree.node){
-        if (found){
-            if (i == endv){
-                
-            }else{
-                let d = dist(tree.node[i].x, tree.node[i].y, x, y);
-                if ((d < mindist)){
-                    mindist = d;
-                    u=i;
-                }
-            }
-        }else{
-            let d = dist(tree.node[i].x, tree.node[i].y, x, y);
-            if ((d < mindist)){
-                mindist = d;
-                u=i;
-            }
-        }
-    }
-    return u;
-}
-
 
 function draw(){
-    let v;
     if (mouseIsPressed){
-        stage = false;
+        if (stage){
+            stage = false;
+            tree.showTrace(tree.n -1);
+            console.log('DONE!!!');
+            console.log('Distance is ' + tree.distance[endv]);
+        }else{
+            stage = true;
+        }
     }
     if (stage){
         graph.show();
-        //random node
         let randomPoint = graph.getRandomPoint();
-        
-
-        v = tree.sampling(randomPoint);
-
+        let nearestID = tree.findNearestID(randomPoint);
+        let v = tree.getSamplingPoint(randomPoint, nearestID);
         if (graph.checkForValidity(v)){
-            tree.addNode(v,u);
+            tree.addNode(v, nearestID);
         }
-
         //tree.optimizeSuround(40);
-        
-        //checking
         if (graph.reachDestination(v)){
-
-
-
-            // if (tree.distance[tree.node.length -1] < bestDist){
-            //     bestDist = tree.distance[tree.node.length -1];
-            //     endv = tree.node.length -1;
-            //     //console.log(tree.distance[endv]);
-            // }
-            
-
-            if (tree.showTrace(endv)<450){
-                stage = false;
-            }
+            console.log('done');
+            stage = false;
         }
         tree.show();
     }else{
-        tree.showTrace(endv);
-        console.log('DONE!!!');
-        console.log('Distance is ' + tree.distance[endv]);
+       
     }
 }
