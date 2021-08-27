@@ -32,16 +32,18 @@ class Tree{
         for (let i in this.node){
             this.node[i].traced = false;
         }
+        textSize(10)
         for (let i in this.node){
             if (i!=0){
                 this.showTrace(i, color('PINK'));
-                ellipse(this.node[i].x, this.node[i].y, 5);
+                ellipse(this.node[i].x, this.node[i].y, 2);
+                //text(round(this.distance[i]), this.node[i].x, this.node[i].y);
             }
         }
     }
 
     adjustRadius(){
-        if ((this.n > this.maxNumOfPoint / (50 * this.samplingrad)) && (this.samplingrad > 30)){
+        if ((this.n > this.maxNumOfPoint / (100 * this.samplingrad)) && (this.samplingrad > 20)){
             this.samplingrad /=2;
         }
     }
@@ -60,46 +62,106 @@ class Tree{
     }
 
     getSamplingPoint(p,u){
-        let ang = angle(p.x - tree.node[u].x, p.y - tree.node[u].y);
-        let res = new Point(this.node[u].x + this.samplingrad*Math.cos(ang), this.node[u].y + this.samplingrad*Math.sin(ang));
-        ellipse(res.x, res.y, 5);
-        return res;
+        if (dist(p.x,p.y, this.node[u].x, this.node[u].y) > this.samplingrad){
+            let ang = angle(p.x - tree.node[u].x, p.y - tree.node[u].y);
+            let res = new Point(this.node[u].x + this.samplingrad*Math.cos(ang), this.node[u].y + this.samplingrad*Math.sin(ang));
+            ellipse(res.x, res.y, 5);
+            return res;
+        }else{
+            return p;
+        }
+        
     }
 
     addNode(sample, nearestID){
         this.node.push(sample);
         this.n++;
         this.trace[this.n-1] = nearestID;
-        this.distance[this.n-1] = dist(sample.x, sample.y, this.node[nearestID].x, this.node[nearestID].y);
-        this.adjustRadius();
+        this.distance[this.n-1] = this.distance[nearestID] + this.samplingrad;
         return sample;
     }
 
-    optimizeSuround(rad){
-        let iv = this.n-1;
+    circle(p){
+        ellipse(p.x, p.y,10);
+    }
+
+    dista(a,b){
+        return dist(this.node[a].x, this.node[a].y, this.node[b].x, this.node[b].y);
+    }
+
+    optimizeSuround2(rad){
+        let newNodeID = this.n-1;
+        let unplugID = this.trace[newNodeID];
+        this.circle(this.node[newNodeID]);
+        stroke('RED');
+        this.circle(this.node[unplugID]);
+        let mindist = Number.MAX_SAFE_INTEGER;
+        let minID;
+        let scanArray = [];
+        strokeWeight(2);
+        //find new parent
         for (let i in this.node){
-            let d = dist(this.node[iv].x, this.node[iv].y, this.node[i].x, this.node[i].y);
-            if (d<rad){
-                if (this.distance[iv] + d < this.distance[i]){
-                    this.distance[i] = this.distance[iv] + d;
-                    this.trace[i] = iv;
+            if (i == newNodeID){
+                continue;
+            }
+            let d = this.dista(i, newNodeID);
+            if (d < rad){
+                scanArray.push(i);
+                line(this.node[newNodeID].x, this.node[newNodeID].y, this.node[i].x, this.node[i].y);
+                if (this.distance[i] + d < mindist){
+                    mindist = this.distance[i] + d;
+                    minID = i;
+                }
+            }
+        }
+        this.trace[newNodeID] = minID;
+        this.distance[newNodeID] = mindist;
+        //rewiring
+        for(let i in scanArray){
+            if ((scanArray[i] != newNodeID) && (scanArray[i] != minID)){
+                let dis = this.dista(newNodeID, scanArray[i])
+                if ((this.distance[scanArray[i]] > this.distance[newNodeID] + dis)){
+                    stroke('yellow');
+                    strokeWeight(4);
+                    line(this.node[newNodeID].x, this.node[newNodeID].y, this.node[scanArray[i]].x, this.node[scanArray[i]].y);
+                    this.distance[scanArray[i]] = this.distance[newNodeID] + dis;
+                    this.trace[scanArray[i]] = newNodeID;
                 }
             }
         }
     }
 
     showTrace(i, c){
+        //console.log('show trace');
         stroke(c);
+        strokeWeight(1);
         let v;
         let u = i;
-        //let dis=0;
+        let dis=0;
         while((u != 0) && (this.node[u].traced == false)){
             v = this.trace[u];
+            //console.log(u);
             line(this.node[u].x, this.node[u].y, this.node[v].x, this.node[v].y);
             this.node[u].traced = true;
-            //dis += dist(this.node[u].x, this.node[u].y, this.node[v].x, this.node[v].y);
+            dis += dist(this.node[u].x, this.node[u].y, this.node[v].x, this.node[v].y);
             u = v;
         }
+    }
+
+    showPath(desID, c){
+        stroke(c);
+        strokeWeight(4)
+        let v;
+        let u = desID;
+        let dis=0;
+        while((u != 0)){
+            v = this.trace[u];
+            //console.log(u);
+            line(this.node[u].x, this.node[u].y, this.node[v].x, this.node[v].y);
+            dis += dist(this.node[u].x, this.node[u].y, this.node[v].x, this.node[v].y);
+            u = v;
+        }
+        return dis;
     }
 }
 
