@@ -1,5 +1,5 @@
 const filepath = 'test1.csv';
-const samplingDistance=30;
+const samplingDistance=20;
 const correctionRadius = samplingDistance * 1.5;
 const bias = 0.1;
 

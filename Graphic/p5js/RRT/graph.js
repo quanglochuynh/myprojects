@@ -89,6 +89,10 @@ class Tree{
         return dist(this.node[a].x, this.node[a].y, this.node[b].x, this.node[b].y);
     }
 
+    drawLine(a,b){
+        line(this.node[a].x, this.node[a].y, this.node[b].x, this.node[b].y);
+    }
+
     optimizeSuround(rad){
         let newNodeID = this.n-1;
         let unplugID = this.trace[newNodeID];
@@ -107,7 +111,7 @@ class Tree{
             let d = this.dista(i, newNodeID);
             if (d < rad){
                 scanArray.push(i);
-                line(this.node[newNodeID].x, this.node[newNodeID].y, this.node[i].x, this.node[i].y);
+                this.drawLine(newNodeID, i);
                 if (this.distance[i] + d < mindist){
                     mindist = this.distance[i] + d;
                     minID = i;
@@ -117,13 +121,13 @@ class Tree{
         this.trace[newNodeID] = minID;
         this.distance[newNodeID] = mindist;
         //rewiring
+        stroke('yellow');
+        strokeWeight(4);
         for(let i in scanArray){
             if ((scanArray[i] != newNodeID)){
                 let dis = this.dista(newNodeID, scanArray[i])
-                if ((this.distance[scanArray[i]] > this.distance[newNodeID] + dis)){
-                    stroke('yellow');
-                    strokeWeight(4);
-                    line(this.node[newNodeID].x, this.node[newNodeID].y, this.node[scanArray[i]].x, this.node[scanArray[i]].y);
+                if ((this.distance[scanArray[i]] > this.distance[newNodeID] + dis)){            
+                    this.drawLine(newNodeID, scanArray[i]);
                     this.distance[scanArray[i]] = this.distance[newNodeID] + dis;
                     this.trace[scanArray[i]] = newNodeID;
                 }
@@ -132,18 +136,14 @@ class Tree{
     }
 
     showTrace(i, c){
-        //console.log('show trace');
         stroke(c);
         strokeWeight(1);
         let v;
         let u = i;
-        let dis=0;
         while((u != 0) && (this.node[u].traced == false)){
             v = this.trace[u];
-            //console.log(u);
             line(this.node[u].x, this.node[u].y, this.node[v].x, this.node[v].y);
             this.node[u].traced = true;
-            dis += dist(this.node[u].x, this.node[u].y, this.node[v].x, this.node[v].y);
             u = v;
         }
     }
@@ -156,7 +156,6 @@ class Tree{
         let dis=0;
         while((u != 0)){
             v = this.trace[u];
-            //console.log(u);
             line(this.node[u].x, this.node[u].y, this.node[v].x, this.node[v].y);
             dis += dist(this.node[u].x, this.node[u].y, this.node[v].x, this.node[v].y);
             u = v;
@@ -236,8 +235,6 @@ class Map{
         }else{
             console.log('biasing');
             let res = new Point(this.destination.x * this.spacing + this.margin + this.spacing/2, this.destination.y * this.spacing + this.margin + this.spacing/2);
-            fill(255);
-            ellipse(res.x, res.y, 100);
             return res;
         }
         
