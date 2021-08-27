@@ -1,3 +1,8 @@
+const filepath = 'test1.csv';
+const samplingDistance=30;
+const correctionRadius = samplingDistance * 1.5;
+const bias = 0.1;
+
 let graph;
 let tree;
 let stage = false;
@@ -6,8 +11,6 @@ let found = false;
 let bestDist = Number.MAX_SAFE_INTEGER;
 let backgroundColor;
 let obstacleColor;
-let samplingDistance=20;
-let correctionRadius = samplingDistance * 2;
 let res;
 let matrix;
 
@@ -23,7 +26,6 @@ function init(){
         for(let j = 0; j < matrix.getColumnCount(); j++){
             str = matrix.getString(i,j);
             if (str == '1'){
-                console.log(i + '  '+ j + '  ' + str);
                 obstacle.push(new Point(j,i));
             }else if (str == '2'){
                 s = new Point(j,i)
@@ -34,18 +36,18 @@ function init(){
         }
     }
 
-    graph = new Map(width, height, matrix.getRowCount(), matrix.getColumnCount(), obstacle, s, d, backgroundColor, obstacleColor);
+    graph = new Map(width, height, matrix.getRowCount(), matrix.getColumnCount(), obstacle, s, d, bias, backgroundColor, obstacleColor);
     let node = [new Point(s.x * graph.spacing + graph.margin + graph.spacing/2, s.y * graph.spacing + graph.margin + graph.spacing/2)];
     tree = new Tree(node, samplingDistance, height*width);
 }
 
 function preload(){
-    matrix = loadTable('test1.csv', 'csv');
+    matrix = loadTable(filepath, 'csv');
 }
 
 function setup(){
     createCanvas(800,800);
-    frameRate(10);
+    frameRate(8);
     background(0);
     init();
 }

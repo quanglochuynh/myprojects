@@ -118,7 +118,7 @@ class Tree{
         this.distance[newNodeID] = mindist;
         //rewiring
         for(let i in scanArray){
-            if ((scanArray[i] != newNodeID) && (scanArray[i] != minID)){
+            if ((scanArray[i] != newNodeID)){
                 let dis = this.dista(newNodeID, scanArray[i])
                 if ((this.distance[scanArray[i]] > this.distance[newNodeID] + dis)){
                     stroke('yellow');
@@ -166,7 +166,7 @@ class Tree{
 }
 
 class Map{
-    constructor(wid, hei, n, m, obstacle, start, destination, bgc, oc){
+    constructor(wid, hei, n, m, obstacle, start, destination, bias, bgc, oc){
         this.w = wid;
         this.h = hei;
         this.n = n;
@@ -174,6 +174,7 @@ class Map{
         this.obstacle = obstacle;
         this.start = start;
         this.destination = destination;
+        this.bias = bias;
         this.margin = 25;
         this.spacing = min((this.w - 2*this.margin)/this.m, (this.h - 2*this.margin)/this.n);
         this.bgc = bgc;
@@ -225,11 +226,21 @@ class Map{
     }
 
     getRandomPoint(){
-        let rw = random(graph.margin, graph.margin + graph.m*graph.spacing);
-        let rh = random(graph.margin, graph.margin + graph.n*graph.spacing);
-        fill('Cyan');
-        ellipse(rw, rh, 10);
-        return new Point(rw, rh);
+        let biasing = random(1);
+        if (biasing > this.bias){
+            let rw = random(graph.margin, graph.margin + graph.m*graph.spacing);
+            let rh = random(graph.margin, graph.margin + graph.n*graph.spacing);
+            fill('Cyan');
+            ellipse(rw, rh, 10);
+            return new Point(rw, rh);
+        }else{
+            console.log('biasing');
+            let res = new Point(this.destination.x * this.spacing + this.margin + this.spacing/2, this.destination.y * this.spacing + this.margin + this.spacing/2);
+            fill(255);
+            ellipse(res.x, res.y, 100);
+            return res;
+        }
+        
     }
 
     checkForValidity(p){
