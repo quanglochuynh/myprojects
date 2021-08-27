@@ -6,7 +6,8 @@ let found = false;
 let bestDist = Number.MAX_SAFE_INTEGER;
 let backgroundColor;
 let obstacleColor;
-let samplingDistance=30;
+let samplingDistance=20;
+let correctionRadius = samplingDistance * 2;
 let res;
 let matrix;
 
@@ -21,14 +22,11 @@ function init(){
     for(let i=0; i < matrix.getRowCount(); i++){
         for(let j = 0; j < matrix.getColumnCount(); j++){
             str = matrix.getString(i,j);
-            console.log(str);
-            if (str == ''){
-                continue;
-            }
-            if (str = '1'){
+            if (str == '1'){
+                console.log(i + '  '+ j + '  ' + str);
                 obstacle.push(new Point(j,i));
             }else if (str == '2'){
-                s = new Point(j,i);
+                s = new Point(j,i)
             }else if (str == '3'){
                 d = new Point(j,i);
             }
@@ -75,7 +73,7 @@ function draw(){
         if (graph.checkForValidity(v)){
             tree.addNode(v, nearestID);
             //tree.adjustRadius();
-            tree.optimizeSuround2(samplingDistance*2);
+            tree.optimizeSuround(correctionRadius);
         }
         tree.show();
         if (graph.reachDestination(v)){

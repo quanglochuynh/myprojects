@@ -89,7 +89,7 @@ class Tree{
         return dist(this.node[a].x, this.node[a].y, this.node[b].x, this.node[b].y);
     }
 
-    optimizeSuround2(rad){
+    optimizeSuround(rad){
         let newNodeID = this.n-1;
         let unplugID = this.trace[newNodeID];
         this.circle(this.node[newNodeID]);
