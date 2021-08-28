@@ -1,7 +1,10 @@
 const filepath = 'test1.csv';
-const samplingDistance=20;
+const samplingDistance=30;
 const correctionRadius = samplingDistance * 1.5;
-const bias = 0.1;
+const bias = 0.08;
+const canvasHeight = 800;
+const canvasWidth = 800;
+const samplingSpeed = 15;
 
 let graph;
 let tree;
@@ -17,10 +20,9 @@ let matrix;
 function init(){
     backgroundColor = color(0);
     obstacleColor = color(150);
-    let s = new Point(9, 0);
-    let d = new Point(1, 7);
+    let s = new Point(0, 0);
+    let d = new Point(0, 0);
     let obstacle = [];
-
     let str = undefined;
     for(let i=0; i < matrix.getRowCount(); i++){
         for(let j = 0; j < matrix.getColumnCount(); j++){
@@ -32,10 +34,8 @@ function init(){
             }else if (str == '3'){
                 d = new Point(j,i);
             }
-            
         }
     }
-
     graph = new Map(width, height, matrix.getRowCount(), matrix.getColumnCount(), obstacle, s, d, bias, backgroundColor, obstacleColor);
     let node = [new Point(s.x * graph.spacing + graph.margin + graph.spacing/2, s.y * graph.spacing + graph.margin + graph.spacing/2)];
     tree = new Tree(node, samplingDistance, height*width);
@@ -46,8 +46,8 @@ function preload(){
 }
 
 function setup(){
-    createCanvas(800,800);
-    frameRate(8);
+    createCanvas(canvasWidth,canvasHeight);
+    frameRate(samplingSpeed);
     background(0);
     init();
 }
@@ -68,31 +68,34 @@ function draw(){
         stage = false;
     }
     if (stage){
+        console.log('SHOW GRAPH');
         graph.show();
         let randomPoint = graph.getRandomPoint();
         let nearestID = tree.findNearestID(randomPoint);
         let v = tree.getSamplingPoint(randomPoint, nearestID);
         if (graph.checkForValidity(v)){
             tree.addNode(v, nearestID);
-            //tree.adjustRadius();
+            console.log('optimizing');
             tree.optimizeSuround(correctionRadius);
         }
+        console.log('show tree');
         tree.show();
         if (graph.reachDestination(v)){
             if (!found){
                 console.log('Found first path!');
                 found = true;
                 endv = tree.n-1;
-            }
+            }else{
+
+            }            
+        }
+        if (found == true){
+            console.log('show path');
             res = tree.showPath(endv, color('CYAN'));
             if (res < bestDist){
                 bestDist = res;
-                tree.distance[endv] = res;
                 endv = tree.n-1;
             }           
-        }
-        if (found == true){
-            res = tree.showPath(endv, color('CYAN'));
             tree.distance[endv] = res;
             console.log('Best distance: ' + res + '     n = ' + tree.n + '      sampling radius = ' + tree.samplingrad);
         }

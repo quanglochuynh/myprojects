@@ -155,6 +155,7 @@ class Tree{
         let u = desID;
         let dis=0;
         while((u != 0)){
+            console.log('u = ' + u);
             v = this.trace[u];
             line(this.node[u].x, this.node[u].y, this.node[v].x, this.node[v].y);
             dis += dist(this.node[u].x, this.node[u].y, this.node[v].x, this.node[v].y);
@@ -233,7 +234,6 @@ class Map{
             ellipse(rw, rh, 10);
             return new Point(rw, rh);
         }else{
-            console.log('biasing');
             let res = new Point(this.destination.x * this.spacing + this.margin + this.spacing/2, this.destination.y * this.spacing + this.margin + this.spacing/2);
             return res;
         }
