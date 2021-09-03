@@ -22,7 +22,7 @@ function draw(){
     particle[0].updateAccelaration(new Vector(0, -(particle[0].position.y)*0.005));
 
     for (let i=1; i<particle.length; i++){
-        particle[i].updateAccelaration(new Vector(0, -(particle[i].position.y)*0.005 + (particle[i-1].position.y-particle[i].position.y)*0.0005));
+        particle[i].updateAccelaration(new Vector (0, 0.001*(particle[i-1].position.y - particle[i].position.y)));
     }
 
     plane.drawPlane();

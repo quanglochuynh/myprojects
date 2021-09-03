@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Mi IEMAC</title>
+	<link rel="stylesheet" href="style.css">
+	<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,300;0,400;0,500;0,700;1,100;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+</head>
+<body>
+	<div class="header">
+		<div class="container">
+			<div class="navbar">
+				<div class="logo">
+					<img src="images/logo.jpg" width="125px">
+				</div>
+				<nav>
+					<ul>
+						<li><a href="index.html">Home</a></li>
+						<li><a href="product.html">Product</a></li>
+						<li><a href="about.html">About</a></li>
+						<li><a href="contact.html">Contact</a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</div>
+
+	<div class="catalogue">
+		<form class="small-container"  action="getorder.php" method="POST">
+			<div class="row2">
+				<div class="col-3">
+				  	<img src="images/mitron.png" width="150px" height="150px">
+					<div class="col-5">
+						<b>Mì Trộn 1 vắt</b>
+						<p1>18,000 vnđ</p1>
+					</div>
+					<div class="row2">
+						<div class="col-4">
+							<img src="images/add.png" alt="add" width="50px" height="50px" onclick="add(1)">
+						</div>
+						<div class="col-4">
+                            <input class="edtx2" id="sl1" name="sl1" value="0">
+                        </div>
+						<div class="col-4">
+							<img src="images/drop.png" alt="drop" width="50px" height="50px" onclick="add(5)">
+						</div>
+					</div>
+				</div>
+				<div class="col-3">
+					<img src="images/mitron.png" width="150px" height="150px">
+					<div class="col-5">
+						<b>Mì Trộn 2 vắt</b>
+						<p1>22,000 vnđ</p1>
+					</div>
+					<div class="row2">
+						<div class="col-4">
+							<img src="images/add.png" width="50px" height="50px" id="add2" onclick="add(2)">
+						</div>
+						<div class="col-4">
+                            <input class="edtx2" id="sl2" name="sl2" value="0">
+						</div>
+						<div class="col-4">
+							<img src="images/drop.png" width="50px" height="50px" id="drop2" onclick="add(6)">
+						</div>
+					</div>
+				</div>
+				<div class="col-3">
+					<img src="images/drink.png" width="150px" height="150px">
+					<div class="col-5">
+						<b>Soda Việt quất</b>
+						<p1>12,000 vnđ</p1>
+					</div>
+					<div class="row2">
+						<div class="col-4">
+							<img src="images/add.png" width="50px" height="50px" id="add3" onclick="add(3)">
+						</div>
+						<div class="col-4">
+                            <input class="edtx2" id="sl3" name="sl3" value="0">
+						</div>
+						<div class="col-4">
+							<img src="images/drop.png" width="50px" height="50px" id="drop3" onclick="add(7)">
+						</div>
+					</div>
+				</div>
+				<div class="col-3">
+					<img src="images/combo.png" width="150px" height="150px">	
+					<b>Combo 2 vắt + Soda Việt quất</b>	
+					<p1>30,000 vnđ</p1>
+					<div class="row2">
+						<div class="col-4">
+							<img src="images/add.png" width="50px" height="50px" id="add4" onclick="add(4)">
+						</div>
+						<div class="col-4">
+                            <input class="edtx2" id="sl4" name="sl4" value="0">
+						</div>
+						<div class="col-4">
+							<img src="images/drop.png" width="50px" height="50px" id="drop4"  onclick="add(8)">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row3">
+					<a>Tên của bạn:</a>
+					<input class="edtx1" type="text" name="tenKH" placeholder="vd: Nguyễn Văn A">
+					<a>Mã số sinh viên:</a>
+					<input class="edtx1" type="text" name="MSSV" placeholder="vd: IELSIU20123">
+					<a>Số điện thoại liên lạc:</a>
+					<input class="edtx1" type="text" name="SDT" placeholder="vd: 0123456789">
+					<a>Nơi bạn muốn ship:</a>
+					<input class="edtx1" type="text" name="Address" placeholder="vd: A2.104">
+					<div align="center" class="col-2">
+						<button class="big-btn" type="submit" value="Submit">Choose!</button>
+					</div>
+			</div>
+		</form>
+	</div>
+	
+	
+	<script>
+		var m1=0;
+		var m2=0;
+		var tc=0;
+		var cb=0;
+		
+		function add(i){
+			switch (i){
+				case 1:
+					m1=m1+1;
+					document.getElementById("sl1").value = m1;
+					break;
+				case 2:
+					m2=m2+1;
+					document.getElementById("sl2").value = m2;
+					break;
+				case 3:
+					tc=tc+1;
+					document.getElementById("sl3").value = tc;
+					break;
+				case 4:
+					cb=cb+1;
+					document.getElementById("sl4").value = cb;
+					break;
+				case 5:
+					if (m1==0) break;
+					m1=m1-1;
+					document.getElementById("sl1").value = m1;
+					break;
+				case 6:
+					if (m2==0) break;
+					m2=m2-1;
+					document.getElementById("sl2").value = m2;
+					break;
+				case 7:
+					if (tc==0) break;
+					tc=tc-1;
+					document.getElementById("sl3").value = tc;
+					break;
+				case 8:
+					if (cb==0) break;
+					cb=cb-1;
+					document.getElementById("sl4").value = cb;
+					break;
+			}
+		}
+		
+		document.getElementById("sl1").value = m1;
+		document.getElementById("sl2").value = m2;
+		document.getElementById("sl3").value = tc;
+		document.getElementById("sl4").value = cb;
+		
+	</script>
+	
+	
+</body>
+</html>

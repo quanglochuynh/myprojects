@@ -56,10 +56,10 @@ function draw(){
     if (mouseIsPressed){
         if (stage){
             stage = false;
-            if (found){
-                let res = tree.showPath(endv, color('CYAN'));
-                console.log('Distance is ' + res);
-            }
+            // if (found){
+            //     let res = tree.showPath(endv, color('CYAN'));
+            //     console.log('Distance is ' + res);
+            // }
         }else{
             stage = true;
         }
@@ -89,16 +89,16 @@ function draw(){
 
             }            
         }
-        if (found == true){
-            console.log('show path');
-            res = tree.showPath(endv, color('CYAN'));
-            if (res < bestDist){
-                bestDist = res;
-                endv = tree.n-1;
-            }           
-            tree.distance[endv] = res;
-            console.log('Best distance: ' + res + '     n = ' + tree.n + '      sampling radius = ' + tree.samplingrad);
-        }
+        // if (found == true){
+        //     console.log('show path');
+        //     res = tree.showPath(endv, color('CYAN'));
+        //     if (res < bestDist){
+        //         bestDist = res;
+        //         endv = tree.n-1;
+        //     }           
+        //     tree.distance[endv] = res;
+        //     console.log('Best distance: ' + res + '     n = ' + tree.n + '      sampling radius = ' + tree.samplingrad);
+        // }
     }else{
        //do nothing
     }

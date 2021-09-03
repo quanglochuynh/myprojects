@@ -32,12 +32,12 @@ class Tree{
         for (let i in this.node){
             this.node[i].traced = false;
         }
-        textSize(10)
+        stroke('PINK');
+        strokeWeight(1);
         for (let i in this.node){
             if (i!=0){
-                this.showTrace(i, color('PINK'));
+                this.distance[i] = this.showTrace(i);
                 ellipse(this.node[i].x, this.node[i].y, 2);
-                //text(round(this.distance[i]), this.node[i].x, this.node[i].y);
             }
         }
     }
@@ -135,22 +135,17 @@ class Tree{
         }
     }
 
-    showTrace(i, c){
-        stroke(c);
-        strokeWeight(1);
-        let v;
-        let u = i;
-        while((u != 0) && (this.node[u].traced == false)){
-            v = this.trace[u];
-            line(this.node[u].x, this.node[u].y, this.node[v].x, this.node[v].y);
-            this.node[u].traced = true;
-            u = v;
+    showTrace(i){
+        if ((this.node[i].traced == true) || (i == 0)){
+            return this.distance[i];
+        }else{
+            this.drawLine(i, this.trace[i]);
+            this.node[i].traced = true;
+            return (this.showTrace(this.trace[i]) + this.dista(i, this.trace[i]));
         }
     }
 
-    showPath(desID, c){
-        stroke(c);
-        strokeWeight(4)
+    showPath(desID){
         let v;
         let u = desID;
         let dis=0;
