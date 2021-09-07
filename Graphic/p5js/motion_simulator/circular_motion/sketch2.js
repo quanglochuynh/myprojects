@@ -5,8 +5,8 @@ let par;
 function init(){
     plane = new OXY(height, width, 50);
     let p = new Vector(0, 4);
-    let v = new Vector(4, 0);
-    let a = new Vector(0, -4);
+    let v = new Vector(0.2, 0);
+    let a = new Vector(0, -0.01);
     par = new Particle(p, v, a, 'cyan');
 
 }
@@ -19,8 +19,8 @@ function setup(){
 }
 
 function draw(){
-    background(color('rgba(0,0,0,0.0025)'));
-    par.updateAccelaration(Vector.parallel(par.position,  -4));
+    background(color('rgba(0,0,0,0.05)'));
+    par.updateAccelaration(Vector.parallel(par.position,  -0.01));
     plane.drawPlane();
     plane.drawParticle(par);
 }
