@@ -18,9 +18,9 @@ function process(n){
         let res = collazt(n);
         if (res % 2 ==0){
             rotate(angle);
-            stroke('rgba(225,100, 150, 0.5)')
+            stroke('rgba(225,100, 150, 0.25)')
         }else{
-            stroke('rgba(150,100, 225, 0.5)')
+            stroke('rgba(150,100, 225, 0.25)')
             rotate(-angle);
         }
         line(0,0,0,-branchLength);
