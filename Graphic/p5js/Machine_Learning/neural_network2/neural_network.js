@@ -33,4 +33,44 @@ class NeuralNetwork{
         return output.matrixToArray();
     }
 
+    train(inputArray, targetArray){
+        //feed forward
+        let inpMatrix = Matrix.arrayToMatrix(inputArray);
+        let hidMatrix = Matrix.multiply(this.weightIH, inpMatrix);  
+        hidMatrix = Matrix.add(hidMatrix, this.bias_H);
+        hidMatrix.map(sigmoid);
+        let resultMatrix = Matrix.multiply(this.weightHO, hidMatrix);
+        resultMatrix = Matrix.add(resultMatrix, this.bias_O);
+        resultMatrix.map(sigmoid);
+
+        //back-propagation
+        let targetMatrix = Matrix.arrayToMatrix(targetArray);
+        let outputError = Matrix.subtract(targetMatrix, resultMatrix);
+        console.table(inputArray);
+        resultMatrix.show();
+        targetMatrix.show();
+        outputError.show();
+
+        //calculate gradient
+        let gradient = Matrix.map(resultMatrix, dsigmoid);
+        gradient.hardamard(outputError);
+        gradient.scale(this.learningRate);
+        //calculate delta
+        let hidden_T = Matrix.transpose(hidMatrix);
+        let weightHO_delta = Matrix.multiply(gradient, hidden_T);
+        this.weightHO = Matrix.add(this.weightHO, weightHO_delta);
+
+        //calculate hidden error
+        let weigthHO_Transposed = Matrix.transpose(this.weightHO);
+        let hiddenError = Matrix.multiply(weigthHO_Transposed, outputError);
+        hiddenError.show();
+
+        let hiddenGradient = Matrix.map(hidMatrix, dsigmoid);
+        hiddenGradient.hardamard(hiddenError);
+        hiddenGradient.scale(this.learningRate);
+        let input_T = Matrix.transpose(inpMatrix);
+        let weightIH_delta = Matrix.multiply(hiddenGradient, input_T);
+        this.weightIH = Matrix.add(this.weightIH, weightIH_delta);
+    }
+
 }

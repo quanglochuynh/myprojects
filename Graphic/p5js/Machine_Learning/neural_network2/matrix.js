@@ -59,6 +59,14 @@ class Matrix{
         }
     }
 
+    hardamard(n){
+        for (let i=0; i< this.rows; i++){
+            for (let j = 0; j< this.cols; j++){
+                this.data[i][j] *= n.data[i][j];
+            }
+        }
+    }
+
     static multiply(a,b){
         if (a.cols != b.rows){
             console.log('cannot multiply');
@@ -78,12 +86,24 @@ class Matrix{
         }
     }
 
+
+
     map(fn){
         for (let i=0; i< this.rows; i++){
             for (let j = 0; j< this.cols; j++){
                 this.data[i][j] = fn(this.data[i][j]);
             }
         }
+    }
+
+    static map(matrix, fn){
+        let res = new Matrix(matrix.rows, matrix.cols);
+        for (let i=0; i< matrix.rows; i++){
+            for (let j = 0; j< matrix.cols; j++){
+                res.data[i][j] = fn(matrix.data[i][j]);
+            }
+        }
+        return res;
     }
 
     static transpose(a){
