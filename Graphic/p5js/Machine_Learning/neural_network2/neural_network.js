@@ -46,11 +46,6 @@ class NeuralNetwork{
         //back-propagation
         let targetMatrix = Matrix.arrayToMatrix(targetArray);
         let outputError = Matrix.subtract(targetMatrix, resultMatrix);
-        console.table(inputArray);
-        resultMatrix.show();
-        targetMatrix.show();
-        outputError.show();
-
         //calculate gradient
         let gradient = Matrix.map(resultMatrix, dsigmoid);
         gradient.hardamard(outputError);
@@ -63,7 +58,6 @@ class NeuralNetwork{
         //calculate hidden error
         let weigthHO_Transposed = Matrix.transpose(this.weightHO);
         let hiddenError = Matrix.multiply(weigthHO_Transposed, outputError);
-        hiddenError.show();
 
         let hiddenGradient = Matrix.map(hidMatrix, dsigmoid);
         hiddenGradient.hardamard(hiddenError);
