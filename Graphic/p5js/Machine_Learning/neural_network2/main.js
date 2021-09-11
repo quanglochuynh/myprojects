@@ -20,21 +20,16 @@ let dataset = [
 ]
 
 function setup(){
-    createCanvas(600,600);
+    createCanvas(100,100);
     background(0);
     nn = new NeuralNetwork(2,2,1);
-    for (let i=0; i<600; i++){
+    for (let i=0; i<50000; i++){
         let data = random(dataset);
         nn.train(data.inp, data.out);
+        //console.log(data);
     }
-
-
-    let inp = [0,1];
-    console.table(nn.feedForward(inp));
-    inp = [1,0];
-    console.table(nn.feedForward(inp));
-    inp = [0,0];
-    console.table(nn.feedForward(inp));
-    inp = [1,1];
-    console.table(nn.feedForward(inp));
+    console.table(nn.feedForward([0,1]));
+    console.table(nn.feedForward([1,0]));
+    console.table(nn.feedForward([0,0]));
+    console.table(nn.feedForward([1,1]));
 }
