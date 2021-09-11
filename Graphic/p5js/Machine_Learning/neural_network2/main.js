@@ -22,7 +22,7 @@ let dataset = [
 function setup(){
     createCanvas(100,100);
     background(0);
-    nn = new NeuralNetwork(2,2,1);
+    nn = new NeuralNetwork(2,4,1);
     for (let i=0; i<50000; i++){
         let data = random(dataset);
         nn.train(data.inp, data.out);
