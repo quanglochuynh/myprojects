@@ -1,10 +1,7 @@
 let nn;
 
-function binhphuong(x){
-    return x*x;
-}
-
 function setup(){
+    noLoop();
     createCanvas(600,600);
     background(0);
     nn = new NeuralNetwork(3,3,3);
