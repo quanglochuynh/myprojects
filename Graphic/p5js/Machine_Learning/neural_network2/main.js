@@ -12,7 +12,7 @@ function setup(){
     let out = [0,0,1];
     let res = nn.feedForward(inp);
     console.table(res);
-    for (let i=0; i<600; i++){
+    for (let i=0; i<6000; i++){
         inp = [1,0,0];
         out = [0,0,1];
         nn.train(inp, out);
