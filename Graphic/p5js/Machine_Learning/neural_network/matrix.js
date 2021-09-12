@@ -1,126 +1,122 @@
 class Matrix{
-    constructor(row, col){
-        this.rows = row;
-        this.cols = col;
+    constructor(n,m){
+        this.rows = n;
+        this.cols = m;
         this.data = [];
-    
-        for (let i=0; i<this.rows; i++){
+        for(let i=0; i< n; i++){
             this.data[i] = [];
-            for (let j=0; j<this.cols; j++){
+            for (let j=0; j< m; j++){
                 this.data[i][j] = 0;
             }
         }
     }
-    
+
+    show(){
+        console.table(this.data);
+    }
+
     randomize(){
-        for (let i=0; i<this.rows; i++){
-            for (let j=0; j<this.cols; j++){
+        for (let i=0; i< this.rows; i++){
+            for (let j = 0; j< this.cols; j++){
                 this.data[i][j] = Math.random()*2 - 1;
             }
         }
     }
-    
-    add(n){
-        if (n instanceof Matrix){
-            for (let i=0; i<this.rows; i++){
-                for (let j=0; j<this.cols; j++){
-                    this.data[i][j] += n.data[i][j];
-                }
-            }
-        }else{
-            for (let i=0; i<this.rows; i++){
-                for (let j=0; j<this.cols; j++){
-                    this.data[i][j] += n;
-                }
+
+    plus(a){
+        for (let i=0; i< this.rows; i++){
+            for (let j = 0; j< this.cols; j++){
+                this.data[i][j] += a;
             }
         }
     }
 
-    static subtract(a,b){
-        let result = new Matrix(a.rows, a.cols);
-        for (let i=0; i<result.rows; i++){
-            for (let j=0; j<result.cols; j++){
-                result.data[i][j] = a.data[i][j] - b.data[i][j];
+    static add(a,b){    //element-wise
+        let res = new Matrix(a.rows, a.cols);
+        for (let i=0; i< a.rows; i++){
+            for (let j = 0; j< a.cols; j++){
+                res.data[i][j] = a.data[i][j] + b.data[i][j];
             }
         }
-        return result;
+        return res;
     }
 
-    static multiply(m, n){
-        if (m.cols !== n.rows){
+    static subtract(a,b){    //element-wise
+        let res = new Matrix(a.rows, a.cols);
+        for (let i=0; i< a.rows; i++){
+            for (let j = 0; j< a.cols; j++){
+                res.data[i][j] = a.data[i][j] - b.data[i][j];
+            }
+        }
+        return res;
+    }
+
+    scale(b){
+        for (let i=0; i< this.rows; i++){
+            for (let j = 0; j< this.cols; j++){
+                this.data[i][j] *= b;
+            }
+        }
+    }
+
+    hardamard(n){
+        for (let i=0; i< this.rows; i++){
+            for (let j = 0; j< this.cols; j++){
+                this.data[i][j] *= n.data[i][j];
+            }
+        }
+    }
+
+    static multiply(a,b){
+        if (a.cols != b.rows){
             console.log('cannot multiply');
             return undefined;
         }else{
-            let result = new Matrix(m.rows, n.cols);
-            for (let i=0; i<result.rows; i++){
-                for (let j=0; j<result.cols; j++){
+            let res = new Matrix(a.rows, b.cols);
+            for (let i = 0; i < a.rows; i++){
+                for(let j = 0; j< b.cols; j++){
                     let sum = 0;
-                    for (let k=0; k<m.cols; k++){
-                        sum += m.data[i][k] * n.data[k][j];
+                    for (let k=0; k < a.cols; k++){
+                        sum += a.data[i][k] * b.data[k][j];
                     }
-                    result.data[i][j] = sum;
+                    res.data[i][j] = sum;
                 }
             }
-            return result;
+            return res;
         }
     }
 
-    multiply(m){
-        if (this.cols !== m.rows){
-            console.log('khong the multiply');
-            return undefined;
-        }else{
-            let result = new Matrix(this.rows, m.cols);
-            for (let i=0; i<result.rows; i++){
-                for (let j=0; j<result.cols; j++){
-                    let sum = 0;
-                    for (let k=0; k<this.cols; k++){
-                        sum += this.data[i][k] * m.data[k][j];
-                        //console.log('sum = ' + sum);
-                    }
-                    result.data[i][j] = sum;
-                }
-            }
-            return result;
-        }
-    }
-    
+
+
     map(fn){
-        for (let i=0; i<this.rows; i++){
-            for (let j=0; j<this.cols; j++){
-                let val = this.data[i][j];
-                this.data[i][j] = fn(val);
+        for (let i=0; i< this.rows; i++){
+            for (let j = 0; j< this.cols; j++){
+                this.data[i][j] = fn(this.data[i][j]);
             }
         }
-        return this;
     }
 
     static map(matrix, fn){
-        let result = new Matrix(matrix.rows, matrix.cols);
-        for (let i=0; i<this.rows; i++){
-            for (let j=0; j<this.cols; j++){
-                let val = result.data[i][j];
-                result.data[i][j] = fn(val);
+        let res = new Matrix(matrix.rows, matrix.cols);
+        for (let i=0; i< matrix.rows; i++){
+            for (let j = 0; j< matrix.cols; j++){
+                res.data[i][j] = fn(matrix.data[i][j]);
             }
         }
-        return result;
+        return res;
     }
 
     static transpose(a){
-        let result = new Matrix(a.cols, a.rows);
-        for (let i=0; i<a.rows; i++){
-            for (let j=0; j<a.cols; j++){
-                result.data[j][i] = a.data[i][j];
+        let res = new Matrix(a.cols, a.rows);
+        for (let i=0; i< a.cols; i++){
+            for (let j = 0; j< a.rows; j++){
+                res.data[i][j] = a.data[j][i];
             }
         }
-        return result;
+        return res;
     }
 
-    print(){
-        console.table(this.data);
-    }
-
-    static fromArr(a){
+    static arrayToMatrix(a){
         let m = new Matrix(a.length,1);
         for (let i=0; i<a.length; i++){
             m.data[i][0] = a[i];
@@ -128,7 +124,7 @@ class Matrix{
         return m;
     }
 
-    static toArr(){
+    matrixToArray(){
         let a = [];
         for (let i=0; i<this.rows; i++){
             for (let j=0; j<this.cols; j++){
