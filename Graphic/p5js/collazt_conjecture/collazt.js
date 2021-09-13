@@ -1,17 +1,17 @@
 let numbOfBranch = 100;
-let branchLength = 20;
-let angle = Math.PI/12;
+let branchLength = 15;
+let angle = 0;
 let slider;
 let dir = true;
 
 function setup(){
-    createCanvas(1000, 1200);
+    createCanvas(800, 800);
     background(0);
     strokeWeight(2);
     //frameRate(24);
-    slider = createSlider(0, Math.PI, Math.PI/12, 0.01);
-    slider.position(50,50);
-    slider.style('width', '200px');
+    // slider = createSlider(0, Math.PI, Math.PI/12, 0.01);
+    // slider.position(50,50);
+    // slider.style('width', '200px');
 }
 
 function process(n){
@@ -40,19 +40,19 @@ function collazt(n){
 }
 
 function draw(){
-    // if (dir){
-    //     angle += 0.002;
-    // }else{
-    //     angle -= 0.002;
-    // }
-    // if ((angle == 0) || (angle == Math.PI)){
-    //     angle = !angle;
-    // }
+    if (dir){
+        angle += 0.002;
+    }else{
+        angle -= 0.002;
+    }
+    if ((angle == 0) || (angle == Math.PI)){
+        angle = !angle;
+    }
     background(0);
-    angle = slider.value();
+    //angle = slider.value();
     for (let i = 2; i <= numbOfBranch + 1; i++){
         resetMatrix();
-        translate(100, 600);
+        translate(400, 400);
         process(i);
     }
 }

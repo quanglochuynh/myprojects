@@ -6,6 +6,10 @@ function dsigmoid(y){
     return y*(1-y);
 }
 
+class UserInterface{
+
+}
+
 class NeuralNetwork{
     constructor(numI, numH, numO){
         this.numOfInput = numI;
@@ -46,10 +50,6 @@ class NeuralNetwork{
         //back-propagation
         let targetMatrix = Matrix.arrayToMatrix(targetArray);
         let outputError = Matrix.subtract(targetMatrix, resultMatrix);
-        // console.table(inputArray);
-        // resultMatrix.show();
-        // targetMatrix.show();
-        // outputError.show();
 
         //calculate gradient
         let gradient = Matrix.map(resultMatrix, dsigmoid);
@@ -74,4 +74,46 @@ class NeuralNetwork{
         this.bias_H = Matrix.add(this.bias_H, hiddenGradient);
     }
 
+}
+
+class MultilayerNeuralNetwork{
+    constructor(layerArray, learning_rate){
+        this.layerArray = layerArray;
+        this.weightMatrix = [];
+        for (let i=0; i<this.layerArray.length-1; i++){
+            this.weightMatrix[i] = new Matrix(this.layerArray[i+1], this.layerArray[i]);
+            this.weightMatrix[i].randomize();
+        }
+        this.biasMatrix = [];
+        for (let i=0; i<this.layerArray.length-1; i++){
+            this.biasMatrix[i] = new Matrix(layerArray[i+1], 1);
+            this.biasMatrix[i].randomize();
+        }
+        this.learningRate = learning_rate;
+    }
+
+    predict(inputArray){
+        if (inputArray.length != this.layerArray[0]){
+            console.log('Wrong amount of input, ' + this.layerArray[0] + ' instead of ' + inputArray.length);
+            return undefined;
+        }else{
+            let dataMatrix = Matrix.arrayToMatrix(inputArray);
+            for (let i=0; i<this.weightMatrix.length; i++){
+                dataMatrix = Matrix.multiply(this.weightMatrix[i],dataMatrix);
+                dataMatrix = Matrix.add(dataMatrix, this.biasMatrix[i]);
+                dataMatrix.map(sigmoid);
+            }
+            return dataMatrix.matrixToArray();
+        }
+    }
+
+    train(input_Array, target_Array){
+        if (input_Array.length != this.layerArray[0]){
+            console.log('Wrong amount of input, ' + this.layerArray[0] + ' instead of ' + inputArray.length);
+        }else if (target_Array.length != this.layerArray[this.layerArray.length-1]){
+            console.log('Wrong amount of input, ' + this.layerArray[this.layerArray.length-1] + ' instead of ' + target_Array.length);
+        }else{
+            
+        }
+    }
 }
