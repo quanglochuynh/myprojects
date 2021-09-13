@@ -22,9 +22,9 @@ function setup(){
 
 function draw(){
     background(color('rgba(0,0,0,1)'));
-    // m.x = plane.unMapX(mouseX);
-    // m.y = plane.unMapY(mouseY);
-    // let sub = Vector.subtract(s.position, m);
+    m.x = plane.unMapX(mouseX);
+    m.y = plane.unMapY(mouseY);
+    let sub = Vector.subtract(s.position, m);
     let da = Vector.subtract(Vector.parallel(sub, s.velocity.len()), s.velocity);
     s.updateAccelaration(Vector.scale(da, 0.1));
     plane.drawPlane();

@@ -1,5 +1,5 @@
 const dimX = 15;
-const dimY = 30;
+const dimY = 15;
 const pixSize = 20;
 const margin = 50;
 

@@ -23,17 +23,22 @@ function setup(){
 
 function draw(){
     background(0);
+    noStroke();
     a1 = -x1*0.005;
     v1 += a1;
     x1 += v1;
+    fill('cyan')
     drawParticleX(x1);
     
     let a2 = x2*-0.005;
     v2 += a2;
     x2 += v2;
+    fill('orange')
     drawParticleY(x2);
-
+    fill(255);
     ellipse(x1 + width/2, x2 + height/2, 10)
+    stroke(255);
+    strokeWeight(2);
     line(x1 + width/2, height/2, x1 + width/2, height/2 + x2);
     line(width/2, height/2 + x2, width/2 + x1, height/2 + x2);
 }

@@ -2,6 +2,7 @@ let numbOfBranch = 100;
 let branchLength = 20;
 let angle = Math.PI/12;
 let slider;
+let dir = true;
 
 function setup(){
     createCanvas(1000, 1200);
@@ -39,6 +40,14 @@ function collazt(n){
 }
 
 function draw(){
+    // if (dir){
+    //     angle += 0.002;
+    // }else{
+    //     angle -= 0.002;
+    // }
+    // if ((angle == 0) || (angle == Math.PI)){
+    //     angle = !angle;
+    // }
     background(0);
     angle = slider.value();
     for (let i = 2; i <= numbOfBranch + 1; i++){
