@@ -32,23 +32,31 @@ class Matrix{
     }
 
     static add(a,b){    //element-wise
-        let res = new Matrix(a.rows, a.cols);
-        for (let i=0; i< a.rows; i++){
-            for (let j = 0; j< a.cols; j++){
-                res.data[i][j] = a.data[i][j] + b.data[i][j];
+        if ((a.rows != b.rows) || (a.cols != b.cols)){
+            console.log('cannot add matrices, wrong dimension');
+        }else{
+            let res = new Matrix(a.rows, a.cols);
+            for (let i=0; i< a.rows; i++){
+                for (let j = 0; j< a.cols; j++){
+                    res.data[i][j] = a.data[i][j] + b.data[i][j];
+                }
             }
-        }
         return res;
+        }
     }
 
     static subtract(a,b){    //element-wise
-        let res = new Matrix(a.rows, a.cols);
-        for (let i=0; i< a.rows; i++){
-            for (let j = 0; j< a.cols; j++){
-                res.data[i][j] = a.data[i][j] - b.data[i][j];
+        if ((a.rows != b.rows) || (a.cols != b.cols)){
+            console.log('cannot add matrices, wrong dimension');
+        }else{
+            let res = new Matrix(a.rows, a.cols);
+            for (let i=0; i< a.rows; i++){
+                for (let j = 0; j< a.cols; j++){
+                    res.data[i][j] = a.data[i][j] - b.data[i][j];
+                }
             }
-        }
         return res;
+        }
     }
 
     scale(b){
@@ -60,9 +68,13 @@ class Matrix{
     }
 
     hardamard(n){
-        for (let i=0; i< this.rows; i++){
-            for (let j = 0; j< this.cols; j++){
-                this.data[i][j] *= n.data[i][j];
+        if ((n.cols != this.cols) || (n.rows != this.rows)){
+            console.log('cannot hadamarding, wrong dimension');
+        }else{
+            for (let i=0; i< this.rows; i++){
+                for (let j = 0; j< this.cols; j++){
+                    this.data[i][j] *= n.data[i][j];
+                }
             }
         }
     }
