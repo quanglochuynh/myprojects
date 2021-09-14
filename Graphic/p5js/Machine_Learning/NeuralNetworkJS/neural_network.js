@@ -125,9 +125,7 @@ class MultilayerNeuralNetwork{
                 dataMatrix.map(sigmoid);
                 layerResultMatrixArray.push(dataMatrix);
             }
-            let feedResultMatrix = layerResultMatrixArray[layerResultMatrixArray.length-1];
-            //console.log(layerResultMatrixArray);
-            
+            let feedResultMatrix = layerResultMatrixArray[layerResultMatrixArray.length-1];            
             //BACK-PROPAGATION
             let targetMatrix = Matrix.arrayToMatrix(target_Array);
             let errorMatrix = Matrix.subtract(targetMatrix,feedResultMatrix);
@@ -141,7 +139,6 @@ class MultilayerNeuralNetwork{
             this.weightMatrix[this.weightMatrix.length-1] = Matrix.add(this.weightMatrix[this.weightMatrix.length-1], delta);
             this.biasMatrix[this.biasMatrix.length-1] = Matrix.add(this.biasMatrix[this.biasMatrix.length-1], outputGradient);
             for(let i=this.layerArray.length-3; i>=0; i--){
-                //console.log('i = ' + i);
                 let weightTransposed = Matrix.transpose(this.weightMatrix[i+1]);
                 errorMatrix = Matrix.multiply(weightTransposed, errorMatrix);
                 let gradientMatrix = Matrix.map(layerResultMatrixArray[i+1], dsigmoid);
@@ -151,7 +148,6 @@ class MultilayerNeuralNetwork{
                 this.weightMatrix[i] = Matrix.add(this.weightMatrix[i], delta);
                 this.biasMatrix[i] = Matrix.add(this.biasMatrix[i], gradientMatrix);
             }
-            //console.log('Finish training!');
         }
     }
 }
