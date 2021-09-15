@@ -1,6 +1,6 @@
-const filepath = 'test1.csv';
+const filepath = 'test2.csv';
 const samplingDistance=30;
-const correctionRadius = samplingDistance * 1.5;
+const correctionRadius = samplingDistance * 2;
 const bias = 0.08;
 const canvasHeight = 800;
 const canvasWidth = 800;
@@ -8,13 +8,14 @@ const samplingSpeed = 15;
 
 let graph;
 let tree;
-let stage = false;
+let stage = true;
 let endv;
 let found = false;
 let bestDist = Number.MAX_SAFE_INTEGER;
 let backgroundColor;
 let obstacleColor;
 let res;
+let reachID;
 let matrix;
 
 function init(){
@@ -68,37 +69,39 @@ function draw(){
         stage = false;
     }
     if (stage){
-        console.log('SHOW GRAPH');
+        //console.log('SHOW GRAPH');
         graph.show();
         let randomPoint = graph.getRandomPoint();
         let nearestID = tree.findNearestID(randomPoint);
         let v = tree.getSamplingPoint(randomPoint, nearestID);
         if (graph.checkForValidity(v)){
             tree.addNode(v, nearestID);
-            console.log('optimizing');
+            //console.log('optimizing');
             tree.optimizeSuround(correctionRadius);
         }
-        console.log('show tree');
+        //console.log('show tree');
         tree.show();
         if (graph.reachDestination(v)){
             if (!found){
                 console.log('Found first path!');
                 found = true;
-                endv = tree.n-1;
-            }else{
-
-            }            
+                graph.found = true;
+            }      
+            reachID = tree.n-1;
         }
-        // if (found == true){
-        //     console.log('show path');
-        //     res = tree.showPath(endv, color('CYAN'));
-        //     if (res < bestDist){
-        //         bestDist = res;
-        //         endv = tree.n-1;
-        //     }           
-        //     tree.distance[endv] = res;
-        //     console.log('Best distance: ' + res + '     n = ' + tree.n + '      sampling radius = ' + tree.samplingrad);
-        // }
+        if (found == true){
+            console.log('show path');
+            if (endv == undefined){
+                tree.showPath(reachID, color('CYAN'));
+            }else{
+                tree.showPath(endv, color('CYAN'));
+            }
+            if (tree.distance[reachID] < bestDist){
+                bestDist = tree.distance[reachID];
+                endv = reachID;
+            }           
+            console.log('Best distance: ' + bestDist + '     n = ' + tree.n);
+        }
     }else{
        //do nothing
     }

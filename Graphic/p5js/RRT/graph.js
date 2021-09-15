@@ -23,6 +23,7 @@ class Tree{
         this.maxNumOfPoint = maxNumOfPoint;
         this.trace = [0];
         this.distance = [0];
+        this.found = false;
     }
 
     show(){
@@ -145,18 +146,16 @@ class Tree{
         }
     }
 
-    showPath(desID){
+    showPath(desID, c){
         let v;
         let u = desID;
-        let dis=0;
+        stroke(c);
+        strokeWeight(2);
         while((u != 0)){
-            console.log('u = ' + u);
             v = this.trace[u];
             line(this.node[u].x, this.node[u].y, this.node[v].x, this.node[v].y);
-            dis += dist(this.node[u].x, this.node[u].y, this.node[v].x, this.node[v].y);
             u = v;
         }
-        return dis;
     }
 }
 
@@ -174,6 +173,7 @@ class Map{
         this.spacing = min((this.w - 2*this.margin)/this.m, (this.h - 2*this.margin)/this.n);
         this.bgc = bgc;
         this.oc = oc
+        this.found = false
     }
 
     show(){
@@ -222,7 +222,7 @@ class Map{
 
     getRandomPoint(){
         let biasing = random(1);
-        if (biasing > this.bias){
+        if ((biasing > this.bias) || (this.found == true)){
             let rw = random(graph.margin, graph.margin + graph.m*graph.spacing);
             let rh = random(graph.margin, graph.margin + graph.n*graph.spacing);
             fill('Cyan');
