@@ -1,99 +1,120 @@
 const objectLength = 784;
 const numOfDoodle = 2000;
 const trainingNumber = 1800;
-let fileName = ['airplane2000.bin', 'car2000.bin', 'guitar2000.bin', 'piano2000.bin', 'tshirt2000.bin'];
-let objectName = ['Airplane', 'Car', 'Guitar', 'Piano', 'T-shirt']
+let fileName = ['guitar2000.bin', 'piano2000.bin', 'tshirt2000.bin', 'airplane2000.bin', 'car2000.bin'];
+let objectName = ['a Guitar', 'a Piano', 'a T-shirt', 'an Airplane', 'a Car']
 let trainingDatabase = [];
 let testingDatabase = [];
+let dataArray = [];
+let nn;
 
 class TrainingObject{
-    constructor(data, id){
+    constructor(data, result){
         this.data = data;
-        this.id = id;
+        this.result = result;
     }
 }
 
 function preload(){
-    // for (let i=0; i < fileName.length; i++){
-    //     let data = loadBytes('data/' + fileName[i]);
-    //     for (let j = 0; j<trainingNumber; j++){
-    //         let offset = j*objectLength;
-    //         let arr = data.bytes.subarray(offset, offset+objectLength)
-    //         trainingDatabase[j] = new TrainingObject(arr, i);
-    //     }
-    //     // let index = 0;
-    //     // for (let j = trainingNumber; j<numOfDoodle; j++){
-    //     //     let offset = j*objectLength;
-    //     //     testingDatabase[index] = new TrainingObject(data.bytes.subarray(offset, offset+objectLength), i);
-    //     //     index++;
-    //     // }
-    // }
+    for (let i=0; i < fileName.length; i++){
+        dataArray[i] = loadBytes('data/' + fileName[i]);
+    }
+}
+
+function prepareData(){
+    for (let i=0; i < fileName.length; i++){
+        let data = dataArray[i].bytes;
+        let resultArray = [0,0,0,0,0];
+        resultArray[i] = 1;
+        for (let j = 0; j<trainingNumber; j++){
+            let offset = j*objectLength;
+            let arr = data.subarray(offset, offset+objectLength)
+            trainingDatabase.push(new TrainingObject(arr, resultArray));
+        }
+        for (let j = trainingNumber; j<numOfDoodle; j++){
+            let offset = j*objectLength;
+            testingDatabase.push(new TrainingObject(data.subarray(offset, offset+objectLength), resultArray));
+        }
+    }
 }
 
 function setup(){
     createCanvas(560,560);
-    background(255);
+    background(0);
+    prepareData();
+    nn = new MultilayerNeuralNetwork([784, 128, 12, 5],0.2);
+}
 
-    // for (let i=0; i < 1; i++){
-    //     let data = loadBytes('data/' + fileName[i]);
-    //     for (let j = 0; j<trainingNumber; j++){
-    //         let offset = j*objectLength;
-    //         let arr = [];
-    //         for (let k=0; k<objectLength; k++){
-    //             data.bytes[k+offset];
-    //         }
-    //         trainingDatabase[j] = new TrainingObject(arr, i);
-    //     }
-    //     let index = 0;
-    //     for (let j = trainingNumber; j<numOfDoodle; j++){
-    //         let offset = j*objectLength;
-    //         let arr = [];
-    //         for (let k=0; k<objectLength; k++){
-    //             //arr.push(data.bytes[k+offset]);
-    //         }
-    //         testingDatabase[index] = new TrainingObject(arr, i);
-    //         index++;
-    //     }
-    // }
-    
-    let airplane_data = loadBytes('data/' + fileName[0]);
-    console.log(airplane_data);
-    let data = airplane_data;
-    console.log(data.bytes);
-    // let total = 400;
-    // for (let n=0; n<total; n++){
-    //     let img = createImage(28,28);
-    //     img.loadPixels();
-    //     for(let i=0; i<784; i++){
-    //         let val = 255- airplane_data.bytes[i + n*784];
-    //         console.log(val);
-    //         // img.pixels[i*4] = val;
-    //         // img.pixels[i*4+1] = val;
-    //         // img.pixels[i*4+2] = val;
-    //         // img.pixels[i*4+3] = 255;
-    //     }
-    //     img.updatePixels();
-    //     let x = 28 * (n%20);
-    //     let y = 28 * floor((n/20));
-    //     image(img,x,y);
-    // }
-
+function getResult(arr){
+    return objectName[arr.indexOf(max(arr))];
 }
 
 function mouseDragged(){
-    strokeWeight(16);
-    stroke(0);
+    strokeWeight(32);
+    stroke(255);
     line(pmouseX, pmouseY, mouseX, mouseY);
 }
 
 function clearCanvas(){
-    background(255);
+    background(0);
 }
 
 function guess(){
-    console.log('guessing');
+    let myDoodle = [];
+    let img = get();
+    img.resize(28,28);
+    img.loadPixels();
+    for (let i=0; i<objectLength; i++){
+        myDoodle.push(img.pixels[i*4]);
+    }
+    let res = nn.predict(myDoodle);
+    //console.log(res);
+    console.log('Predicted to be ' + getResult(res));
+}
+
+function randomGuess(){
+    let trainObj = random(trainingDatabase);
+    drawDoodle(trainObj.data);
+    console.log('Answer: ' + getResult(trainObj.result));
+    let res = nn.predict(trainObj.data);
+    //console.log(res);
+    console.log('Predicted to be ' + getResult(res));
+}
+
+function drawDoodle(array){
+    let img = createImage(28,28);
+    img.loadPixels();
+    for (let i in array){
+        img.pixels[i*4] = array[i];
+        img.pixels[i*4 +1] = array[i];
+        img.pixels[i*4 +2] = array[i];
+        img.pixels[i*4 +3] = 255;
+        
+    }
+    img.updatePixels();
+    img.resize(560,560);
+    image(img,0,0);
 }
 
 function trainNN(){
-    console.log('training');
+    console.log('Training');
+    for (let i=0; i<trainingDatabase.length; i++){
+        let trainObj = random(trainingDatabase);
+        if (i%200 ==0){
+            console.log(i);
+        }
+        nn.train(trainObj.data, trainObj.result);
+    }
+    
+}
+
+function testNN(){
+    let cr = 0;
+    for (let i=0; i<testingDatabase.length; i++){
+        let res = nn.predict(testingDatabase[i].data);
+        if (res.indexOf(max(res)) == testingDatabase[i].result.indexOf(1)){
+            cr++;
+        }
+    }
+    console.log((floor(cr*100/testingDatabase.length)) + '% correct');
 }

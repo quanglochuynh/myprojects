@@ -1,6 +1,6 @@
-const filepath = 'test2.csv';
-const samplingDistance=30;
-const correctionRadius = samplingDistance * 2;
+const filepath = 'test1.csv';
+const samplingDistance=25;
+const correctionRadius = samplingDistance * 3;
 const bias = 0.08;
 const canvasHeight = 800;
 const canvasWidth = 800;
@@ -86,16 +86,14 @@ function draw(){
                 console.log('Found first path!');
                 found = true;
                 graph.found = true;
-            }      
-            reachID = tree.n-1;
-        }
+                reachID = tree.n-1;
+                endv = reachID;
+            }
+        }      
+            
         if (found == true){
             console.log('show path');
-            if (endv == undefined){
-                tree.showPath(reachID, color('CYAN'));
-            }else{
-                tree.showPath(endv, color('CYAN'));
-            }
+            tree.showPath(endv, color('CYAN'));
             if (tree.distance[reachID] < bestDist){
                 bestDist = tree.distance[reachID];
                 endv = reachID;

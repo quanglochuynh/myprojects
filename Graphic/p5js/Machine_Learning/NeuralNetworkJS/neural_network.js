@@ -6,10 +6,6 @@ function dsigmoid(y){
     return y*(1-y);
 }
 
-class UserInterface{
-
-}
-
 class NeuralNetwork{
     constructor(numI, numH, numO){
         this.numOfInput = numI;
@@ -100,6 +96,9 @@ class MultilayerNeuralNetwork{
             return undefined;
         }else{
             let dataMatrix = Matrix.arrayToMatrix(inputArray);
+            //
+            dataMatrix.scale(1/255);
+            //
             for (let i=0; i<this.weightMatrix.length; i++){
                 dataMatrix = Matrix.multiply(this.weightMatrix[i],dataMatrix);
                 dataMatrix = Matrix.add(dataMatrix, this.biasMatrix[i]);
@@ -118,6 +117,9 @@ class MultilayerNeuralNetwork{
             //feed-forward            
             let layerResultMatrixArray = [];
             let dataMatrix = Matrix.arrayToMatrix(input_Array);
+            //
+            dataMatrix.scale(1/255);
+            //
             layerResultMatrixArray.push(dataMatrix);
             for (let i=0; i<this.weightMatrix.length; i++){
                 dataMatrix = Matrix.multiply(this.weightMatrix[i],dataMatrix);
