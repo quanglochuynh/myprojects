@@ -48,7 +48,8 @@ function prepareData(){
 }
 
 function setup(){
-    createCanvas(560,560);
+    var myCanvas = createCanvas(560, 560);
+    myCanvas.parent("canvasdiv");
     background(0);
     prepareData();
     nn = new MultilayerNeuralNetwork([784, 128, 12, 5],0.1);
@@ -62,10 +63,12 @@ function mouseDragged(){
     strokeWeight(32);
     stroke(255);
     line(pmouseX, pmouseY, mouseX, mouseY);
+    document.getElementById("resultString").innerHTML = '';
 }
 
 function clearCanvas(){
     background(0);
+    document.getElementById("resultString").innerHTML = '';
 }
 
 function guess(){
@@ -76,9 +79,9 @@ function guess(){
     for (let i=0; i<objectLength; i++){
         myDoodle.push(img.pixels[i*4] / 255);
     }
-    let res = nn.predict(myDoodle);
-    console.table(res);
-    console.log('Predicted to be ' + getResult(res));
+    let res = getResult(nn.predict(myDoodle));
+    console.log('Predicted to be ' + res);
+    document.getElementById("resultString").innerHTML = 'Predicted to be ' + res;
 }
 
 function randomGuess(){

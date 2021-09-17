@@ -6,34 +6,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body{
-            background-color: rgb(26, 26, 62);
+            background-color: rgb(255, 255, 255);
         }
         button{
             background-color: white;
             text-decoration-color: darkblue;
-            padding: 5px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            padding-left: 10px;
+            padding-right: 10px;
             margin-right: 10px;
             margin-bottom: 10px;
+            border-radius: 20px;
         }
         button:hover{
             color: orange;
             background: darkblue;
+        }
+        controlPanel{
+            display: inline-flex;
+        }
+        canvasdiv{
+            padding: 0px;
+            margin: 0px;
         }
     </style>
     <title>Doodle Classifier</title>
     <script src="/Graphic/p5js/p5.min.js"></script>
     <script src="../matrix.js"></script>
     <script src="../neural_network.js"></script>
-    <script src="DoodleClassifier.js"></script>
 </head>
 <body>
-    <button type="button" onclick="clearCanvas()">Clear</button>
-    <button type="button" onclick="guess()">Guess</button>
-    <button type="button" onclick="randomGuess()">Random</button>
-    <button type="button" onclick="trainNN()">Train!</button>
-    <button type="button" onclick="testNN()">Test</button>
-    <button type="button" onclick="saveNN()">Save Data</button>
-    <button type="button" onclick="loadNN()">Load data</button>
+    <div class="controlPanel">
+        <button type="button" onclick="clearCanvas()">Clear</button>
+        <button type="button" onclick="guess()">Guess</button>
+        <button type="button" onclick="randomGuess()">Random</button>
+        <button type="button" onclick="trainNN()">Train!</button>
+        <button type="button" onclick="testNN()">Test</button>
+        <button type="button" onclick="saveNN()">Save Data</button>
+        <button type="button" onclick="loadNN()">Load data</button>
+        <script src="DoodleClassifier.js"></script>
+    </div>
+    
+    <div id="canvasdiv" class="canvasdiv"></div>
 
+    <div>
+        <p style="font-style: italic; font-size: 16px;">*Neural network hiện tại chỉ nhận diện được hình vẽ máy bay, xe hơi, đàn piano, đàn guitar và áo thun</p>
+        <h1 id="resultString" style="font: 15px Arial, sans-serif; font-size: 32px;"></h1>
+    </div>
 </body>
 </html>
