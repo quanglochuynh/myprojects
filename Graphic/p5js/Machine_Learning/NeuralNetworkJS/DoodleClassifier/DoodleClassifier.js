@@ -1,6 +1,7 @@
 const objectLength = 784;
 const numOfDoodle = 2000;
 const trainingNumber = 1800;
+const dataAddress = 'neural_network_data.json';
 let fileName = ['guitar2000.bin', 'piano2000.bin', 'tshirt2000.bin', 'airplane2000.bin', 'car2000.bin'];
 let objectName = ['a Guitar', 'a Piano', 'a T-shirt', 'an Airplane', 'a Car']
 let trainingDatabase = [];
@@ -126,4 +127,24 @@ function testNN(){
         }
     }
     console.log((floor(cr*100/testingDatabase.length)) + '% correct');
+}
+
+function saveNN(){
+    nn.exportNetwork();
+}
+
+function loadNN(){
+    loadJSON(dataAddress, processJSON);
+}
+
+function processJSON(json){
+    //call-back for loadNN()
+    nn = new MultilayerNeuralNetwork(json.layerArray, json.learningRate);
+    for (let i=0; i<nn.weightMatrix.length; i++){
+        nn.weightMatrix[i] = json.weightMatrix[i];
+    }
+    for (let i=0; i<nn.biasMatrix.length; i++){
+        nn.biasMatrix[i] = json.biasMatrix[i];
+    }
+    console.log('Done!');
 }

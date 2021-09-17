@@ -138,4 +138,35 @@ class MultilayerNeuralNetwork{
             }
         }
     }
+
+    exportNetwork(address){
+        //let nnString = JSON.stringify(this);
+        saveJSON(this, 'neural_network_data.json');
+        console.log('Saved!');
+    }
+}
+
+function applyNeuralNetwork(data){
+    //console.log(data);
+    // this.weightMatrix = data.weightMatrix;
+    // this.biasMatrix = data.biasMatrix;
+    //this.layerArray = data.layerArray;
+    let newLayerArray = [];
+    for (let i=0; i < data.layerArray.length; i++){
+        newLayerArray[i] = data.layerArray[i];
+    }
+    console.log(newLayerArray);
+    this.layerArray = newLayerArray;
+
+    let newWeightMatrix = [];
+    for (let i=0; i < data.weightMatrix.length; i++){
+        let wMatrix = new Matrix(data.weightMatrix[i].rows, data.weightMatrix[i].cols);
+        wMatrix.data = data.weightMatrix[i].data;
+        this.weightMatrix.push(wMatrix);
+    }
+
+    // for (let i=0; i < data.layerArray.length; i++){
+    //     console.log(data.layerArray[i]);
+    // }
+    this.learningRate = data.learningRate;
 }
