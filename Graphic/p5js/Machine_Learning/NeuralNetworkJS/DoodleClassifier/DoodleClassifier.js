@@ -13,6 +13,12 @@ class TrainingObject{
         this.data = data;
         this.result = result;
     }
+
+    normalizeData(){
+        for (let i in this.data){
+            this.data[i] /= 255;
+        }
+    }
 }
 
 function preload(){
@@ -27,13 +33,15 @@ function prepareData(){
         let resultArray = [0,0,0,0,0];
         resultArray[i] = 1;
         for (let j = 0; j<trainingNumber; j++){
-            let offset = j*objectLength;
-            let arr = data.subarray(offset, offset+objectLength)
-            trainingDatabase.push(new TrainingObject(arr, resultArray));
+            let arr = data.subarray(j*objectLength, j*objectLength+objectLength);
+            let object = new TrainingObject(arr, resultArray);
+            object.normalizeData();
+            trainingDatabase.push(object);
         }
         for (let j = trainingNumber; j<numOfDoodle; j++){
-            let offset = j*objectLength;
-            testingDatabase.push(new TrainingObject(data.subarray(offset, offset+objectLength), resultArray));
+            let object = new TrainingObject(data.subarray(j*objectLength, j*objectLength+objectLength), resultArray);
+            object.normalizeData();
+            testingDatabase.push(object);
         }
     }
 }
@@ -42,7 +50,7 @@ function setup(){
     createCanvas(560,560);
     background(0);
     prepareData();
-    nn = new MultilayerNeuralNetwork([784, 128, 12, 5],0.2);
+    nn = new MultilayerNeuralNetwork([784, 128, 12, 5],0.1);
 }
 
 function getResult(arr){
@@ -65,10 +73,10 @@ function guess(){
     img.resize(28,28);
     img.loadPixels();
     for (let i=0; i<objectLength; i++){
-        myDoodle.push(img.pixels[i*4]);
+        myDoodle.push(img.pixels[i*4] / 255);
     }
     let res = nn.predict(myDoodle);
-    //console.log(res);
+    console.table(res);
     console.log('Predicted to be ' + getResult(res));
 }
 
@@ -77,7 +85,7 @@ function randomGuess(){
     drawDoodle(trainObj.data);
     console.log('Answer: ' + getResult(trainObj.result));
     let res = nn.predict(trainObj.data);
-    //console.log(res);
+    console.table(res);
     console.log('Predicted to be ' + getResult(res));
 }
 
@@ -85,14 +93,14 @@ function drawDoodle(array){
     let img = createImage(28,28);
     img.loadPixels();
     for (let i in array){
-        img.pixels[i*4] = array[i];
-        img.pixels[i*4 +1] = array[i];
-        img.pixels[i*4 +2] = array[i];
+        img.pixels[i*4] = array[i] * 255;
+        img.pixels[i*4 +1] = array[i] * 255;
+        img.pixels[i*4 +2] = array[i]* 255;
         img.pixels[i*4 +3] = 255;
         
     }
     img.updatePixels();
-    img.resize(560,560);
+    img.resize(280,280);
     image(img,0,0);
 }
 
@@ -100,7 +108,7 @@ function trainNN(){
     console.log('Training');
     for (let i=0; i<trainingDatabase.length; i++){
         let trainObj = random(trainingDatabase);
-        if (i%200 ==0){
+        if (i%100 ==0){
             console.log(i);
         }
         nn.train(trainObj.data, trainObj.result);
@@ -111,8 +119,9 @@ function trainNN(){
 function testNN(){
     let cr = 0;
     for (let i=0; i<testingDatabase.length; i++){
-        let res = nn.predict(testingDatabase[i].data);
-        if (res.indexOf(max(res)) == testingDatabase[i].result.indexOf(1)){
+        let obj = testingDatabase[i];
+        let res = nn.predict(obj.data);
+        if (res.indexOf(max(res)) == obj.result.indexOf(1)){
             cr++;
         }
     }

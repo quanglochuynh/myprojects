@@ -96,9 +96,6 @@ class MultilayerNeuralNetwork{
             return undefined;
         }else{
             let dataMatrix = Matrix.arrayToMatrix(inputArray);
-            //
-            dataMatrix.scale(1/255);
-            //
             for (let i=0; i<this.weightMatrix.length; i++){
                 dataMatrix = Matrix.multiply(this.weightMatrix[i],dataMatrix);
                 dataMatrix = Matrix.add(dataMatrix, this.biasMatrix[i]);
@@ -117,9 +114,6 @@ class MultilayerNeuralNetwork{
             //feed-forward            
             let layerResultMatrixArray = [];
             let dataMatrix = Matrix.arrayToMatrix(input_Array);
-            //
-            dataMatrix.scale(1/255);
-            //
             layerResultMatrixArray.push(dataMatrix);
             for (let i=0; i<this.weightMatrix.length; i++){
                 dataMatrix = Matrix.multiply(this.weightMatrix[i],dataMatrix);
@@ -131,24 +125,16 @@ class MultilayerNeuralNetwork{
             //BACK-PROPAGATION
             let targetMatrix = Matrix.arrayToMatrix(target_Array);
             let errorMatrix = Matrix.subtract(targetMatrix,feedResultMatrix);
-            //gradient
-            let outputGradient = Matrix.map(feedResultMatrix,dsigmoid);
-            outputGradient.hardamard(errorMatrix);
-            outputGradient.scale(this.learningRate);
-            //calculate delta
-            let transpose = Matrix.transpose(layerResultMatrixArray[layerResultMatrixArray.length-2]);
-            let delta = Matrix.multiply(outputGradient, transpose);            
-            this.weightMatrix[this.weightMatrix.length-1] = Matrix.add(this.weightMatrix[this.weightMatrix.length-1], delta);
-            this.biasMatrix[this.biasMatrix.length-1] = Matrix.add(this.biasMatrix[this.biasMatrix.length-1], outputGradient);
-            for(let i=this.layerArray.length-3; i>=0; i--){
-                let weightTransposed = Matrix.transpose(this.weightMatrix[i+1]);
-                errorMatrix = Matrix.multiply(weightTransposed, errorMatrix);
+            for(let i=this.layerArray.length-2; i>=0; i--){
                 let gradientMatrix = Matrix.map(layerResultMatrixArray[i+1], dsigmoid);
                 gradientMatrix.hardamard(errorMatrix);
                 gradientMatrix.scale(this.learningRate);
                 let delta = Matrix.multiply(gradientMatrix, Matrix.transpose(layerResultMatrixArray[i]));
                 this.weightMatrix[i] = Matrix.add(this.weightMatrix[i], delta);
                 this.biasMatrix[i] = Matrix.add(this.biasMatrix[i], gradientMatrix);
+                if (i==-1){continue}
+                let weightTransposed = Matrix.transpose(this.weightMatrix[i]);
+                errorMatrix = Matrix.multiply(weightTransposed, errorMatrix);
             }
         }
     }
