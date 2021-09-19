@@ -13,12 +13,11 @@ public:
     float data[1000][1000];
 
     Matrix(int row, int col){
-        srand (time(NULL));
-        this->rows = row;
-        this->cols = col;
+        rows = row;
+        cols = col;
         for (int i=0; i<rows; i++){
             for (int j=0; j<cols; j++){
-                this->data[i][j] = (rand()%200 - 100)/100.0;
+                data[i][j] = (rand()%200 - 100)/100.0;
             }
         }
     }
@@ -33,11 +32,13 @@ public:
         cout << endl;
     }
     
-    void add(Matrix m){
+    static Matrix add(Matrix m, Matrix n){
+        Matrix res(m.rows, m.cols);
         for (int i=0; i<m.rows; i++){
             for (int j=0; j<m.cols; j++){
-                this->data[i][j] += m.data[i][j];
+                res.data[i][j] = m.data[i][j] + n.data[i][j];
             }
         }
+        return res;
     }
 };
