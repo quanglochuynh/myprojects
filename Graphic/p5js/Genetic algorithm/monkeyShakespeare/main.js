@@ -1,5 +1,5 @@
-const numOfPopulation = 200;
-const mutationRatio = 0.08;
+const numOfPopulation = 500;
+const mutationRatio = 0.06;
 const targetString = "Dak dak buh buh lmao";
 
 let population;
