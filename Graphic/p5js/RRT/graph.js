@@ -6,6 +6,19 @@ class Point{
     }
 }
 
+class Edge{
+    constructor(p1,p2){
+        this.p1 = p1;
+        this.p2 = p2;
+    }
+
+    show(){
+        stroke(255);
+        strokeWeight(4);
+        line(this.p1.x, this.p1.y, this.p2.x, this.p2.y);
+    }
+}
+
 function angle(x,y){
     if (x<0){
         return (Math.atan(y/x) + PI);
@@ -16,17 +29,24 @@ function angle(x,y){
 
 
 class Tree{
-    constructor(nodes, samplingrad, maxNumOfPoint){
-        this.node = nodes;
-        this.n = 1;
+    constructor(obstacle, sta, des, samplingrad, bias){
+        this.node = [];
+        this.node.push(sta);
         this.samplingrad = samplingrad;
-        this.maxNumOfPoint = maxNumOfPoint;
         this.trace = [0];
         this.distance = [0];
         this.found = false;
+        this.obstacleArray = obstacle;
+        this.destination = des;
+        this.found = false;
+        this.bias = bias
     }
 
     show(){
+        fill('RED');
+        circle(this.node[0].x, this.node[0].y, 10);
+        fill(0,255,0);
+        circle(this.destination.x, this.destination.y, 10);
         fill(255);
         noStroke();
         ellipse(this.node[0].x, this.node[0].y, 15);
@@ -36,6 +56,7 @@ class Tree{
         stroke('PINK');
         strokeWeight(1);
         for (let i in this.node){
+            
             if (i!=0){
                 this.distance[i] = this.showTrace(i);
                 ellipse(this.node[i].x, this.node[i].y, 2);
@@ -43,9 +64,10 @@ class Tree{
         }
     }
 
-    adjustRadius(){
-        if ((this.n > this.maxNumOfPoint / (100 * this.samplingrad)) && (this.samplingrad > 20)){
-            this.samplingrad /=2;
+    showObstacle(){
+        background(0);
+        for(let i =0; i< this.obstacleArray.length; i++){
+            this.obstacleArray[i].show();
         }
     }
 
@@ -76,9 +98,8 @@ class Tree{
 
     addNode(sample, nearestID){
         this.node.push(sample);
-        this.n++;
-        this.trace[this.n-1] = nearestID;
-        this.distance[this.n-1] = this.distance[nearestID] + this.samplingrad;
+        this.trace.push(nearestID);
+        this.distance.push(this.distance[nearestID] + this.samplingrad);
         return sample;
     }
 
@@ -95,7 +116,7 @@ class Tree{
     }
 
     optimizeSuround(rad){
-        let newNodeID = this.n-1;
+        let newNodeID = this.node.length-1;
         let unplugID = this.trace[newNodeID];
         this.circle(this.node[newNodeID]);
         stroke('RED');
@@ -111,12 +132,14 @@ class Tree{
             }
             let d = this.dista(i, newNodeID);
             if (d < rad){
-                scanArray.push(i);
-                this.drawLine(newNodeID, i);
-                if (this.distance[i] + d < mindist){
-                    mindist = this.distance[i] + d;
-                    minID = i;
+                if (this.checkForValidity(this.node[i], this.node[newNodeID]) == true){
+                    scanArray.push(i);
+                    if (this.distance[i] + d < mindist){
+                        mindist = this.distance[i] + d;
+                        minID = i;
+                    }
                 }
+
             }
         }
         this.trace[newNodeID] = minID;
@@ -157,125 +180,81 @@ class Tree{
             u = v;
         }
     }
-}
-
-class Map{
-    constructor(wid, hei, n, m, obstacle, start, destination, bias, bgc, oc){
-        this.w = wid;
-        this.h = hei;
-        this.n = n;
-        this.m = m;
-        this.obstacle = obstacle;
-        this.start = start;
-        this.destination = destination;
-        this.bias = bias;
-        this.margin = 25;
-        this.spacing = min((this.w - 2*this.margin)/this.m, (this.h - 2*this.margin)/this.n);
-        this.bgc = bgc;
-        this.oc = oc
-        this.found = false
-    }
-
-    show(){
-        background(this.bgc);
-        //draw grid
-        let k=0;
-        for (let i=this.margin; i< this.margin+this.n*this.spacing; i+= this.spacing){
-            stroke(100);
-            strokeWeight(1);
-            noFill();
-            line(this.margin, i, this.spacing * this.m + this.margin, i);
-            noStroke();
-            fill(255);
-            textSize(16);
-            text(k++, this.margin-20, i+this.spacing/2);
-        }
-        k = 0
-        for (let i=this.margin; i< this.spacing*this.m + this.margin; i+= this.spacing){
-            stroke(100);
-            strokeWeight(1);
-            noFill();
-            line(i, this.margin, i, this.margin + this.n * this.spacing);
-            noStroke();
-            fill(255);
-            textSize(16);
-            text(k++, i+this.spacing/2, this.margin-8);
-        }
-
-        //draw obstacles
-        fill(this.oc);
-        noStroke();
-        for(let i =0; i< this.obstacle.length; i++){
-            rect(this.obstacle[i].x * this.spacing + this.margin, this.obstacle[i].y * this.spacing + this.margin, this.spacing, this.spacing)
-        }
-        fill('RED');
-        rect(this.start.x*this.spacing+this.margin, this.start.y * this.spacing + this.margin, this.spacing, this.spacing);
-        fill(0,255,0);
-        rect(this.destination.x*this.spacing+this.margin, this.destination.y * this.spacing + this.margin, this.spacing, this.spacing);
-        
-        //draw border
-        noFill();
-        strokeWeight(2);
-        stroke(255);
-        rect(this.margin, this.margin, this.m * this.spacing, this.n * this.spacing);
-    }
 
     getRandomPoint(){
         let biasing = random(1);
         if ((biasing > this.bias) || (this.found == true)){
-            let rw = random(graph.margin, graph.margin + graph.m*graph.spacing);
-            let rh = random(graph.margin, graph.margin + graph.n*graph.spacing);
+            let rw = random(0, width);
+            let rh = random(0, height);
             fill('Cyan');
             ellipse(rw, rh, 10);
             return new Point(rw, rh);
         }else{
-            let res = new Point(this.destination.x * this.spacing + this.margin + this.spacing/2, this.destination.y * this.spacing + this.margin + this.spacing/2);
+            let res = new Point(this.destination.x, this.destination.y);
             return res;
         }
         
     }
 
-    checkForValidity(p){
-        if (this.hitObstacle(p) == true){
+    checkForValidity(p1, p2){
+        if (this.outOfMap(p1) == true){
             return false;
         }
-        for (let i in this.obstacle){
-            let ob = new Point(this.obstacle[i].x * this.spacing + this.margin, this.obstacle[i].y * this.spacing + this.margin);
-            if (this.isBlocked(ob , p)){
+        for (let i in this.obstacleArray){
+            if (check(p1, p2, this.obstacleArray[i].p1, this.obstacleArray[i].p2) == true){
                 return false;
-            }
+              }
         }
         return true;
     }
 
-    hitObstacle(p){
-        //console.log(p.x+ '  ' + this.margin)
-        if ((p.x < this.margin) || (p.x > this.spacing*this.m + this.margin)){
+    outOfMap(p){
+        if ((p.x < 0) || (p.x > width)){
             return true;
-        }else if ((p.y < this.margin) || (p.y > this.spacing*this.n + this.margin)){
+        }else if ((p.y < 0) || (p.y > height)){
             return true;
         }
         return false;
     }
 
     reachDestination(p){
-        let x = this.destination.x * this.spacing + this.margin;
-        let y = this.destination.y * this.spacing + this.margin;
-        if ((p.x >= x) && (p.x <= x + this.spacing) && (p.y >= y) && (p.y <= y + this.spacing)){
+        if (dist(p.x,p.y, this.destination.x, this.destination.y) < this.samplingrad/2){
+            this.found = true;
             return true;
         }
         return false;
     }
 
-    isBlocked(pO, v){
-        if ((v.x > pO.x) && (v.x  <= pO.x + this.spacing) && (v.y >= pO.y) && (v.y <= pO.y + this.spacing)){
-            return true;
-        }
-        return false;
-    }
+}
 
-    map(p){
-        return new Point(p.x * this.m * this.spacing + this.margin + this.spacing/2, p.y * this.n* this.spacing + this.margin + this.spacing/2);
+function intersect(p1, p2, p3, p4){
+    let a1;
+    let a2;
+    if (p2.x != p1.x){
+      a1 = (p2.y - p1.y)/(p2.x - p1.x);
+    }else {
+      a1 = Number.MAX_SAFE_INTEGER;
     }
+    let b1 = p1.y - a1* p1.x;
+  
+    if (p4.x != p3.x){
+      a2 = (p4.y - p3.y)/(p4.x - p3.x);  
+    }else{
+      a2 = Number.MAX_SAFE_INTEGER;
+    }
+    let b2 = p3.y - a2 * p3.x;
+    let x = (b2-b1)/(a1-a2);
+    let y = x*a1 + b1;
+    return new Point(x,y);
+}
 
+
+function check(p1, p2, p3, p4){
+    let giaoDiem = intersect(p1,p2,p3,p4);
+    if ((((giaoDiem.x > p1.x) && (giaoDiem.x < p2.x)) || ((giaoDiem.y > p1.y) && (giaoDiem.y < p2.y))) || ((((giaoDiem.x < p1.x) && (giaoDiem.x > p2.x)) || ((giaoDiem.y < p1.y) && (giaoDiem.y > p2.y))))) {
+      if ((((giaoDiem.x > p3.x) && (giaoDiem.x < p4.x)) || ((giaoDiem.y > p3.y) && (giaoDiem.y < p4.y))) || ((((giaoDiem.x < p3.x) && (giaoDiem.x > p4.x)) || ((giaoDiem.y < p3.y) && (giaoDiem.y > p4.y))))) {
+        return true;
+      }
+    }
+    return false;
 }

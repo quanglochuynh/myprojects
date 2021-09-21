@@ -2,18 +2,14 @@ const filepath = 'test1.csv';
 const samplingDistance=25;
 const correctionRadius = samplingDistance * 3;
 const bias = 0.08;
-const canvasHeight = 800;
-const canvasWidth = 800;
+const canvasHeight = 600;
+const canvasWidth = 600;
 const samplingSpeed = 15;
 
-let graph;
 let tree;
-let stage = true;
 let endv;
 let found = false;
 let bestDist = Number.MAX_SAFE_INTEGER;
-let backgroundColor;
-let obstacleColor;
 let res;
 let reachID;
 let matrix;
@@ -21,29 +17,38 @@ let matrix;
 function init(){
     backgroundColor = color(0);
     obstacleColor = color(150);
-    let s = new Point(0, 0);
-    let d = new Point(0, 0);
-    let obstacle = [];
-    let str = undefined;
-    for(let i=0; i < matrix.getRowCount(); i++){
-        for(let j = 0; j < matrix.getColumnCount(); j++){
-            str = matrix.getString(i,j);
-            if (str == '1'){
-                obstacle.push(new Point(j,i));
-            }else if (str == '2'){
-                s = new Point(j,i)
-            }else if (str == '3'){
-                d = new Point(j,i);
-            }
-        }
-    }
-    graph = new Map(width, height, matrix.getRowCount(), matrix.getColumnCount(), obstacle, s, d, bias, backgroundColor, obstacleColor);
-    let node = [new Point(s.x * graph.spacing + graph.margin + graph.spacing/2, s.y * graph.spacing + graph.margin + graph.spacing/2)];
-    tree = new Tree(node, samplingDistance, height*width);
+    let s = new Point(50,50);
+    let d = new Point(550, 550);
+    let obstacleArray = [];
+
+    obstacleArray.push(new Edge(new Point(300,300), new Point(400,400)))
+    obstacleArray.push(new Edge(new Point(100, 200), new Point(300, 200)));
+    obstacleArray.push(new Edge(new Point(50, 500), new Point(50, 400)));
+    obstacleArray.push(new Edge(new Point(200, 400), new Point(500, 400)));
+    obstacleArray.push(new Edge(new Point(300, 200), new Point(300, 150)));
+
+    //let str = undefined;
+    // for(let i=0; i < matrix.getRowCount(); i++){
+    //     for(let j = 0; j < matrix.getColumnCount(); j++){
+    //         str = matrix.getString(i,j);
+    //         if (str == '1'){
+    //             obstacle.push(new Point(j,i));
+    //         }else if (str == '2'){
+    //             s = new Point(j,i)
+    //         }else if (str == '3'){
+    //             d = new Point(j,i);
+    //         }
+    //     }
+    // }
+
+
+
+    //graph = new Map(obstacleArray, s, d, bias, backgroundColor, obstacleColor);
+    tree = new Tree(obstacleArray, s, d, samplingDistance, bias);
 }
 
 function preload(){
-    matrix = loadTable(filepath, 'csv');
+    //matrix = loadTable(filepath, 'csv');
 }
 
 function setup(){
@@ -54,53 +59,41 @@ function setup(){
 }
 
 function draw(){
-    if (mouseIsPressed){
-        if (stage){
-            stage = false;
-            // if (found){
-            //     let res = tree.showPath(endv, color('CYAN'));
-            //     console.log('Distance is ' + res);
-            // }
-        }else{
-            stage = true;
-        }
-    }
     if (tree.n>1000){
-        stage = false;
+        noLoop();
     }
-    if (stage){
-        //console.log('SHOW GRAPH');
-        graph.show();
-        let randomPoint = graph.getRandomPoint();
-        let nearestID = tree.findNearestID(randomPoint);
-        let v = tree.getSamplingPoint(randomPoint, nearestID);
-        if (graph.checkForValidity(v)){
-            tree.addNode(v, nearestID);
-            //console.log('optimizing');
-            tree.optimizeSuround(correctionRadius);
+    tree.showObstacle();
+    let randomPoint = tree.getRandomPoint();
+    let nearestID = tree.findNearestID(randomPoint);
+    let v = tree.getSamplingPoint(randomPoint, nearestID);
+    if (tree.checkForValidity(v, tree.node[nearestID]) == true){
+        tree.addNode(v, nearestID);
+        tree.optimizeSuround(correctionRadius);
+    }
+    tree.show();
+    if (tree.reachDestination(v)){
+        if (!tree.found){
+            console.log('Found first path!');
+            graph.found = true;
+            reachID = tree.n-1;
+            endv = reachID;
         }
-        //console.log('show tree');
-        tree.show();
-        if (graph.reachDestination(v)){
-            if (!found){
-                console.log('Found first path!');
-                found = true;
-                graph.found = true;
-                reachID = tree.n-1;
-                endv = reachID;
-            }
-        }      
-            
-        if (found == true){
-            console.log('show path');
-            tree.showPath(endv, color('CYAN'));
-            if (tree.distance[reachID] < bestDist){
-                bestDist = tree.distance[reachID];
-                endv = reachID;
-            }           
-            console.log('Best distance: ' + bestDist + '     n = ' + tree.n);
-        }
+    }        
+    if (tree.found == true){
+        console.log('show path');
+        //(endv, color('CYAN'));
+        if (tree.distance[reachID] < bestDist){
+            bestDist = tree.distance[reachID];
+            endv = reachID;
+        }           
+        console.log('Best distance: ' + bestDist + '     n = ' + tree.node.length);
+    }
+}
+
+function mousePressed(){
+    if (isLooping()){
+        noLoop();
     }else{
-       //do nothing
+        loop();
     }
 }
