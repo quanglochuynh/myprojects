@@ -1,6 +1,6 @@
-const numOfPopulation = 1000;
-const mutationRatio = 0.1;
-const targetString = "To be or not to be.";
+const numOfPopulation = 200;
+const mutationRatio = 0.08;
+const targetString = "Dak dak buh buh lmao";
 
 let population;
 
@@ -8,14 +8,18 @@ let population;
 function setup(){
     createCanvas(600,600);
     background(240);
-    frameRate(25);
+    frameRate(15);
     population = new Population(targetString, numOfPopulation, mutationRatio);
     population.calculateFitness();
 }
 
 function draw(){
     background(240);
-    text(population.generation, 50,400)
+    textSize(48);
+    text(population.bestString, 50, 100);
+    textSize(24);
+    text('Generations: ' + population.generation + 'th', 50,150)
+    population.lamMau();
     population.naturalSelection();
     population.mutate();
     population.evaluateResult();

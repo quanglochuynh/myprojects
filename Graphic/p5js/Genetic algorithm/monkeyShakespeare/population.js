@@ -1,3 +1,12 @@
+function valid(s1, s2){
+    for (let i=0; i<s1.length; i++){
+        if (s1.charAt(i) != s2.charAt(i)){
+            return false;
+        }
+    }
+    return true;
+}
+
 class Population{
     constructor(targetString, numOfDNA, mutationRate){
         this.community = [];
@@ -8,6 +17,7 @@ class Population{
         this.targetString = targetString;
         this.generation = 0;
         this.bestString = "";
+        this.maxFitnessID = -1;
     }
 
     calculateFitness(){
@@ -25,10 +35,14 @@ class Population{
                 idmax = i;
             }
             this.community[i].fitness = Math.pow(f/this.targetString.length, 4);
+            if (this.community[i].fitness === 1){
+                this.maxFitnessID = i;
+            }
         }
-        textSize(32);
         this.bestString = this.community[idmax].data.join("");
-        text(this.bestString, 50, 300);
+        this.community.sort(function (a, b){
+            return b.fitness - a.fitness;
+        })
     }
 
     naturalSelection(){
@@ -39,14 +53,12 @@ class Population{
                 lUT.push(i);
             }
         }
-        //console.log(lUT);
         //update population
         let newPop = [];
         for(let i=0; i<this.community.length; i++){
             let id1 = random(lUT);
             let id2 = random(lUT);
             let middle = floor(random(this.targetString.length));
-            //console.log(id1 + '   ' + id2 + '   ' + middle);            
             let newStr = [];
             for (let j=0; j<this.targetString.length; j++){
                 if (j<=middle){
@@ -68,8 +80,18 @@ class Population{
     }
 
     evaluateResult(){
-        if (this.bestString === this.targetString){
+        if (this.maxFitnessID !== -1){
             noLoop();
+        }
+    }
+
+    lamMau(){
+        textSize(18);
+        for (let i = 0; i<12; i++){
+            text(this.community[i].data.join(""), 50, 200 + i*32);
+        }
+        for (let i = 12; i<24; i++){
+            text(this.community[i].data.join(""), 300, 200 + (i - 12)*32);
         }
     }
 }
