@@ -8,7 +8,14 @@
   <style>
     body {
       padding: 0;
-      margin: 0;
+      margin: 5;
+    }
+    button{
+      margin: 5px;
+      padding-left: 10px;
+      padding-right: 10px;
+      padding-top: 5px;
+      padding-bottom: 5px;
     }
   </style>
   <script src="../p5.js"></script>
@@ -17,8 +24,15 @@
 </head>
 
 <body>
-  <main>
-  </main>
+  <div class="control_panel">
+    <button onclick="reset()">Reset</button>
+    <button id="btn_pause" onclick="pause()">Start</button>
+    <input id="address_textbox" type="text" placeholder="input_address">
+    <button id="btn_load" onclick="loadData()">Load csv</button>
+    <button id="btn_save" onclick="saveData()">Save csv</button>
+  </div>
+  <div id="canvas"></div>
+  <button onclick="undo()">Undo</button>
 </body>
 
 </html>

@@ -43,12 +43,13 @@ class Tree{
     }
 
     show(){
-        fill('RED');
-        circle(this.node[0].x, this.node[0].y, 10);
-        fill(0,255,0);
-        circle(this.destination.x, this.destination.y, 10);
+        noFill();
+        stroke(0,255,0);
+        strokeWeight(4);
+        circle(this.destination.x, this.destination.y, this.samplingrad);
+        noStroke()
         fill(255);
-        noStroke();
+        circle(this.destination.x, this.destination.y, 15)
         ellipse(this.node[0].x, this.node[0].y, 15);
         for (let i in this.node){
             this.node[i].traced = false;
@@ -65,7 +66,6 @@ class Tree{
     }
 
     showObstacle(){
-        background(0);
         for(let i =0; i< this.obstacleArray.length; i++){
             this.obstacleArray[i].show();
         }
@@ -86,7 +86,7 @@ class Tree{
 
     getSamplingPoint(p,u){
         if (dist(p.x,p.y, this.node[u].x, this.node[u].y) > this.samplingrad){
-            let ang = angle(p.x - tree.node[u].x, p.y - tree.node[u].y);
+            let ang = angle(p.x - this.node[u].x, p.y - this.node[u].y);
             let res = new Point(this.node[u].x + this.samplingrad*Math.cos(ang), this.node[u].y + this.samplingrad*Math.sin(ang));
             ellipse(res.x, res.y, 5);
             return res;
@@ -176,7 +176,7 @@ class Tree{
         strokeWeight(2);
         while((u != 0)){
             v = this.trace[u];
-            line(this.node[u].x, this.node[u].y, this.node[v].x, this.node[v].y);
+            this.drawLine(u,v);
             u = v;
         }
     }
@@ -225,6 +225,9 @@ class Tree{
         return false;
     }
 
+    undo(){
+        this.obstacleArray.length --;
+    }
 }
 
 function intersect(p1, p2, p3, p4){
