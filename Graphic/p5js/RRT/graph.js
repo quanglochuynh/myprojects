@@ -203,6 +203,7 @@ class Tree{
                     rw = random(this.node[0].x - (cBest - this.cMin)/2, this.node[0].x + this.cMin + (cBest - this.cMin)/2);
                     rh = random(this.node[0].y - sqrt(pow((cBest),2) - pow(this.cMin,2))/2, this.node[0].y + sqrt(pow((cBest),2) - pow(this.cMin,2))/2);
                 }while (this.inEllipse(rw,rh) == false);
+                console.log(count);
                 let mag = dist(this.node[0].x, this.node[0].y, rw, rh);
                 let ang = angle(rw - this.node[0].x, rh - this.node[0].y) + this.desAng;
                 rw = this.node[0].x + mag * cos(ang);

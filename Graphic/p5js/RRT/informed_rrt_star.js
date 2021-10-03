@@ -7,15 +7,13 @@ const samplingSpeed = 6;
 
 let tree;
 let endv;
-let found = false;
-let bestDist = Number.MAX_SAFE_INTEGER;
-let res;
+let bestDist;
 let reachID;
 let matrix;
 let mx,my;
 let t=0;
 let stage = false;
-let solution = [];
+let solution;
 
 function init(str){
     if ((str !== undefined) && (str != "")){
@@ -27,6 +25,8 @@ function init(str){
         tree = new Tree(obstacleArray, s, d, samplingDistance, bias);
         tree.showObstacle();
     }
+    bestDist = Number.MAX_SAFE_INTEGER;
+    solution = [];
 }
 
 function loadCSV(){
@@ -85,7 +85,7 @@ function draw(){
             solution.push(bestDist);
             if ((solution.length > 100) && (solution[solution.length-100] - solution[solution.length-1] < 10)){
                 console.log('Done');
-                noLoop();
+                stage = false;
                 alert("DONE evaluation");
             }
             console.log('Best distance: ' + bestDist + '     n = ' + tree.node.length);
