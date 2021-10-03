@@ -30,8 +30,7 @@ function angle(x,y){
 
 class Tree{
     constructor(obstacle, sta, des, samplingrad, bias){
-        this.node = [];
-        this.node.push(sta);
+        this.node = [sta];
         this.samplingrad = samplingrad;
         this.trace = [0];
         this.distance = [0];
@@ -39,7 +38,13 @@ class Tree{
         this.obstacleArray = obstacle;
         this.destination = des;
         this.found = false;
-        this.bias = bias
+        this.bias = bias;
+        // this.row = height/this.samplingrad;
+        // this.col = width/this.samplingrad;
+        // this.randomMatrix = new Matrix(this.row * this.col, this.row * this.col);
+        this.bestID = null;
+        this.cMin = dist(this.node[0].x, this.node[0].y, this.destination.x, this.destination.y);
+        this.desAng = angle(this.destination.x - this.node[0].x, this.destination.y - this.node[0].y);
     }
 
     show(){
@@ -57,7 +62,6 @@ class Tree{
         stroke('PINK');
         strokeWeight(1);
         for (let i in this.node){
-            
             if (i!=0){
                 this.distance[i] = this.showTrace(i);
                 ellipse(this.node[i].x, this.node[i].y, 2);
@@ -126,10 +130,7 @@ class Tree{
         let scanArray = [];
         strokeWeight(2);
         //find new parent
-        for (let i in this.node){
-            if (i == newNodeID){
-                continue;
-            }
+        for (let i=0; i< newNodeID; i++){
             let d = this.dista(i, newNodeID);
             if (d < rad){
                 if (this.checkForValidity(this.node[i], this.node[newNodeID]) == true){
@@ -148,13 +149,11 @@ class Tree{
         stroke('yellow');
         strokeWeight(4);
         for(let i in scanArray){
-            if ((scanArray[i] != newNodeID)){
-                let dis = this.dista(newNodeID, scanArray[i])
-                if ((this.distance[scanArray[i]] > this.distance[newNodeID] + dis)){            
-                    this.drawLine(newNodeID, scanArray[i]);
-                    this.distance[scanArray[i]] = this.distance[newNodeID] + dis;
-                    this.trace[scanArray[i]] = newNodeID;
-                }
+            let dis = this.dista(newNodeID, scanArray[i])
+            if ((this.distance[scanArray[i]] > this.distance[newNodeID] + dis)){            
+                this.drawLine(newNodeID, scanArray[i]);
+                this.distance[scanArray[i]] = this.distance[newNodeID] + dis;
+                this.trace[scanArray[i]] = newNodeID;
             }
         }
     }
@@ -172,8 +171,9 @@ class Tree{
     showPath(desID, c){
         let v;
         let u = desID;
+        this.bestID = desID;
         stroke(c);
-        strokeWeight(2);
+        strokeWeight(4);
         while((u != 0)){
             v = this.trace[u];
             this.drawLine(u,v);
@@ -181,17 +181,79 @@ class Tree{
         }
     }
 
+    inEllipse(x,y){
+        let d1 = dist(this.node[0].x, this.node[0].y, x, y);
+        let d2 = dist(this.node[0].x + this.cMin, this.node[0].y, x, y);
+        if ((d1+d2) <= this.distance[this.bestID]){
+            return true;
+        }
+        return false;
+    }
+
     getRandomPoint(){
+        let cBest = this.distance[this.bestID];
+        //console.log(cBest);
         let biasing = random(1);
-        if ((biasing > this.bias) || (this.found == true)){
-            let rw = random(0, width);
-            let rh = random(0, height);
-            fill('Cyan');
-            ellipse(rw, rh, 10);
-            return new Point(rw, rh);
-        }else{
-            let res = new Point(this.destination.x, this.destination.y);
-            return res;
+        if (this.found == true){
+            if ((biasing > this.bias)){
+                let rw, rh;
+                let count=0;
+                do{
+                    count++;
+                    rw = random(this.node[0].x - (cBest - this.cMin)/2, this.node[0].x + this.cMin + (cBest - this.cMin)/2);
+                    rh = random(this.node[0].y - sqrt(pow((cBest),2) - pow(this.cMin,2))/2, this.node[0].y + sqrt(pow((cBest),2) - pow(this.cMin,2))/2);
+                }while (this.inEllipse(rw,rh) == false);
+                let mag = dist(this.node[0].x, this.node[0].y, rw, rh);
+                let ang = angle(rw - this.node[0].x, rh - this.node[0].y) + this.desAng;
+                rw = this.node[0].x + mag * cos(ang);
+                rh = this.node[0].y + mag * sin(ang);
+
+                circle(rw, rh, 10);
+                /*
+                //feed-forward
+                let py = floor(rh / this.samplingrad)
+                let px = floor(rw / this.samplingrad);
+                let p = py * this.col + px;
+    
+                //console.log(px + '    ' + py);
+    
+                let inpArray = [];
+                for (let i =0; i < this.col * this.row; i++){
+                    inpArray.push(0);
+                }
+                inpArray[p] = 1;
+                let inpMatrix = Matrix.arrayToMatrix(inpArray);
+                let outMatrix = Matrix.multiply(this.randomMatrix, inpMatrix);
+                let outArray = outMatrix.matrixToArray();
+                let newp = outArray.indexOf(max(outArray));
+                rw = random(0, this.samplingrad);
+                rh = random(0, this.samplingrad);
+    
+                let newpx = newp % this.col;
+                let newpy = floor(newp /this.row);
+                rw += this.samplingrad * newpx;
+                rh += this.samplingrad * newpy;
+                */
+    
+                fill('Cyan');
+                ellipse(rw, rh, 10);
+                return new Point(rw, rh);
+            }else{
+                let res = new Point(this.destination.x, this.destination.y);
+                return res;
+            }
+        }else{  //not found
+            if ((biasing > this.bias)){
+                let rw = random(0, width);
+                let rh = random(0, height);
+                ellipse(rw, rh, 10);
+                fill('Cyan');
+                ellipse(rw, rh, 10);
+                return new Point(rw, rh);
+            }else{
+                let res = new Point(this.destination.x, this.destination.y);
+                return res;
+            }
         }
         
     }
@@ -226,7 +288,7 @@ class Tree{
     }
 
     undo(){
-        this.obstacleArray.length --;
+        this.obstacleArray.pop();
     }
 }
 

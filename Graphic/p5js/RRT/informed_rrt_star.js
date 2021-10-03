@@ -1,4 +1,4 @@
-const samplingDistance=50;
+const samplingDistance=80;
 const correctionRadius = samplingDistance * 2;
 const bias = 0.1;
 const canvasHeight = 600;
@@ -15,14 +15,11 @@ let matrix;
 let mx,my;
 let t=0;
 let stage = false;
+let solution = [];
 
 function init(str){
-    backgroundColor = color(0);
-    obstacleColor = color(150);
-    
-    
     if ((str !== undefined) && (str != "")){
-        matrix = loadTable('data/' + str, 'csv', 'header', loadCSV, errorNotify());
+        matrix = loadTable('data/' + str, 'csv', 'header', loadCSV, errorNotify);
     }else{
         let obstacleArray = []; 
         let s = new Point(50,50);
@@ -33,11 +30,10 @@ function init(str){
 }
 
 function loadCSV(){
-    //console.log(matrix);
     let s = new Point(50,50);
     let d = new Point(50, 550);
     let obstacleArray = []; 
-    for(let i=1; i < matrix.getRowCount(); i++){
+    for(let i=0; i < matrix.getRowCount(); i++){
         let p1x = matrix.getString(i,'p1x');
         let p1y = matrix.getString(i,'p1y');
         let p2x = matrix.getString(i,'p2x');
@@ -81,12 +77,17 @@ function draw(){
             endv = reachID;
         }
         if (tree.found == true){
-            console.log('show path');
             tree.showPath(endv, color('CYAN'));
             if (tree.distance[reachID] < bestDist){
                 bestDist = tree.distance[reachID];
                 endv = reachID;
-            }           
+            }
+            solution.push(bestDist);
+            if ((solution.length > 100) && (solution[solution.length-100] - solution[solution.length-1] < 10)){
+                console.log('Done');
+                noLoop();
+                alert("DONE evaluation");
+            }
             console.log('Best distance: ' + bestDist + '     n = ' + tree.node.length);
         }
     }
@@ -109,10 +110,34 @@ function draw(){
 function mousePressed(){
     mx = mouseX;
     my = mouseY;
+    for (let i in tree.obstacleArray){
+        if ((dist(mx,my, tree.obstacleArray[i].p1.x, tree.obstacleArray[i].p1.y) < 20)){
+            mx = tree.obstacleArray[i].p1.x;
+            my = tree.obstacleArray[i].p1.y;
+            break;
+        }else if (dist(mx,my, tree.obstacleArray[i].p2.x, tree.obstacleArray[i].p2.y) < 20){
+            mx = tree.obstacleArray[i].p2.x;
+            my = tree.obstacleArray[i].p2.y;
+            break;
+        }
+    }
   }
   
 function mouseReleased(){
-        tree.obstacleArray.push(new Edge(new Point(mx,my), new Point(mouseX, mouseY)));
+    let m2x = mouseX; 
+    let m2y = mouseY;
+    for (let i in tree.obstacleArray){
+        if ((dist(m2x,m2y, tree.obstacleArray[i].p1.x, tree.obstacleArray[i].p1.y) < 20)){
+            m2x = tree.obstacleArray[i].p1.x;
+            m2y = tree.obstacleArray[i].p1.y;
+            break;
+        }else if (dist(m2x,m2y, tree.obstacleArray[i].p2.x, tree.obstacleArray[i].p2.y) < 20){
+            m2x = tree.obstacleArray[i].p2.x;
+            m2y = tree.obstacleArray[i].p2.y;
+            break;
+        }
+    }
+    tree.obstacleArray.push(new Edge(new Point(mx,my), new Point(m2x, m2y)));
 }
 
 function reset(){
