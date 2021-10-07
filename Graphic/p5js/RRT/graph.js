@@ -104,7 +104,6 @@ class Tree{
         this.node.push(sample);
         this.trace.push(nearestID);
         this.distance.push(this.distance[nearestID] + this.samplingrad);
-        return sample;
     }
 
     circle(p){
@@ -290,6 +289,22 @@ class Tree{
 
     undo(){
         this.obstacleArray.pop();
+    }
+
+    saveData(str){
+        let table = new p5.Table();
+        table.addColumn('p1x');
+        table.addColumn('p1y');
+        table.addColumn('p2x');
+        table.addColumn('p2y');
+        for (let i in tree.obstacleArray){
+            let row = table.addRow();
+            row.setNum('p1x', this.obstacleArray[i].p1.x);
+            row.setNum('p1y', this.obstacleArray[i].p1.y);
+            row.setNum('p2x', this.obstacleArray[i].p2.x);
+            row.setNum('p2y', this.obstacleArray[i].p2.y);
+        }
+        saveTable(table, str);
     }
 }
 

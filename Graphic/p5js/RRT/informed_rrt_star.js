@@ -1,6 +1,6 @@
 const samplingDistance=80;
 const correctionRadius = samplingDistance * 2;
-const bias = 0.1;
+const bias = 0.08;
 const canvasHeight = 600;
 const canvasWidth = 600;
 const samplingSpeed = 6;
@@ -91,6 +91,7 @@ function draw(){
             console.log('Best distance: ' + bestDist + '     n = ' + tree.node.length);
         }
     }
+    
     if (!stage){
         background(0);
         tree.showObstacle();
@@ -100,11 +101,9 @@ function draw(){
         }
     }
     
-
     if (mouseIsPressed){
         line(mx,my, mouseX, mouseY)
     }
-    
 }
 
 function mousePressed(){
@@ -159,19 +158,7 @@ function loadData(){
 }
 
 function saveData(){
-    let table = new p5.Table();
-    table.addColumn('p1x');
-    table.addColumn('p1y');
-    table.addColumn('p2x');
-    table.addColumn('p2y');
-    for (let i in tree.obstacleArray){
-        let row = table.addRow();
-        row.setNum('p1x', tree.obstacleArray[i].p1.x);
-        row.setNum('p1y', tree.obstacleArray[i].p1.y);
-        row.setNum('p2x', tree.obstacleArray[i].p2.x);
-        row.setNum('p2y', tree.obstacleArray[i].p2.y);
-    }
-    saveTable(table, document.getElementById("address_textbox").value);
+    tree.saveData(document.getElementById("address_textbox").value)
 }
 
 function undo(){
