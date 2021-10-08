@@ -46,7 +46,7 @@ let meaning = [ new FuzzyNumber(1/9, 1/9, 1/7),
 */
 let valMat = [  [8, 12, 10],
                 [4, 8, 6],
-                [6, 10, 8]
+                [6, 10, 8] 
             ];
 
 let mat = new AHPmatrix(3, meaning, valMat);
