@@ -21,7 +21,7 @@ function init(str){
     }else{
         let obstacleArray = []; 
         let s = new Point(50,50);
-        let d = new Point(50, 550);
+        let d = new Point(300, 550);
         tree = new Tree(obstacleArray, s, d, samplingDistance, bias);
         tree.showObstacle();
     }
@@ -31,7 +31,7 @@ function init(str){
 
 function loadCSV(){
     let s = new Point(50,50);
-    let d = new Point(50, 550);
+    let d = new Point(300, 550);
     let obstacleArray = []; 
     for(let i=0; i < matrix.getRowCount(); i++){
         let p1x = matrix.getString(i,'p1x');
@@ -53,6 +53,7 @@ function setup(){
     let cv = createCanvas(canvasWidth,canvasHeight);
     cv.parent('canvas');
     rectMode(CORNERS);
+    curveTightness(0);
     background(0);
     init();
     

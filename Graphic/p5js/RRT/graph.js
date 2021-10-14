@@ -49,8 +49,12 @@ class Tree{
 
     show(){
         noFill();
-        stroke(0,255,0);
-        strokeWeight(4);
+        if (this.found){
+            stroke(0,255,0);
+        }else{
+            stroke(255,0,0);
+        }
+        strokeWeight(2);
         circle(this.destination.x, this.destination.y, this.samplingrad);
         noStroke()
         fill(255);
@@ -59,7 +63,7 @@ class Tree{
         for (let i in this.node){
             this.node[i].traced = false;
         }
-        stroke('PINK');
+        stroke(245,194,203,100);
         strokeWeight(1);
         for (let i in this.node){
             if (i!=0){
@@ -173,11 +177,20 @@ class Tree{
         this.bestID = desID;
         stroke(c);
         strokeWeight(4);
+        noFill();
+        beginShape();
+        curveVertex(this.node[u].x, this.node[u].y);
         while((u != 0)){
             v = this.trace[u];
-            this.drawLine(u,v);
+            if (this.dista(u,v) >= 10){
+                curveVertex(this.node[u].x, this.node[u].y);
+            }
+            //this.drawLine(u,v);
             u = v;
         }
+        curveVertex(this.node[0].x, this.node[0].y);
+        curveVertex(this.node[0].x, this.node[0].y);
+        endShape();
     }
 
     inEllipse(x,y){
@@ -191,7 +204,6 @@ class Tree{
 
     getRandomPoint(){
         let cBest = this.distance[this.bestID];
-        //console.log(cBest);
         let biasing = random(1);
         if (this.found == true){
             if ((biasing > this.bias)){
@@ -207,7 +219,6 @@ class Tree{
                 let ang = angle(rw - this.node[0].x, rh - this.node[0].y) + this.desAng;
                 rw = this.node[0].x + mag * cos(ang);
                 rh = this.node[0].y + mag * sin(ang);
-
                 circle(rw, rh, 10);
                 /*
                 //feed-forward

@@ -1,0 +1,22 @@
+{
+    "manifest_version": 2,
+    "name": "I hate EdusoftWeb",
+    "version": "0.01",
+    "content_scripts": [
+        {
+            "matches": [
+                "https://edusoftweb.hcmiu.edu.vn/Default.aspx?page=gioithieu*",
+                "https://edusoftweb.hcmiu.edu.vn/default.aspx?page=gioithieu*"
+            ],
+            "css": ["Standard.css"],
+            "js": ["content_trangchu.js"]
+        },
+        {
+            "matches": [
+                "https://edusoftweb.hcmiu.edu.vn/Default.aspx?page=thoikhoabieu"
+            ],
+            "css": ["Standard.css"],
+            "js": ["content_tkb.js"]
+        }
+    ]
+}
