@@ -72,8 +72,10 @@ function draw(){
         }
         tree.show();
         tree.showObstacle();
-        if ((!tree.found) && (tree.reachDestination(v))){
-            console.log('Found first path!');
+        // if ((!tree.found)){
+        //     console.log('Found first path!');
+        // }
+        if (tree.reachDestination(v)){
             reachID = tree.node.length-1;
             endv = reachID;
         }

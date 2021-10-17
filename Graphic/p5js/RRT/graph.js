@@ -37,7 +37,6 @@ class Tree{
         this.found = false;
         this.obstacleArray = obstacle;
         this.destination = des;
-        this.found = false;
         this.bias = bias;
         // this.row = height/this.samplingrad;
         // this.col = width/this.samplingrad;
@@ -135,15 +134,14 @@ class Tree{
         //find new parent
         for (let i=0; i< newNodeID; i++){
             let d = this.dista(i, newNodeID);
-            if (d < rad){
+            if ((d < rad)){
                 if (this.checkForValidity(this.node[i], this.node[newNodeID]) == true){
                     scanArray.push(i);
-                    if (this.distance[i] + d < mindist){
-                        mindist = this.distance[i] + d;
+                    if (d + this.distance[i] < mindist){
+                        mindist = d + this.distance[i];
                         minID = i;
                     }
                 }
-
             }
         }
         this.trace[newNodeID] = minID;
@@ -182,7 +180,7 @@ class Tree{
         curveVertex(this.node[u].x, this.node[u].y);
         while((u != 0)){
             v = this.trace[u];
-            if (this.dista(u,v) >= 10){
+            if (this.dista(u,v) >= 40){
                 curveVertex(this.node[u].x, this.node[u].y);
             }
             //this.drawLine(u,v);
@@ -214,7 +212,7 @@ class Tree{
                     rw = random(this.node[0].x - (cBest - this.cMin)/2, this.node[0].x + this.cMin + (cBest - this.cMin)/2);
                     rh = random(this.node[0].y - sqrt(pow((cBest),2) - pow(this.cMin,2))/2, this.node[0].y + sqrt(pow((cBest),2) - pow(this.cMin,2))/2);
                 }while (this.inEllipse(rw,rh) == false);
-                console.log(count);
+                //console.log(count);
                 let mag = dist(this.node[0].x, this.node[0].y, rw, rh);
                 let ang = angle(rw - this.node[0].x, rh - this.node[0].y) + this.desAng;
                 rw = this.node[0].x + mag * cos(ang);

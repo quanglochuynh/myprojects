@@ -6,17 +6,28 @@
         {
             "matches": [
                 "https://edusoftweb.hcmiu.edu.vn/Default.aspx?page=gioithieu*",
-                "https://edusoftweb.hcmiu.edu.vn/default.aspx?page=gioithieu*"
+                "https://edusoftweb.hcmiu.edu.vn/default.aspx?page=gioithieu*",
+                "http://edusoftweb.hcmiu.edu.vn/Default.aspx?page=gioithieu*",
+                "http://edusoftweb.hcmiu.edu.vn/default.aspx?page=gioithieu*"
             ],
             "css": ["Standard.css"],
             "js": ["content_trangchu.js"]
         },
         {
             "matches": [
-                "https://edusoftweb.hcmiu.edu.vn/Default.aspx?page=thoikhoabieu"
+                "https://edusoftweb.hcmiu.edu.vn/Default.aspx?page=thoikhoabieu",
+                "http://edusoftweb.hcmiu.edu.vn/Default.aspx?page=thoikhoabieu"
             ],
             "css": ["Standard.css"],
             "js": ["content_tkb.js"]
+        },
+        {
+            "matches": [
+                "https://edusoftweb.hcmiu.edu.vn/default.aspx?page=dangnhap",
+                "http://edusoftweb.hcmiu.edu.vn/default.aspx?page=dangnhap"
+            ],
+            "css": ["Standard.css"],
+            "js": ["content_dangnhap.js"]
         }
     ]
 }
