@@ -72,9 +72,6 @@ function draw(){
         }
         tree.show();
         tree.showObstacle();
-        // if ((!tree.found)){
-        //     console.log('Found first path!');
-        // }
         if (tree.reachDestination(v)){
             reachID = tree.node.length-1;
             endv = reachID;
@@ -85,6 +82,7 @@ function draw(){
                 bestDist = tree.distance[reachID];
                 endv = reachID;
             }
+            //xet dieu kien dung
             solution.push(bestDist);
             if ((solution.length > 100) && (solution[solution.length-100] - solution[solution.length-1] < 10)){
                 console.log('Done');
