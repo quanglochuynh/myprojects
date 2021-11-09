@@ -6,8 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Electre 1</title>
     <script src="electre_one.js"></script>
+    <script src="main.js"></script>
 </head>
 <body>
-    
+    <div id="head_div" style="display: block;">
+        <input id="numOfCriteriaTextBox" placeholder="Number of Criteria" type="number">
+        <input id="numOfAlternativeTextBox" placeholder="Number of Alternative" type="number">
+        <button id="buttonOK" onclick="btnOK()">OK</button>
+    </div>
+
+    <div id="input_div" style="display: none;">
+        <div id="input1_div" style="display: block;">
+            <table id="criteria_table" border="2"></table>
+            <table id="alternative_table" border="2" style="margin-top: 40px;"></table>
+            <button id="btn_next" onclick="btnNext()" style="margin-top: 40px;">Next1</button>
+        </div>
+        
+        <div id="input2_div" style="display: none;">
+            <table id="compare_table" border="2" style="display: none;"></table>
+            <button onclick="btnNext2()">Next2</button>
+        </div>
+    </div>
+
+    <div id="result_div" style="display: none;">
+        <h1>result is</h1>
+        <table id="result_table" border="2"></table>
+        <button id="btn_reset" onclick="btnReset()" style="margin-top: 40px;">Reset</button>
+    </div>
 </body>
 </html>
