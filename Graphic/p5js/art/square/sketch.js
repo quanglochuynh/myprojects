@@ -9,6 +9,7 @@ class Square{
     stroke(0);
     strokeWeight(2);
     noFill();
+    rectMode(CENTER);
     rect(this.x, this.y,this.w, this.w);
   }
 }
@@ -25,15 +26,14 @@ function setup() {
   background(220);
   s = new Square(0,0,200)
   translate(300, 300);
-  // for (let i =0 ; i<10; i++){
-
-  // }
+  for (let i =0 ; i<20; i++){
+    array.push(new Square(0,0,1000*(1/sqrt(i))));
+  }
 }
 
 function draw() {
   background(220);
-  z++;
-  s.show()
-  translate(300, 300,z);
-
+  for (let i in array){
+    array[i].show();
+  }
 }
