@@ -38,9 +38,6 @@ class Tree{
         this.obstacleArray = obstacle;
         this.destination = des;
         this.bias = bias;
-        // this.row = height/this.samplingrad;
-        // this.col = width/this.samplingrad;
-        // this.randomMatrix = new Matrix(this.row * this.col, this.row * this.col);
         this.bestID = null;
         this.cMin = dist(this.node[0].x, this.node[0].y, this.destination.x, this.destination.y);
         this.desAng = angle(this.destination.x - this.node[0].x, this.destination.y - this.node[0].y);
@@ -272,7 +269,7 @@ class Tree{
             return false;
         }
         for (let i in this.obstacleArray){
-            if (check(p1, p2, this.obstacleArray[i].p1, this.obstacleArray[i].p2) == true){
+            if (this.check(p1, p2, this.obstacleArray[i].p1, this.obstacleArray[i].p2) == true){
                 return false;
               }
         }
@@ -315,36 +312,41 @@ class Tree{
         }
         saveTable(table, str);
     }
+
+    check(p1, q1, p2, q2){
+        let o1 = orient(p1, q1, p2);
+        let o2 = orient(p1, q1, q2);
+        let o3 = orient(p2, q2, p1);
+        let o4 = orient(p2, q2, q1);
+        if ((o1 != o2) && (o3 != o4)){
+            return true;
+        }else if ((o1 == 0) && on_segment(p1, p2, q1)) {
+            return true;
+        }else if ((o2 == 0) && on_segment(p1, q2, q1)) {
+            return true;
+        }else if ((o3 == 0) && on_segment(p2, p1, q2)) {
+            return true;
+        }else if ((o4 == 0) && on_segment(p2, q1, q2)) {
+            return true;
+        }
+    }
 }
 
-function intersect(p1, p2, p3, p4){
-    let a1;
-    let a2;
-    if (p2.x != p1.x){
-      a1 = (p2.y - p1.y)/(p2.x - p1.x);
-    }else {
-      a1 = Number.MAX_SAFE_INTEGER;
-    }
-    let b1 = p1.y - a1* p1.x;
-  
-    if (p4.x != p3.x){
-      a2 = (p4.y - p3.y)/(p4.x - p3.x);  
+function orient(p, q, r){
+    let val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
+    if (val == 0) {
+        return 0; 
+    }else if (val > 0){
+        return 1;
     }else{
-      a2 = Number.MAX_SAFE_INTEGER;
+        return -1;
     }
-    let b2 = p3.y - a2 * p3.x;
-    let x = (b2-b1)/(a1-a2);
-    let y = x*a1 + b1;
-    return new Point(x,y);
-}
+} 
 
-
-function check(p1, p2, p3, p4){
-    let giaoDiem = intersect(p1,p2,p3,p4);
-    if ((((giaoDiem.x > p1.x) && (giaoDiem.x < p2.x)) || ((giaoDiem.y > p1.y) && (giaoDiem.y < p2.y))) || ((((giaoDiem.x < p1.x) && (giaoDiem.x > p2.x)) || ((giaoDiem.y < p1.y) && (giaoDiem.y > p2.y))))) {
-      if ((((giaoDiem.x > p3.x) && (giaoDiem.x < p4.x)) || ((giaoDiem.y > p3.y) && (giaoDiem.y < p4.y))) || ((((giaoDiem.x < p3.x) && (giaoDiem.x > p4.x)) || ((giaoDiem.y < p3.y) && (giaoDiem.y > p4.y))))) {
+function on_segment(p, q, r){
+    if (q.x <= max(p.x, r.x) && q.x >= min(p.x, r.x) && q.y <= max(p.y, r.y) && q.y >= min(p.y, r.y)){
         return true;
-      }
+    }else{
+        return false;
     }
-    return false;
 }
