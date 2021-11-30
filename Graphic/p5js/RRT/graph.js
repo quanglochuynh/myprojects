@@ -179,6 +179,7 @@ class Tree{
         beginShape();
         curveVertex(this.node[u].x, this.node[u].y);
         while((u != 0)){
+            console.log('show node ' + u);
             v = this.trace[u];
             if (this.dista(u,v) >= 40){
                 curveVertex(this.node[u].x, this.node[u].y);
@@ -271,7 +272,7 @@ class Tree{
     }
 
     reachDestination(p){
-        if (dist(p.x,p.y, this.destination.x, this.destination.y) < this.samplingrad/2){
+        if (dist(p.x,p.y, this.destination.x, this.destination.y) < 3){
             this.found = true;
             return true;
         }

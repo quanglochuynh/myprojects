@@ -6,33 +6,33 @@ const canvasWidth = 600;
 const samplingSpeed = 6;
 
 let tree;
+let tree2;
 let endv;
-let bestDist;
+let bestDist = Number.MAX_SAFE_INTEGER;
 let reachID;
 let matrix;
 let mx,my;
 let t=0;
 let stage = false;
 let solution;
-let cMin;
 
 function init(str){
     if ((str !== undefined) && (str != "")){
         matrix = loadTable('data/' + str, 'csv', 'header', loadCSV, errorNotify);
     }else{
         let obstacleArray = []; 
-        let s = new Point(300,50);
+        let s = new Point(50,50);
         let d = new Point(300, 550);
         tree = new Tree(obstacleArray, s, d, samplingDistance, bias);
+        tree2 = new Tree(obstacleArray,d,s,samplingDistance, bias);
         tree.showObstacle();
     }
     bestDist = Number.MAX_SAFE_INTEGER;
-    cMin = 500;
     solution = [];
 }
 
 function loadCSV(){
-    let s = new Point(300,50);
+    let s = new Point(50,50);
     let d = new Point(300, 550);
     let obstacleArray = []; 
     for(let i=0; i < matrix.getRowCount(); i++){
@@ -43,6 +43,7 @@ function loadCSV(){
         obstacleArray.push(new Edge(new Point(p1x, p1y), new Point(p2x, p2y)));
     }
     tree = new Tree(obstacleArray, s, d, samplingDistance, bias);
+    tree2 = new Tree(obstacleArray,d,s,samplingDistance, bias);
     tree.showObstacle();
     console.log('Loaded');
 }
@@ -65,40 +66,55 @@ function draw(){
     t++;
     if ((t%samplingSpeed == 0) && (stage)){
         background(0);
-        console.log('1');
-        let randomPoint = tree.getRandomPoint();
-        console.log('2');
+        let randomPoint = tree.getRandomPoint(bestDist);
         let nearestID = tree.findNearestID(randomPoint);
-        console.log('3');
+        let nearest2ID = tree2.findNearestID(randomPoint);
         let v = tree.getSamplingPoint(randomPoint, nearestID);
-        console.log('4');
+        console.log('1');
+        let v2 = tree2.getSamplingPoint(randomPoint,nearest2ID);
+        console.log('2');
+
         if (tree.checkForValidity(v, tree.node[nearestID]) == true){
-            console.log('5');
             tree.addNode(v, nearestID);
-            console.log('6');
+            console.log('3.1');
             tree.optimizeSuround(correctionRadius);
+            console.log('3.2');
         }
-        console.log('7');
+        if (tree2.checkForValidity(v2, tree2.node[nearest2ID]) == true){
+            tree2.addNode(v2, nearest2ID);
+            console.log('3.3');
+            tree2.optimizeSuround(correctionRadius);
+            console.log('3.4');
+        }
         tree.show();
+        tree2.show();
         tree.showObstacle();
-        console.log('8');
-        if (tree.reachDestination(v)){
-            reachID = tree.node.length-1;
-            endv = reachID;
-        }
-        if (tree.found == true){
-            console.log('9');
-            tree.showPath(endv, color('CYAN'));
-            if (tree.distance[reachID] < bestDist){
-                bestDist = tree.distance[reachID];
+        // if (tree.reachDestination(v)){
+        //     reachID = tree.node.length-1;
+        //     endv = reachID;
+        // }
+        // if (tree2.reachDestination(v2)){
+        // }
+        if ((v.x == v2.x) && (v.y == v2.y)){
+            tree.found == true;
+            tree2.found == true;
+            reachID = [tree.node.length-1, tree2.node.length-1];
+            if (tree.distance[reachID[0]] + tree2.distance[reachID[1]] < bestDist){
+                bestDist = tree.distance[reachID[0]] + tree2.distance[reachID[1]];
                 endv = reachID;
             }
+            //noLoop();
+        }
+        if (endv != undefined){
+            tree.showPath(endv[0], color('CYAN'));
+            tree2.showPath(endv[1], color('CYAN'));
+            console.log('4');
             //xet dieu kien dung
             solution.push(bestDist);
-            if (((solution.length > 100) && (solution[solution.length-100] - solution[solution.length-1] < 10)) || (bestDist-3 < cMin)){
+            if ((solution.length > 100) && (solution[solution.length-100] - solution[solution.length-1] < 10)){
                 console.log('Done');
                 stage = false;
-                alert("DONE evaluation");
+                alert("DONE evaluation, best route cost " + bestDist);
             }
             console.log('Best distance: ' + bestDist + '     n = ' + tree.node.length);
         }
@@ -108,12 +124,14 @@ function draw(){
         background(0);
         tree.showObstacle();
         tree.show();
-        if (tree.found == true){
-            tree.showPath(endv, color('CYAN'));
+        tree2.show();
+        if (endv != undefined){
+            tree.showPath(endv[0], color('CYAN'));
+            tree2.showPath(endv[1], color('CYAN'));
         }
     }
     
-    if (mouseIsPressed){
+    if (mouseIsPressed){
         line(mx,my, mouseX, mouseY)
     }
 }
