@@ -38,6 +38,9 @@ class Tree{
         this.obstacleArray = obstacle;
         this.destination = des;
         this.bias = bias;
+        // this.row = height/this.samplingrad;
+        // this.col = width/this.samplingrad;
+        // this.randomMatrix = new Matrix(this.row * this.col, this.row * this.col);
         this.bestID = null;
         this.cMin = dist(this.node[0].x, this.node[0].y, this.destination.x, this.destination.y);
         this.desAng = angle(this.destination.x - this.node[0].x, this.destination.y - this.node[0].y);
@@ -202,49 +205,31 @@ class Tree{
         let biasing = random(1);
         if (this.found == true){
             if ((biasing > this.bias)){
+                console.log('1.1');
                 let rw, rh;
                 let count=0;
                 do{
                     count++;
+                    if (count>5){
+                        break;
+                    }
                     rw = random(this.node[0].x - (cBest - this.cMin)/2, this.node[0].x + this.cMin + (cBest - this.cMin)/2);
                     rh = random(this.node[0].y - sqrt(pow((cBest),2) - pow(this.cMin,2))/2, this.node[0].y + sqrt(pow((cBest),2) - pow(this.cMin,2))/2);
                 }while (this.inEllipse(rw,rh) == false);
-                //console.log(count);
-                let mag = dist(this.node[0].x, this.node[0].y, rw, rh);
-                let ang = angle(rw - this.node[0].x, rh - this.node[0].y) + this.desAng;
-                rw = this.node[0].x + mag * cos(ang);
-                rh = this.node[0].y + mag * sin(ang);
-                circle(rw, rh, 10);
-                /*
-                //feed-forward
-                let py = floor(rh / this.samplingrad)
-                let px = floor(rw / this.samplingrad);
-                let p = py * this.col + px;
-    
-                //console.log(px + '    ' + py);
-    
-                let inpArray = [];
-                for (let i =0; i < this.col * this.row; i++){
-                    inpArray.push(0);
+                if (count<=5){
+                    let mag = dist(this.node[0].x, this.node[0].y, rw, rh);
+                    let ang = angle(rw - this.node[0].x, rh - this.node[0].y) + this.desAng;
+                    rw = this.node[0].x + mag * cos(ang);
+                    rh = this.node[0].y + mag * sin(ang);
+                    circle(rw, rh, 10);
+                    fill('Cyan');
+                    ellipse(rw, rh, 10);
+                    return new Point(rw, rh);
+                }else{
+                    return new Point(random(0, width), random(0, height));
                 }
-                inpArray[p] = 1;
-                let inpMatrix = Matrix.arrayToMatrix(inpArray);
-                let outMatrix = Matrix.multiply(this.randomMatrix, inpMatrix);
-                let outArray = outMatrix.matrixToArray();
-                let newp = outArray.indexOf(max(outArray));
-                rw = random(0, this.samplingrad);
-                rh = random(0, this.samplingrad);
-    
-                let newpx = newp % this.col;
-                let newpy = floor(newp /this.row);
-                rw += this.samplingrad * newpx;
-                rh += this.samplingrad * newpy;
-                */
-    
-                fill('Cyan');
-                ellipse(rw, rh, 10);
-                return new Point(rw, rh);
             }else{
+                console.log('1.2');
                 let res = new Point(this.destination.x, this.destination.y);
                 return res;
             }
@@ -269,7 +254,7 @@ class Tree{
             return false;
         }
         for (let i in this.obstacleArray){
-            if (this.check(p1, p2, this.obstacleArray[i].p1, this.obstacleArray[i].p2) == true){
+            if (check(p1, p2, this.obstacleArray[i].p1, this.obstacleArray[i].p2) == true){
                 return false;
               }
         }
@@ -312,41 +297,44 @@ class Tree{
         }
         saveTable(table, str);
     }
+}
 
-    check(p1, q1, p2, q2){
-        let o1 = orient(p1, q1, p2);
-        let o2 = orient(p1, q1, q2);
-        let o3 = orient(p2, q2, p1);
-        let o4 = orient(p2, q2, q1);
-        if ((o1 != o2) && (o3 != o4)){
-            return true;
-        }else if ((o1 == 0) && on_segment(p1, p2, q1)) {
-            return true;
-        }else if ((o2 == 0) && on_segment(p1, q2, q1)) {
-            return true;
-        }else if ((o3 == 0) && on_segment(p2, p1, q2)) {
-            return true;
-        }else if ((o4 == 0) && on_segment(p2, q1, q2)) {
-            return true;
-        }
+
+function check(p1, q1, p2, q2){
+    let o1 = orient(p1, q1, p2);
+    let o2 = orient(p1, q1, q2);
+    let o3 = orient(p2, q2, p1);
+    let o4 = orient(p2, q2, q1);
+    if ((o1 != o2) && (o3 != o4)){
+        return true;
+    }else if ((o1 == 0) && on_segment(p1, p2, q1)) {
+        return true;
+    }else if ((o2 == 0) && on_segment(p1, q2, q1)) {
+        return true;
+    }else if ((o3 == 0) && on_segment(p2, p1, q2)) {
+        return true;
+    }else if ((o4 == 0) && on_segment(p2, q1, q2)) {
+        return true;
     }
 }
 
+
 function orient(p, q, r){
-    let val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
-    if (val == 0) {
-        return 0; 
-    }else if (val > 0){
-        return 1;
-    }else{
-        return -1;
-    }
-} 
+let val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
+if (val == 0) {
+    return 0; 
+}else if (val > 0){
+    return 1;
+}else{
+    return -1;
+}
+}
+
 
 function on_segment(p, q, r){
-    if (q.x <= max(p.x, r.x) && q.x >= min(p.x, r.x) && q.y <= max(p.y, r.y) && q.y >= min(p.y, r.y)){
-        return true;
-    }else{
-        return false;
-    }
+if (q.x <= max(p.x, r.x) && q.x >= min(p.x, r.x) && q.y <= max(p.y, r.y) && q.y >= min(p.y, r.y)){
+    return true;
+}else{
+    return false;
+}
 }
