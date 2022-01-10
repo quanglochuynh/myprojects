@@ -12,7 +12,7 @@ bool visited[numOFvertices];
 
 void readData(){
     ifstream file;
-    file.open("data2.txt",ios::in);
+    file.open("data.txt",ios::in);
     file >> n >> m >> s >> d;
     int x,y;
     for (int i=1; i<=m; i++){

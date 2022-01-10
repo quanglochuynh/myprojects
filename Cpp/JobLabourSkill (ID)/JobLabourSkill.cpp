@@ -19,7 +19,7 @@ float x[maxJob][maxLabour][maxSkills],maxx[maxJob][maxLabour][maxSkills];
 
 void docfile(){
     fstream fi;
-    fi.open("/Users/huynhquangloc/github/myprojects/Cpp/JobLabourSkill/input.txt", ios::in);
+    fi.open("input.txt", ios::in);
     fi >> n >> m >> p;
     for (int i = 1; i<= n; i++){
         fi >> income[i];

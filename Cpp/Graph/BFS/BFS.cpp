@@ -10,7 +10,7 @@ int n, d=0, c=0;
 
 void doc_file(){
   ifstream fi;
-  fi.open("/Users/huynhquangloc/github/myprojects/Cpp/Graph/BFS/input.txt", ios::in);
+  fi.open("input.txt", ios::in);
   fi >> n;
   for (int i=1; i<=n; i++){
     for (int j=1; j<=n; j++){
