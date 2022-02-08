@@ -3,7 +3,7 @@
         width: 49px;
         height: 10px;
     }
-    .style6
+.style6
     {
         width: 98px;
         height: 10px;
@@ -30,6 +30,9 @@
     .style14
     {
         height: 3px;
+    }
+    .style5{
+      width: 100%;
     }
 body{
   font-family:tahoma,verdana;

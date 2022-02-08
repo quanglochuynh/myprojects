@@ -5,10 +5,12 @@
     "content_scripts": [
         {
             "matches": [
+                "https://edusoftweb.hcmiu.edu.vn/",
                 "https://edusoftweb.hcmiu.edu.vn/Default.aspx?page=gioithieu*",
                 "https://edusoftweb.hcmiu.edu.vn/default.aspx?page=gioithieu*",
                 "http://edusoftweb.hcmiu.edu.vn/Default.aspx?page=gioithieu*",
-                "http://edusoftweb.hcmiu.edu.vn/default.aspx?page=gioithieu*"
+                "http://edusoftweb.hcmiu.edu.vn/default.aspx?page=gioithieu*",
+                "http://edusoftweb.hcmiu.edu.vn/Default.aspx?page=gioithieu"
             ],
             "css": ["Standard.css"],
             "js": ["content_trangchu.js"]
