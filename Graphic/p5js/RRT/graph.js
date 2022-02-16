@@ -177,9 +177,11 @@ class Tree{
         strokeWeight(4);
         noFill();
         beginShape();
+        let count=0;
         curveVertex(this.node[u].x, this.node[u].y);
-        while((u != 0)){
+        while((u != 0) && (count<100)){
             console.log('show node ' + u);
+            count++;
             v = this.trace[u];
             if (this.dista(u,v) >= 40){
                 curveVertex(this.node[u].x, this.node[u].y);
@@ -190,6 +192,7 @@ class Tree{
         curveVertex(this.node[0].x, this.node[0].y);
         curveVertex(this.node[0].x, this.node[0].y);
         endShape();
+        console.log('Count = ' + count);
     }
 
     inEllipse(x,y){

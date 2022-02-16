@@ -73,10 +73,19 @@ function draw(){
         let v = tree.getSamplingPoint(randomPoint, nearestID);
         console.log('4');
         if (tree.checkForValidity(v, tree.node[nearestID]) == true){
-            console.log('5');
-            tree.addNode(v, nearestID);
-            console.log('6');
-            tree.optimizeSuround(correctionRadius);
+            if (tree.found){
+                if ((v.x!=tree.destination.x) && (v.y != tree.destination.y)){
+                    console.log('5');
+                    tree.addNode(v, nearestID);
+                    console.log('6');
+                    tree.optimizeSuround(correctionRadius);
+                }
+            }else{
+                console.log('5');
+                tree.addNode(v, nearestID);
+                console.log('6');
+                tree.optimizeSuround(correctionRadius);
+            }
         }
         console.log('7');
         tree.show();
