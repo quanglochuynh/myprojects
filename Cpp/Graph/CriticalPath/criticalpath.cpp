@@ -12,7 +12,7 @@ int du[numOfVertex], es[numOfVertex], lf[numOfVertex], sh[numOfVertex];
 
 void doc_file(){
   ifstream fi;
-  fi.open("/Users/huynhquangloc/github/myprojects/Cpp/Graph/CriticalPath/input.txt", ios::in);
+  fi.open("C:/Users/quang/Documents/myprojects/Cpp/Graph/CriticalPath/input.txt", ios::in);
   fi >> n >> m;
   int s, f;
   for (int i=0; i<m; i++){
