@@ -47,10 +47,23 @@ class DNA:
         self.fitness = self.calc_fitness(matrix)
 
     def calc_fitness(self, matrix):
+        ma_stt = [0] * num_of_machine
+        ef = [0] * num_of_jobs
         for j in range(np.shape(matrix)[1]-1):
-            for i in range(np.shape(matrix)[0]):
-                print(str(matrix[i][j]) + " -> " + str(matrix[i][j+1]) + "  " + str(job_array[i].data[j][matrix[i][j+1]-1]))
-        return 0;
+            for i in range(num_of_jobs):
+                if (matrix[i][j+1] == -1) or (matrix[i][j+1] == 0):
+                    continue
+                else:    
+                    a = matrix[i][j]
+                    b = matrix[i][j+1]
+                    duration = int(job_array[i].data[j][matrix[i][j+1]-1])
+                    # print(str(a) + " -> " + str(b) + "  " + str(duration))
+                    ma_stt[b-1] = max(ma_stt[b-1], ef[i]) + duration
+                    # print(ma_stt)
+                    ef[i] = max(ef[i],ma_stt[b-1])
+                    # print(ef)
+        # print(ef)
+        return max(ef)
         
 
 
@@ -62,11 +75,12 @@ class DNA:
 #     #init DNA
 #     population.append(DNA())
 
-a = [[0, 1, 3, 4, 0, 0],
-     [0, 3, 4, 1, 2, 0],
-     [0, 4, 3, 3, 0, 0]]
+a = [[0, 1, 3, 4, -1, 0, 0],
+     [0, 3, 4, 1, 2, -1, 0],
+     [0, 4, 3, 3, -1, 0, 0]]
 
 # print(a)
 
 k = DNA(a)
 
+print(k.fitness)
