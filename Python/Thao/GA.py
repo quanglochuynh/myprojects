@@ -1,4 +1,6 @@
 import numpy as np
+from numpy import random as rd
+from math import floor
 import csv
 
 
@@ -42,9 +44,15 @@ for k in range(3):
 # print(job_array[2].num_of_operation)
 
 class DNA:
-    def __init__(self, matrix):
-        self.matrix = matrix
-        self.fitness = self.calc_fitness(matrix)
+    def __init__(self, num_of_job, num_of_operation):
+        self.matrix = [[0]*(max(num_of_operation)+3)]*num_of_job
+        for i in range(num_of_job):
+            for j in range(1, num_of_operation[i]+1):
+                self.matrix[i][j] = floor(rd.rand()*num_of_machine)
+                print(i)
+                print(j)
+                print(self.matrix[i][j])
+        # self.fitness = self.calc_fitness(self.matrix)
 
     def calc_fitness(self, matrix):
         ma_stt = [0] * num_of_machine
@@ -64,11 +72,6 @@ class DNA:
                     # print(ef)
         # print(ef)
         return max(ef)
-        
-
-
-
-
 
 
 # for i in range(population_size):
@@ -81,6 +84,6 @@ a = [[0, 1, 3, 4, -1, 0, 0],
 
 # print(a)
 
-k = DNA(a)
+k = DNA(3, [3, 4, 3])
 
-print(k.fitness)
+print(k.matrix)
