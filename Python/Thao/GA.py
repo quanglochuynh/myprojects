@@ -4,16 +4,16 @@ from numpy import random as rd
 from math import floor
 import csv
 
-num_of_iteration = 300
+num_of_iteration = 10
 
 num_of_jobs = 3
 num_of_machine = 4
 
 job_array = []
 population = []
-population_size = 200
+population_size = 100
 crossover_rate = 0.6
-mutation_rate = 0.7
+mutation_rate = 0.8
 
 class Operation:
     def __init__(self, name, duration, machine):
@@ -129,7 +129,10 @@ for it in range(num_of_iteration):
     for i in range(population_size):
         id1 = rd.choice(pool)
         id2 = rd.choice(pool)
-        new_DNA = crossover(population[id1], population[id2])
+        if id1!=id2:
+            new_DNA = crossover(population[id1], population[id2])
+        else:
+            new_DNA = population[id1]
         new_DNA = mutation(new_DNA)
         new_population.append(new_DNA)
         best = min(best, new_population[i].fitness)
@@ -160,5 +163,5 @@ print(min(fit))
 # # h = DNA(3,[3, 4, 3])
 # # print(h.matrix)
 
-# l = mutation(k)
-# print(l.matrix)
+# k = mutation(k)
+# print(k.matrix)
