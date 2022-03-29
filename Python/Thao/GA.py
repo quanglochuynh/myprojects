@@ -1,16 +1,19 @@
 import numpy as np
+import math
 from numpy import random as rd
 from math import floor
 import csv
 
-num_of_iteration = 1
+num_of_iteration = 300
 
 num_of_jobs = 3
 num_of_machine = 4
 
 job_array = []
 population = []
-population_size = 100
+population_size = 200
+crossover_rate = 0.6
+mutation_rate = 0.7
 
 class Operation:
     def __init__(self, name, duration, machine):
@@ -90,13 +93,35 @@ def natural_select(population):
             pool.append(i)
     return pool
 
+def crossover(dna1, dna2):
+    new_dna = dna1
+    for i in range(num_of_jobs):
+        if (rd.rand() < crossover_rate):
+            #crossover
+            new_dna.matrix[i] = dna2.matrix[i][:]
+    return new_dna
+
+def mutation(dna):
+    new_dna = dna
+    for j in range(1, np.shape(new_dna.matrix)[1]-1):
+            for i in range(num_of_jobs):
+                if (new_dna.matrix[i][j+1] == -1) or (new_dna.matrix[i][j+1] == 0):
+                    continue
+                else:    
+                    if (rd.rand() < mutation_rate):
+                        #Mutate
+                        new_dna.matrix[i][j] = floor(rd.rand()*num_of_machine)+1
+    return new_dna
+
+
 #init Population
 for i in range(population_size):
     population.append(DNA(3, [3, 4, 3]))
     # print(population[i].fitness)
 
-
+best = math.inf
 for it in range(num_of_iteration):
+    print("Iteration " + str(it))
     #Natural selection
     pool = natural_select(population)
     # print(pool)
@@ -107,8 +132,16 @@ for it in range(num_of_iteration):
         new_DNA = crossover(population[id1], population[id2])
         new_DNA = mutation(new_DNA)
         new_population.append(new_DNA)
+        best = min(best, new_population[i].fitness)
     population = new_population
+    print("Best make span: " + str(best))
 
+fit = []
+
+for i in range(population_size):
+    fit.append(population[i].fitness)
+
+print(min(fit))
 
 # a = [[0, 1, 3, 2, -1, 0, 0],
 #      [0, 3, 4, 1, 1, -1, 0],
@@ -121,17 +154,11 @@ for it in range(num_of_iteration):
 # print(k.matrix)
 # print("Make span = " + str(k.fitness))
 
+# k = DNA(3,[3, 4, 3])
+# print(k.matrix)
 
-# function res = natural_select(pop)
-#     pool = [];
-#     for i = 1:size(pop.community,2)
-#         for j = 1:map(pop.community(i).fitness)
-#             pool(end+1) = i;
-#         end
-#     end
-#     res = pool;
-# end
+# # h = DNA(3,[3, 4, 3])
+# # print(h.matrix)
 
-# function res = map(x)
-#     res = floor(200*5^(-0.05*x));
-# end
+# l = mutation(k)
+# print(l.matrix)
