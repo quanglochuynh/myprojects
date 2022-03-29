@@ -3,13 +3,14 @@ from numpy import random as rd
 from math import floor
 import csv
 
+num_of_iteration = 1
 
 num_of_jobs = 3
 num_of_machine = 4
 
 job_array = []
 population = []
-population_size = 10
+population_size = 100
 
 class Operation:
     def __init__(self, name, duration, machine):
@@ -45,14 +46,15 @@ for k in range(3):
 
 class DNA:
     def __init__(self, num_of_job, num_of_operation):
-        self.matrix = [[0]*(max(num_of_operation)+3)]*num_of_job
+        matrix = np.array([[0]*(max(num_of_operation)+3)]*num_of_job)
         for i in range(num_of_job):
-            for j in range(1, num_of_operation[i]+1):
-                self.matrix[i][j] = floor(rd.rand()*num_of_machine)
-                print(i)
-                print(j)
-                print(self.matrix[i][j])
-        # self.fitness = self.calc_fitness(self.matrix)
+            for j in range(1, num_of_operation[i]+2):
+                if (j!=num_of_operation[i]+1):
+                    matrix[i][j] = floor(rd.rand()*num_of_machine)+1
+                else:
+                    matrix[i][j] = -1
+        self.matrix = matrix
+        self.fitness = self.calc_fitness(self.matrix)
 
     def calc_fitness(self, matrix):
         ma_stt = [0] * num_of_machine
@@ -65,25 +67,71 @@ class DNA:
                     a = matrix[i][j]
                     b = matrix[i][j+1]
                     duration = int(job_array[i].data[j][matrix[i][j+1]-1])
+                    # print(duration)
+                    if duration == 0:
+                        duration = 65535
                     # print(str(a) + " -> " + str(b) + "  " + str(duration))
                     ma_stt[b-1] = max(ma_stt[b-1], ef[i]) + duration
                     # print(ma_stt)
                     ef[i] = max(ef[i],ma_stt[b-1])
                     # print(ef)
         # print(ef)
+        # print("EF = ")
+        # print(ef)
         return max(ef)
 
+def curve(x):
+    return int(np.floor(200 * np.power(5,-0.05*x)))
 
-# for i in range(population_size):
-#     #init DNA
-#     population.append(DNA())
+def natural_select(population):
+    pool = []
+    for i in range(population_size):
+        for j in range(curve(population[i].fitness)):
+            pool.append(i)
+    return pool
 
-a = [[0, 1, 3, 4, -1, 0, 0],
-     [0, 3, 4, 1, 2, -1, 0],
-     [0, 4, 3, 3, -1, 0, 0]]
+#init Population
+for i in range(population_size):
+    population.append(DNA(3, [3, 4, 3]))
+    # print(population[i].fitness)
+
+
+for it in range(num_of_iteration):
+    #Natural selection
+    pool = natural_select(population)
+    # print(pool)
+    new_population = []
+    for i in range(population_size):
+        id1 = rd.choice(pool)
+        id2 = rd.choice(pool)
+        new_DNA = crossover(population[id1], population[id2])
+        new_DNA = mutation(new_DNA)
+        new_population.append(new_DNA)
+    population = new_population
+
+
+# a = [[0, 1, 3, 2, -1, 0, 0],
+#      [0, 3, 4, 1, 1, -1, 0],
+#      [0, 4, 3, 3, -1, 0, 0]]
 
 # print(a)
 
-k = DNA(3, [3, 4, 3])
+# k = DNA(3, [3, 4, 3])
 
-print(k.matrix)
+# print(k.matrix)
+# print("Make span = " + str(k.fitness))
+
+
+# function res = natural_select(pop)
+#     pool = [];
+#     for i = 1:size(pop.community,2)
+#         for j = 1:map(pop.community(i).fitness)
+#             pool(end+1) = i;
+#         end
+#     end
+#     res = pool;
+# end
+
+# function res = map(x)
+#     res = floor(200*5^(-0.05*x));
+# end
