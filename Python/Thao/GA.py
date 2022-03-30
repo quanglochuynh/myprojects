@@ -36,7 +36,7 @@ class Job:
 
 # Doc file
 for k in range(3):
-    with open('job' + str(k+1) + '.csv') as csv_file:
+    with open('/Users/lochuynhquang/Documents/myprojects/Python/Thao/job' + str(k+1) + '.csv') as csv_file:
         data = []
         i=0
         csv_reader = csv.reader(csv_file, delimiter=',')
@@ -139,12 +139,12 @@ for it in range(num_of_iteration):
     population = new_population
     print("Best make span: " + str(best))
 
-fit = []
+# fit = []
 
-for i in range(population_size):
-    fit.append(population[i].fitness)
+# for i in range(population_size):
+#     fit.append(population[i].fitness)
 
-print(min(fit))
+# print(min(fit))
 
 # a = [[0, 1, 3, 2, -1, 0, 0],
 #      [0, 3, 4, 1, 1, -1, 0],
@@ -157,11 +157,11 @@ print(min(fit))
 # print(k.matrix)
 # print("Make span = " + str(k.fitness))
 
-# k = DNA(3,[3, 4, 3])
-# print(k.matrix)
+k = DNA(3,[3, 4, 3])
+print(k.matrix)
 
-# # h = DNA(3,[3, 4, 3])
-# # print(h.matrix)
+h = DNA(3,[3, 4, 3])
+print(h.matrix)
 
-# k = mutation(k)
-# print(k.matrix)
+l = crossover(k,h)
+print(l.matrix)
