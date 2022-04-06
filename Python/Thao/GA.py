@@ -4,16 +4,16 @@ from numpy import random as rd
 from math import floor
 import csv
 
-num_of_iteration = 10
+num_of_iteration = 1000
 
 num_of_jobs = 3
 num_of_machine = 4
 
 job_array = []
 population = []
-population_size = 100
-crossover_rate = 0.6
-mutation_rate = 0.8
+population_size = 400
+crossover_rate = 0.5
+mutation_rate = 0.5
 
 class Operation:
     def __init__(self, name, duration, machine):
@@ -31,9 +31,6 @@ class Job:
         self.data = data
 
 
-
-
-
 # Doc file
 for k in range(3):
     with open('/Users/lochuynhquang/Documents/myprojects/Python/Thao/job' + str(k+1) + '.csv') as csv_file:
@@ -45,21 +42,8 @@ for k in range(3):
             data.append(row)
         job_array.append(Job(i, data))
 
-# print(job_array[2].num_of_operation)
 
-class DNA:
-    def __init__(self, num_of_job, num_of_operation):
-        matrix = np.array([[0]*(max(num_of_operation)+3)]*num_of_job)
-        for i in range(num_of_job):
-            for j in range(1, num_of_operation[i]+2):
-                if (j!=num_of_operation[i]+1):
-                    matrix[i][j] = floor(rd.rand()*num_of_machine)+1
-                else:
-                    matrix[i][j] = -1
-        self.matrix = matrix
-        self.fitness = self.calc_fitness(self.matrix)
-
-    def calc_fitness(self, matrix):
+def calc_fitness(matrix):
         ma_stt = [0] * num_of_machine
         ef = [0] * num_of_jobs
         for j in range(np.shape(matrix)[1]-1):
@@ -72,7 +56,7 @@ class DNA:
                     duration = int(job_array[i].data[j][matrix[i][j+1]-1])
                     # print(duration)
                     if duration == 0:
-                        duration = 65535
+                        duration = 1000
                     # print(str(a) + " -> " + str(b) + "  " + str(duration))
                     ma_stt[b-1] = max(ma_stt[b-1], ef[i]) + duration
                     # print(ma_stt)
@@ -82,9 +66,21 @@ class DNA:
         # print("EF = ")
         # print(ef)
         return max(ef)
+class DNA:
+    def __init__(self, num_of_job, num_of_operation):
+        matrix = np.array([[0]*(max(num_of_operation)+3)]*num_of_job)
+        for i in range(num_of_job):
+            for j in range(1, num_of_operation[i]+2):
+                if (j!=num_of_operation[i]+1):
+                    matrix[i][j] = floor(rd.rand()*num_of_machine)+1
+                else:
+                    matrix[i][j] = -1
+        self.matrix = matrix
+        self.fitness = 0
+
 
 def curve(x):
-    return int(np.floor(200 * np.power(5,-0.05*x)))
+    return int(np.floor(200 * np.power(10,-0.0008*x)))
 
 def natural_select(population):
     pool = []
@@ -113,18 +109,31 @@ def mutation(dna):
                         new_dna.matrix[i][j] = floor(rd.rand()*num_of_machine)+1
     return new_dna
 
+def init_population():
+    for i in range(population_size):
+        population.append(DNA(3, [3, 4, 3]))
+        population[i].fitness = calc_fitness(population[i].matrix)
 
-#init Population
-for i in range(population_size):
-    population.append(DNA(3, [3, 4, 3]))
-    # print(population[i].fitness)
+
+init_population()
 
 best = math.inf
+best_id = 0
+br = False
 for it in range(num_of_iteration):
     print("Iteration " + str(it))
     #Natural selection
     pool = natural_select(population)
-    # print(pool)
+    n = 0 
+    while len(pool)==0:
+        n = n+1
+        if n == 500:
+            br = True
+            break
+        init_population()
+        pool = natural_select(population)
+    if br:
+        break
     new_population = []
     for i in range(population_size):
         id1 = rd.choice(pool)
@@ -132,12 +141,18 @@ for it in range(num_of_iteration):
         if id1!=id2:
             new_DNA = crossover(population[id1], population[id2])
         else:
-            new_DNA = population[id1]
+            new_DNA = crossover(population[id1], DNA(3, [3, 4, 3]))
         new_DNA = mutation(new_DNA)
         new_population.append(new_DNA)
-        best = min(best, new_population[i].fitness)
+        new_population[i].fitness = calc_fitness(new_population[i].matrix)
+        if new_population[i].fitness < best:
+            best =  new_population[i].fitness
+            best_id = i
     population = new_population
     print("Best make span: " + str(best))
+
+print("Solution: ")
+print(population[best_id].matrix)
 
 # fit = []
 
@@ -157,11 +172,11 @@ for it in range(num_of_iteration):
 # print(k.matrix)
 # print("Make span = " + str(k.fitness))
 
-k = DNA(3,[3, 4, 3])
-print(k.matrix)
+# k = DNA(3,[3, 4, 3])
+# print(k.matrix)
 
-h = DNA(3,[3, 4, 3])
-print(h.matrix)
+# h = DNA(3,[3, 4, 3])
+# print(h.matrix)
 
-l = crossover(k,h)
-print(l.matrix)
+# l = crossover(k,h)
+# print(l.matrix)
