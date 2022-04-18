@@ -11,9 +11,29 @@ num_of_machine = 4
 
 job_array = []
 population = []
-population_size = 400
+population_size = 10
 crossover_rate = 0.5
 mutation_rate = 0.5
+
+
+def partition(array, low, high):
+  pivot = array[high].fitness
+  i = low - 1
+  for j in range(low, high):
+    if array[j].fitness >= pivot:
+      i = i + 1
+      (array[i], array[j]) = (array[j], array[i])
+  (array[i + 1], array[high]) = (array[high], array[i + 1])
+  return i + 1
+
+def quickSort(array, low, high):
+  if low < high:
+    pi = partition(array, low, high)
+    quickSort(array, low, pi - 1)
+    quickSort(array, pi + 1, high)
+
+def sort_DNA():
+    quickSort(population, 0, len(population)-1)
 
 class Operation:
     def __init__(self, name, duration, machine):
@@ -113,12 +133,12 @@ def init_population():
     for i in range(population_size):
         population.append(DNA(3, [3, 4, 3]))
         population[i].fitness = calc_fitness(population[i].matrix)
+        
 
 
 init_population()
 
-best = math.inf
-best_id = 0
+
 br = False
 for it in range(num_of_iteration):
     print("Iteration " + str(it))
@@ -135,7 +155,7 @@ for it in range(num_of_iteration):
     if br:
         break
     new_population = []
-    for i in range(population_size):
+    for i in range(floor(population_size*0.8)):
         id1 = rd.choice(pool)
         id2 = rd.choice(pool)
         if id1!=id2:
@@ -145,14 +165,12 @@ for it in range(num_of_iteration):
         new_DNA = mutation(new_DNA)
         new_population.append(new_DNA)
         new_population[i].fitness = calc_fitness(new_population[i].matrix)
-        if new_population[i].fitness < best:
-            best =  new_population[i].fitness
-            best_id = i
-    population = new_population
-    print("Best make span: " + str(best))
+    sort_DNA()
+    print("Best make span: " + str(population[len(population)-1].fitness))
+
 
 print("Solution: ")
-print(population[best_id].matrix)
+print(population[len(population)-1].matrix)
 
 # fit = []
 
