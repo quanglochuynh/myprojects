@@ -1,3 +1,4 @@
+from email import header
 import numpy as np
 from numpy import random as rd
 import matplotlib.pyplot as plt
@@ -15,15 +16,19 @@ dc_name = ["Tonekabonl","Tonekabon2","	Tonekabon3","	Chalus1","	Chalus2","Chalus
 garden_name = ["Ramsarl","Ramsar2","Ramsar3","Noorl","Noor2","Noor3","Saril","Sari2","Sari3"]
 fruit_customer_name = ["Chalus1","Chalus2","Babolsar","Amoll","Amol2","Amol3","Ramsar","Behshahr","Pol sefid"]
 compost_customer_name = ["Behshahr1","Behshahr2","Tonakabon","Neka","Juybar","Ramsar","Noor","Sari"]
+composting_center_name = ['Noshahr1', 'Noshahr2', 'Amoll', 'Amol2', 'Amol3', 'Chalus1', 'Chalus2', 'Chalus3', 'Ramsar1', 'Ramsar2', 'Saril', 'Sari2', 'Juybar']
 
 num_of_DC = len(dc_name)
 num_of_garden = len(garden_name)
 num_of_fruit_customer = len(fruit_customer_name)
 num_of_compost_customer = len(compost_customer_name)
+num_of_composting_center = len(composting_center_name)
+num_of_location = num_of_DC+num_of_garden+num_of_fruit_customer+num_of_composting_center+num_of_fruit_customer
 
-big_T = 8
+#data
+total_time = 8
 t_prime = 3
-fj2 = [36.363, 36.250, 31.818, 31.700, 30.800]
+fj = [36.363, 36.250, 31.818, 31.700, 30.800]
 fl = [18.181, 18.100, 13.636, 13.530, 12.520]
 dc = 0.073
 ch = rd.uniform(low=38, high=45)
@@ -50,17 +55,35 @@ phi = 1.1
 wc = 91
 we = 1000
 
-ComposeCenter2FruitCustomer = []
-ComposingCenter2CompostCustomer = []
-DC2ComposingCenter = []
-DC2FruitCustomer = []
-Garden2Composing = []
-Garden2DC = []
-Garden2FruitCustomer = []
 
-#Doc file
-cwd = os.getcwd()
-with open(os.path.join(cwd, "logdes_data", "ComposeCenter2FruitCustomer.csv")) as csv_file:
-    csv_reader = csv.reader(csv_file, delimiter=',')
-    for row in csv_reader:
-        print(row)
+def read_csv(name):
+    res = []
+    cwd = os.getcwd()
+    with open(os.path.join(cwd, "logdes_data", name)) as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        head = next(csv_reader)
+        for row in csv_reader:
+            new_row = []
+            for i in range(1, len(row)):
+                new_row.append(row[i])
+            res.append(new_row)
+    return res
+
+
+ComposeCenter2FruitCustomer = read_csv('ComposeCenter2FruitCustomer.csv')
+ComposingCenter2CompostCustomer = read_csv('ComposingCenter2CompostCustomer.csv')
+DC2ComposingCenter = read_csv('DC2ComposingCenter.csv')
+DC2FruitCustomer = read_csv('DC2FruitCustomer.csv')
+Garden2Composing = read_csv('Garden2Composing.csv')
+Garden2DC = read_csv('Garden2DC.csv')
+Garden2FruitCustomer = read_csv('Garden2FruitCustomer.csv')
+
+#Decision vars
+
+
+class DNA:
+    def __init__(self):
+        self.Wj = [0]*num_of_DC
+        self.Yl = [0]*num_of_composting_center
+        self.X_r_r = [[[0]*num_of_location]*num_of_location]*total_time
+        
