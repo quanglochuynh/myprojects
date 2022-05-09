@@ -95,6 +95,7 @@ def natural_select(population):
 
 def crossover(dna1, dna2):
     new_dna = dna1
+    u = 0
     for i in range(num_of_jobs):
         if (rd.rand() < crossover_rate):
             #crossover
