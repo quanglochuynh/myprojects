@@ -16,14 +16,9 @@ body{
     background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.2)), url(assets/background.jpg);
     background-size: cover;
     background-position: center;
-    display: inline-flexbox;
-    align-items: center;
-    justify-content: center;
-}
-
-.logo{
-    height: inherit;
-    cursor: pointer;
+    display: block;
+    /* align-items: center;
+    justify-content: center; */
 }
 
 .navbar{
@@ -34,6 +29,11 @@ body{
     display: flex;
     align-items: center;
     justify-content:center;
+}
+
+.logo{
+    height: inherit;
+    cursor: pointer;
 }
 
 .header{
@@ -47,21 +47,27 @@ body{
 
 .schoolname{
     text-align: center;
-    display:inline;
-    justify-items:center;
-    align-items: center;
+    display:block;
+    vertical-align: middle;
+
+    /* justify-items:center;
+    align-items: center; */
 }
 
-h1{
+.schoolname h1{
     font-size:large;
     color: aliceblue;
 }
 
-h2{
+.schoolname h2{
     font-size: large;
     font-weight: normal;
     color: aliceblue;
 }
+
+/* .navbar{
+    display: block;
+} */
 
 .navbar ul li{
     list-style: none;
@@ -93,9 +99,19 @@ h2{
     width: 100%;
 }
 
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .mainform{
-    height: 80%;
-    width: 85%;
-    background-image: linear-gradient(rgba(255, 255, 255, 0.75),rgba(255, 255, 255, 0.75));
-    
+    /* margin-left: 50px; */
+    /* margin-right: 50px; */
+    height:80vh;
+    width:80vh;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.9),rgba(255, 255, 255, 0.9));
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
