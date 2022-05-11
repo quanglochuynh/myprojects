@@ -17,7 +17,8 @@ garden_name = ["Ramsarl","Ramsar2","Ramsar3","Noorl","Noor2","Noor3","Saril","Sa
 fruit_customer_name = ["Chalus1","Chalus2","Babolsar","Amoll","Amol2","Amol3","Ramsar","Behshahr","Pol sefid"]
 compost_customer_name = ["Behshahr1","Behshahr2","Tonakabon","Neka","Juybar","Ramsar","Noor","Sari"]
 composting_center_name = ['Noshahr1', 'Noshahr2', 'Amoll', 'Amol2', 'Amol3', 'Chalus1', 'Chalus2', 'Chalus3', 'Ramsar1', 'Ramsar2', 'Saril', 'Sari2', 'Juybar']
-
+name = np.concatenate([garden_name, dc_name, fruit_customer_name, composting_center_name, compost_customer_name], axis=0)
+print(np.shape(name))
 num_of_DC = len(dc_name)
 num_of_garden = len(garden_name)
 num_of_fruit_customer = len(fruit_customer_name)
@@ -59,6 +60,7 @@ we = 1000
 def read_csv(name):
     res = []
     cwd = os.getcwd()
+    # print(cwd)
     with open(os.path.join(cwd, "logdes_data", name)) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         head = next(csv_reader)
@@ -80,10 +82,21 @@ Garden2FruitCustomer = read_csv('Garden2FruitCustomer.csv')
 
 #Decision vars
 
-
 class DNA:
     def __init__(self):
-        self.Wj = [0]*num_of_DC
-        self.Yl = [0]*num_of_composting_center
-        self.X_r_r = [[[0]*num_of_location]*num_of_location]*total_time
-        
+        self.Wj = np.zeros(num_of_DC)
+        self.Yl = np.zeros(num_of_composting_center)
+        self.X_r_r = np.zeros((num_of_location, num_of_location, total_time))
+        self.Ih = np.zeros((num_of_DC, total_time))
+        self.ld = np.zeros((num_of_garden, total_time))
+        self.z_cost = 0
+        self.z_response = 0
+        self.z_emission = 0
+        self.fitness = self.calcfitness()
+
+    def calcfitness(self):
+        print('fit')
+
+    def calc_cost(self):
+        z1 = np.multiply(fj,self.Wj) + np.multiply(fl, self.Yl)
+        z2 = 
