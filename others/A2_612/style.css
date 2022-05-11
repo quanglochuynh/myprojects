@@ -111,7 +111,20 @@ body{
     height:80vh;
     width:80vh;
     background-image: linear-gradient(rgba(255, 255, 255, 0.9),rgba(255, 255, 255, 0.9));
+    display:block;
+    padding: 20px;
+    
+}
+
+.formhead{
+    margin-top: 40px;
+    margin-bottom: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
+
+}
+
+.formbody h3{
+    margin: 5%;
 }
