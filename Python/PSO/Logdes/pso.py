@@ -4,7 +4,6 @@ from numpy import random as rd
 import matplotlib.pyplot as plt
 import os
 import csv
-
 class Location:
     def __init__(self, name, x, y):
         self.name = name
@@ -20,10 +19,6 @@ production_name = []
 DC_name = []
 Retail_name = []
 Recycling_name = []
-
-
-
-
 
 def read_csv(name):
     res = []
@@ -64,9 +59,7 @@ def process_distance(a,b):
     dis = np.zeros((num_a, num_b))
     for i in range(num_a):
         for j in range(num_b):
-            # print(a[i].x, a[i].y, b[j].x, b[j].y)
             dis[i][j] = np.sqrt(np.square(a[i].x - b[j].x) + np.square(a[i].y - b[j].y ))*10
-            # print(dis[i][j])
     return dis
 
 num_of_production = len(production_name)
@@ -94,13 +87,10 @@ class DNA:
         self.v_jk = np.multiply(rd.rand(num_of_DC, num_of_Retail),10)
         self.v_jm =np.multiply(rd.rand(num_of_DC, num_of_Recycling),10)
         self.v_km = np.multiply(rd.rand(num_of_Retail, num_of_Recycling),10)
-        self.z_cost = 0
-        self.z_emission = 0
-        self.fitness = self.calcfitness()
+        self.z_cost = self.calc_cost()
+        self.z_emission = self.calc_emission()
+        self.fitness = 0
 
-#     def calcfitness(self):
-#         print('fit')
-
-#     def calc_cost(self):
-#         z1 = np.multiply(fj,self.Wj) + np.multiply(fl, self.Yl)
-#         z2 = 
+    # def calc_cost(self):
+    #     z1 = np.multiply(fj,self.Wj) + np.multiply(fl, self.Yl)
+    #     z2 = 
