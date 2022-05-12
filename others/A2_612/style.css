@@ -137,3 +137,10 @@ body{
     height: 100px;
     /* text-size-adjust: 24px; */
 }
+
+.form_container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+

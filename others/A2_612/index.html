@@ -29,27 +29,34 @@
                         <h1>FORM YÊU CẦU SỬA CHỮA THIẾT BỊ</h1>
                     </div>
                     <div class="formbody">
-                        <div>
+                        <div class="form_container">
+                            <label for="paragraph_text">Tên người gửi</label>
+                            <input type="text" name="paragraph_text" id="edtx_ten"></input>
+                        </div>
+                        <div class="form_container">
                             <label for="chon_van_de">Vấn đề yêu cầu:</label>
                             <select id="chon_van_de" onchange="chooseProblem()">
                             </select>
                         </div>
-                        <div>
+                        <div class="form_container">
                             <label for="chon_thong_tin">Thông tin yêu cầu:</label>
                             <select name="chon_thong_tin" id="chon_thong_tin" onchange="chooseRequirement()">
                             </select>
                         </div>
-                        <div>
+                        <div class="form_container">
                             <label for="paragraph_text">Mô tả vấn đề</label>
                             <textarea name="paragraph_text" id="edtx_mota"></textarea>
                         </div>
-                        <div>
+                        <div class="form_container">
                             <label for="paragraph_text">Địa điểm sửa chữa</label>
-                            <textarea name="paragraph_text" id="edtx_mota"></textarea>
+                            <textarea name="paragraph_text" id="edtx_dia_diem"></textarea>
                         </div>
-                        <div>
+                        <div class="form_container">
                             <label for="paragraph_text">Số lượng</label>
-                            <textarea name="paragraph_text" id="edtx_mota"></textarea>
+                            <textarea name="paragraph_text" id="edtx_so_luong"></textarea>
+                        </div>
+                        <div class="form_container">
+                            <button id="btn_submit">Gửi Form</button>
                         </div>
                     </div>
                 </div>
