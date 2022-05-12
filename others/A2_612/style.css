@@ -47,11 +47,9 @@ body{
 
 .schoolname{
     text-align: center;
-    display:block;
-    vertical-align: middle;
-
-    /* justify-items:center;
-    align-items: center; */
+    display:flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .schoolname h1{
@@ -65,9 +63,10 @@ body{
     color: aliceblue;
 }
 
-/* .navbar{
+.schoolname_container{
     display: block;
-} */
+    margin-left: 20px;
+}
 
 .navbar ul li{
     list-style: none;
@@ -125,6 +124,16 @@ body{
 
 }
 
+.formbody{
+    display: block;
+}
+
 .formbody h3{
     margin: 5%;
+}
+
+#edtx_mota{
+    width: 60%;
+    height: 100px;
+    /* text-size-adjust: 24px; */
 }
