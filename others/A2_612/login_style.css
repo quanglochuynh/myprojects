@@ -1,0 +1,157 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.banner{
+    width: 100%;
+    height: 100vh;
+    background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.2)), url(assets/background.jpg);
+    background-size: cover;
+    background-position: center;
+    display: block;
+}
+
+.navbar{
+    width: 100%;
+    height: 80px;
+    margin: auto;
+    padding: 35px 0;
+    display: flex;
+    align-items: center;
+    justify-content:left;
+}
+
+.logo{
+    height: inherit;
+    cursor: pointer;
+}
+
+.header{
+    padding: 8%;
+    height: inherit;
+    width: fit-content;
+    display: flex;
+    /* position: relative; */
+    /* justify-content:space-between; */
+}
+
+.schoolname{
+    text-align: center;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.schoolname h1{
+    font-size:large;
+    color: aliceblue;
+}
+
+.schoolname h2{
+    font-size: large;
+    font-weight: normal;
+    color: aliceblue;
+}
+
+.schoolname_container{
+    display: block;
+    margin-left: 20px;
+}
+
+.navbar ul li{
+    list-style: none;
+    display: inline-block;
+    margin: 0 20px;
+    position: relative;
+    margin: 8px;
+    font-weight: bold;
+}
+
+.navbar ul li a{
+    text-decoration: none;
+    color: white;
+    text-transform: uppercase;
+}
+
+.navbar ul li::after{
+    content: '';
+    height: 3px;
+    width: 0;
+    background-color: aqua;
+    position: absolute;
+    left: 0;
+    bottom: -10px;
+    transition:0.5s
+}
+
+.navbar ul li:hover::after{
+    width: 100%;
+}
+
+.main_container{
+    /* height: calc(100vh - 80px); */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login_div{
+    /* height: 500px;
+    width: 300px; */
+    background-color: aliceblue;
+    display: block;
+    border-radius: 50px;
+}
+
+.center_div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 40px;
+}
+
+.button_div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+#btn_login{
+    width: 60%;
+    height: 5vh;
+    font-size: calc((3vh - 0.5vw)/1.2);
+    background-color: rgb(36, 127, 255);
+    border-radius: 50px;
+    border-color: rgba(0,0.2,0.6,0.5);
+    color: aliceblue;
+    transition: 0.2s;
+}
+
+#btn_login:hover{
+    background-color: rgb(229, 80, 97);
+}
+
+.subtitle{
+    margin: 10px;
+    font-size: calc((3vh - 0.5vw)/1.25);
+}
+
+.login_edtx{
+    height: calc((16vh - 4vw) / 2);
+    font-size: calc((3vh - 0.5vw));
+    width: calc((40vh + 20vw) / 1.25);
+    border-radius: 10px;
+}
+
+.title_dangnhap{
+    font-size: calc((2vh + 0.5vw)*1.25);
+}
