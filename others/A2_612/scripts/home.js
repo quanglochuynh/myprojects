@@ -22,6 +22,7 @@ class MainForm{
         this.moTa = moTa;
         this.diaDiem = diaDiem;
         this.soLuong = soLuong;
+        this.status = 0;
     }
 }
 
