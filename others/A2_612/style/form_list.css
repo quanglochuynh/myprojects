@@ -115,3 +115,17 @@ body{
     overflow: scroll;
 }
 
+.form_container{
+    padding-right: 20px;
+    height: 80px;
+    width: inherit;
+    background-color: aliceblue;
+    border-radius: 20px;
+    display: flex;
+    justify-content:left;
+    align-items: center;
+}
+
+.form_container h1,h2{
+
+}

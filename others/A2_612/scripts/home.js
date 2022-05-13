@@ -1,11 +1,3 @@
-class VanDe{
-    constructor(id, name, thongtin){
-        this.id;
-        this.name = name;
-        this.thongtin = thongtin;
-    }
-}
-
 arrayVanDe = []
 arrayVanDe.push(new VanDe(0, "Điện",["Mất điện", "Thay đèn", "Thay ổ cắm", "Thay công tắc", "Cấp thêm nguồn điện", "Khác"]))
 arrayVanDe.push(new VanDe(1, "Máy Lạnh",["Không lạnh", "Báo lỗi", "Chảy nước", "Máy kêu to", "Có mùi lạ", "Khác"]))
@@ -15,16 +7,7 @@ arrayVanDe.push(new VanDe(4, "Nhà vệ sinh, khuôn viên",["Gạch bể", "C�
 arrayVanDe.push(new VanDe(5, "Khác",[""]))
 
 
-class MainForm{
-    constructor(id_vande, id_thongtin, moTa, diaDiem, soLuong){
-        this.idVanDe = id_vande;
-        this.idThongTin=id_thongtin;
-        this.moTa = moTa;
-        this.diaDiem = diaDiem;
-        this.soLuong = soLuong;
-        this.status = 0;
-    }
-}
+
 
 let id = 0;
 console.log(id);
