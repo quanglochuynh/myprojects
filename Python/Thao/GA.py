@@ -12,9 +12,9 @@ num_of_machine = 12
 
 job_array = []
 population = []
-population_size = 100
-crossover_rate = 0.8
-mutation_rate = 0.5
+population_size = 200
+crossover_rate = 0.5
+mutation_rate = 0.6
 
 class Operation:
     def __init__(self, name, duration, machine):
@@ -56,18 +56,12 @@ def calc_fitness(matrix):
                     a = matrix[i][j]
                     b = matrix[i][j+1]
                     duration = int(job_array[i].data[j][matrix[i][j+1]-1])
-                    # print(duration)
                     if duration == 0:
                         duration = 1000
-                    # print(str(a) + " -> " + str(b) + "  " + str(duration))
                     ma_stt[b-1] = max(ma_stt[b-1], ef[i]) + duration
-                    # print(ma_stt)
                     ef[i] = max(ef[i],ma_stt[b-1])
-                    # print(ef)
-        # print(ef)
-        # print("EF = ")
-        # print(ef)
         return max(ef)
+
 class DNA:
     def __init__(self, num_of_job, num_of_operation):
         matrix = np.array([[0]*(max(num_of_operation)+3)]*num_of_job)
@@ -82,8 +76,6 @@ class DNA:
                         if duration!=0:
                             matrix[i][j] = machine
                             break
-                        # else: print(duration)
-
                 else:
                     matrix[i][j+1] = -1
         self.matrix = matrix
@@ -128,10 +120,10 @@ def init_population():
 
 init_population()
 maximum_trial=1000
-print(population[0].matrix)
 best = math.inf
 best_id = 0
 br = False
+
 for it in range(num_of_iteration):
     print("Iteration " + str(it))
     #Natural selection
