@@ -110,22 +110,48 @@ body{
 
 #scroll_view{
     /* testing */
-    width: 600px;
+    width: auto;
     height: inherit;
-    overflow: scroll;
+    overflow: auto;
 }
 
 .form_container{
     padding-right: 20px;
-    height: 80px;
-    width: inherit;
+    height: fit-content;
+    width: fit-content;
     background-color: aliceblue;
     border-radius: 20px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* .form_container h1,h2{
+    margin-left: 20px;
+} */
+
+.general_info{
+    width: calc((30vh - 5vw)*2);;
     display: flex;
-    justify-content:left;
+    justify-content:space-between;
     align-items: center;
 }
 
-.form_container h1,h2{
+.general_info h1,h2{
+    font-size: calc((2.5vh - 0.5vw)*1.25);
+    margin: 20px;
+    padding: 10px 20px 5px;
+}
 
+.detail_info{
+    /* margin: 0 10px 0 10px; */
+    height: fit-content;
+}
+
+.detail_info p{
+    width: calc((30vh - 5vw)*2);
+    height: fit-content;
+    font-size: calc((2.5vh - 0.5vw));
+    text-align: justify;
+    padding: 0 20px 15px;
+    display: block;
 }
