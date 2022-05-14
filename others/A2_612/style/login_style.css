@@ -13,12 +13,10 @@ body{
 .banner{
     width: 100%;
     height: 100vh;
-    background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.2)), url(assets/background.jpg);
+    background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.2)), url(../assets/background.jpg);
     background-size: cover;
     background-position: center;
     display: block;
-    /* align-items: center;
-    justify-content: center; */
 }
 
 .navbar{
@@ -28,7 +26,7 @@ body{
     padding: 35px 0;
     display: flex;
     align-items: center;
-    justify-content:center;
+    justify-content:left;
 }
 
 .logo{
@@ -47,11 +45,9 @@ body{
 
 .schoolname{
     text-align: center;
-    display:block;
-    vertical-align: middle;
-
-    /* justify-items:center;
-    align-items: center; */
+    display:flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .schoolname h1{
@@ -65,9 +61,10 @@ body{
     color: aliceblue;
 }
 
-/* .navbar{
+.schoolname_container{
     display: block;
-} */
+    margin-left: 20px;
+}
 
 .navbar ul li{
     list-style: none;
@@ -99,32 +96,62 @@ body{
     width: 100%;
 }
 
-.container{
+.main_container{
+    /* height: calc(100vh - 80px); */
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.mainform{
-    /* margin-left: 50px; */
-    /* margin-right: 50px; */
-    height:80vh;
-    width:80vh;
-    background-image: linear-gradient(rgba(255, 255, 255, 0.9),rgba(255, 255, 255, 0.9));
-    display:block;
-    padding: 20px;
-    
+.login_div{
+    /* height: 500px;
+    width: 300px; */
+    background-color: aliceblue;
+    display: block;
+    border-radius: 50px;
 }
 
-.formhead{
-    margin-top: 40px;
+.center_div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 40px;
+}
+
+.button_div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-bottom: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
 }
 
-.formbody h3{
-    margin: 5%;
+#btn_login{
+    width: 60%;
+    height: 5vh;
+    font-size: calc((3vh - 0.5vw)/1.2);
+    background-color: rgb(36, 127, 255);
+    border-radius: 50px;
+    border-color: rgba(0,0.2,0.6,0.5);
+    color: aliceblue;
+    transition: 0.2s;
+}
+
+#btn_login:hover{
+    background-color: rgb(229, 80, 97);
+}
+
+.subtitle{
+    margin: 10px;
+    font-size: calc((3vh - 0.5vw)/1.25);
+}
+
+.login_edtx{
+    height: calc((16vh - 4vw) / 2);
+    font-size: calc((3vh - 0.5vw));
+    width: calc((40vh + 20vw) / 1.25);
+    border-radius: 10px;
+}
+
+.title_dangnhap{
+    font-size: calc((2vh + 0.5vw)*1.25);
 }
