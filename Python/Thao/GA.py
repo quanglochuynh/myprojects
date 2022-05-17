@@ -5,7 +5,7 @@ from math import floor
 import csv
 import os
 
-num_of_iteration = 1000
+num_of_iteration = 100
 
 num_of_jobs = 8
 num_of_machine = 12
@@ -13,7 +13,7 @@ num_of_machine = 12
 job_array = []
 population = []
 population_size = 100
-crossover_rate = 0.8
+crossover_rate = 0.4
 mutation_rate = 0.5
 
 class Operation:
@@ -153,19 +153,21 @@ for it in range(num_of_iteration):
         id2 = rd.choice(pool)
         if id1!=id2:
             new_DNA = crossover(population[id1], population[id2])
-        else:
-            new_DNA = crossover(population[id1], DNA(8, [2, 2, 2, 2, 2, 1, 2, 3]))
+        # else:
+            # new_DNA = crossover(population[id1], DNA(8, [2, 2, 2, 2, 2, 1, 2, 3]))
+            
         new_DNA = mutation(new_DNA)
         new_population.append(new_DNA)
         new_population[i].fitness = calc_fitness(new_population[i].matrix)
         if new_population[i].fitness < best:
             best =  new_population[i].fitness
             best_id = i
+            best_DNA = new_population[i]
     population = new_population
-    print("Best make span: " + str(best))
+    print("Best make span: " + str(best_DNA.fitness))
 
 print("Solution: ")
-print(population[best_id].matrix)
+print(best_DNA.matrix)
 
 # fit = []
 

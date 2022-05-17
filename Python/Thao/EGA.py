@@ -4,14 +4,14 @@ from numpy import random as rd
 from math import floor
 import csv
 
-num_of_iteration = 1
+num_of_iteration = 100
 
 num_of_jobs = 3
 num_of_machine = 4
 
 job_array = []
 population = []
-population_size = 1
+population_size = 100
 crossover_rate = 0.5
 mutation_rate = 0.5
 
@@ -140,38 +140,38 @@ def init_population():
 init_population()
 print(population[0].matrix)
 
-# br = False
-# for it in range(num_of_iteration):
-#     print("Iteration " + str(it))
-#     #Natural selection
-#     pool = natural_select(population)
-#     n = 0 
-#     while len(pool)==0:
-#         n = n+1
-#         if n == 500:
-#             br = True
-#             break
-#         init_population()
-#         pool = natural_select(population)
-#     if br:
-#         break
-#     new_population = []
-#     for i in range(floor(population_size*0.8)):
-#         id1 = rd.choice(pool)
-#         id2 = rd.choice(pool)
-#         if id1!=id2:
-#             new_DNA = crossover(population[id1], population[id2])
-#         else:
-#             new_DNA = crossover(population[id1], DNA(3, [3, 4, 3]))
-#         new_DNA = mutation(new_DNA)
-#         new_population.append(new_DNA)
-#         new_population[i].fitness = calc_fitness(new_population[i].matrix)
-#     sort_DNA()
-#     print("Best make span: " + str(population[len(population)-1].fitness))
+br = False
+for it in range(num_of_iteration):
+    print("Iteration " + str(it))
+    #Natural selection
+    pool = natural_select(population)
+    n = 0 
+    while len(pool)==0:
+        n = n+1
+        if n == 500:
+            br = True
+            break
+        init_population()
+        pool = natural_select(population)
+    if br:
+        break
+    new_population = []
+    for i in range(floor(population_size*0.8)):
+        id1 = rd.choice(pool)
+        id2 = rd.choice(pool)
+        if id1!=id2:
+            new_DNA = crossover(population[id1], population[id2])
+        else:
+            new_DNA = crossover(population[id1], DNA(3, [3, 4, 3]))
+        new_DNA = mutation(new_DNA)
+        new_population.append(new_DNA)
+        new_population[i].fitness = calc_fitness(new_population[i].matrix)
+    sort_DNA()
+    print("Best make span: " + str(population[len(population)-1].fitness))
 
 
-# print("Solution: ")
-# print(population[len(population)-1].matrix)
+print("Solution: ")
+print(population[len(population)-1].matrix)
 
 # fit = []
 
