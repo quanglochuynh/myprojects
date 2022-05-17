@@ -12,15 +12,10 @@ num_of_machine = 12
 
 job_array = []
 population = []
-<<<<<<< HEAD
+
 population_size = 100
 crossover_rate = 0.4
 mutation_rate = 0.5
-=======
-population_size = 200
-crossover_rate = 0.5
-mutation_rate = 0.6
->>>>>>> 653769f752be7ff394e5c6d85262876c36fd0242
 
 class Operation:
     def __init__(self, name, duration, machine):
