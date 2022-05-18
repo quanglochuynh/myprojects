@@ -4,6 +4,7 @@ from numpy import float32, int32, random as rd
 import matplotlib.pyplot as plt
 import os
 import csv
+import pandas as pd
 class Location:
     def __init__(self, name, x, y):
         self.name = name
@@ -48,10 +49,11 @@ def process_map(map):
 def process_distance(a,b):
     num_a = len(a)
     num_b = len(b)
-    dis = np.zeros((num_a, num_b))
+    dis = np.zeros((num_a, num_b), dtype=np.uint8)
     for i in range(num_a):
         for j in range(num_b):
-            dis[i][j] = np.sqrt(np.square(a[i].x - b[j].x) + np.square(a[i].y - b[j].y ))*10
+            # dis[i][j] = np.sqrt(np.square(a[i].x - b[j].x) + np.square(a[i].y - b[j].y ))*10
+            dis[i][j] = np.abs((a[i].x - b[j].x) + (a[i].y - b[j].y ))
     return dis
 
 def get_row_value(a):
@@ -88,58 +90,65 @@ l_jk = process_distance(DC_name, Retail_name)
 l_jm = process_distance(DC_name, Recycling_name)
 l_km = process_distance(Retail_name, Recycling_name)
 
-data = read_csv('data.csv', 5, 2)
-cap_p = get_row_value(data[0])
-cap_dc = get_row_value(data[1])
-cap_rec = get_row_value(data[2])
-retail_dm = get_row_value(data[3])
-Fp=get_row_value(data[4])
-Fdc=get_row_value(data[5])
-Fr=get_row_value(data[6])
-Cp=get_row_value(data[7])
-C_trans=get_row_value(data[8])
-Ch = get_row_value(data[9])
-Cr = get_row_value(data[10])
-Cd = get_row_value(data[11])
-Efp = get_row_value(data[12])
-Efdc = get_row_value(data[13])
-Efr = get_row_value(data[14])
-Ep = get_row_value(data[15])
-E_trans = get_row_value(data[16])
-Eh = get_row_value(data[17])
-Er = get_row_value(data[18])
-Ed = get_row_value(data[19])
-alpha_p = get_row_value(data[20])
-alpha_dc = get_row_value(data[21])
-alpha_retail = get_row_value(data[22])
+pd.DataFrame(l_ij).to_csv("l_ij")
+pd.DataFrame(l_im).to_csv("l_im")
+pd.DataFrame(l_jk).to_csv("l_jk")
+pd.DataFrame(l_jm).to_csv("l_jm")
+pd.DataFrame(l_km).to_csv("l_km")
 
-class DNA:
-    def __init__(self):
-        self.S = rd.randint(2, size=num_of_production)
-        self.W = rd.randint(2, size=num_of_DC)
-        self.G = rd.randint(2, size=num_of_Recycling)
-        self.Q = np.multiply(rd.rand(num_of_production),10)
-        self.v_ij = np.multiply(rd.rand(num_of_production, num_of_DC),10)
-        self.v_im = np.multiply(rd.rand(num_of_production, num_of_Recycling),10)
-        self.v_jk = np.multiply(rd.rand(num_of_DC, num_of_Retail),10)
-        self.v_jm =np.multiply(rd.rand(num_of_DC, num_of_Recycling),10)
-        self.v_km = np.multiply(rd.rand(num_of_Retail, num_of_Recycling),10)
-        self.z_cost = self.calc_cost()
-        # self.z_emission = self.calc_emission()
-        self.fitness = 0
+# data = read_csv('data.csv', 5, 2)
+# cap_p = get_row_value(data[0])
+# cap_dc = get_row_value(data[1])
+# cap_rec = get_row_value(data[2])
+# retail_dm = get_row_value(data[3])
+# Fp=get_row_value(data[4])
+# Fdc=get_row_value(data[5])
+# Fr=get_row_value(data[6])
+# Cp=get_row_value(data[7])
+# C_trans=get_row_value(data[8])
+# Ch = get_row_value(data[9])
+# Cr = get_row_value(data[10])
+# Cd = get_row_value(data[11])
+# Efp = get_row_value(data[12])
+# Efdc = get_row_value(data[13])
+# Efr = get_row_value(data[14])
+# Ep = get_row_value(data[15])
+# E_trans = get_row_value(data[16])
+# Eh = get_row_value(data[17])
+# Er = get_row_value(data[18])
+# Ed = get_row_value(data[19])
+# alpha_p = get_row_value(data[20])
+# alpha_dc = get_row_value(data[21])
+# alpha_retail = get_row_value(data[22])
 
-    def calc_cost(self):
-        Zcf = np.sum(np.multiply(self.S,Fp)) + np.sum(np.multiply(self.W, Fdc)) + np.sum(np.multiply(self.G, Fr))
-        Zcp = np.sum(np.multiply(self.Q, Cp))
-        Zct = C_trans * (np.sum(np.multiply(self.v_ij, l_ij)) + np.sum(np.multiply(self.v_jk, l_jk)) + np.sum(np.multiply(self.v_im, l_im)) + np.sum(np.multiply(self.v_jm, l_jm)) + np.sum(np.multiply(self.v_km, l_km)))
-        Zch = np.sum(np.multiply(self.v_ij, Ch))
-        Zcr = np.sum(np.multiply(self.v_im, Cr)) + np.sum(np.multiply(self.v_jm, Cr)) + np.sum(np.multiply(self.v_km, Cr))
-        Zcd = np.transpose(self.v_im.transpose() - np.multiply(self.Q, alpha_p)) + np.transpose(self.v_jm.transpose() - np.multiply(self.v_ij, alpha_dc)) #+ np.transpose(self.v_km.transpose() - np.multiply(self.v_jk, alpha_retail))
-        print(Zcd)
-        return Zcf+Zcp+Zct+Zch+Zcr
+# class DNA:
+#     def __init__(self):
+#         self.S = rd.randint(2, size=num_of_production)
+#         self.W = rd.randint(2, size=num_of_DC)
+#         self.G = rd.randint(2, size=num_of_Recycling)
+#         self.Q = np.multiply(rd.rand(num_of_production),10)
+#         self.v_ij = np.multiply(rd.rand(num_of_production, num_of_DC),10)
+#         self.v_im = np.multiply(rd.rand(num_of_production, num_of_Recycling),10)
+#         self.v_jk = np.multiply(rd.rand(num_of_DC, num_of_Retail),10)
+#         self.v_jm =np.multiply(rd.rand(num_of_DC, num_of_Recycling),10)
+#         self.v_km = np.multiply(rd.rand(num_of_Retail, num_of_Recycling),10)
+#         # self.z_cost = self.calc_cost()
+#         # self.z_emission = self.calc_emission()
+#         self.fitness = 0
+
+#     def calc_cost(self):
+        
+#         Zcf = np.sum(np.multiply(self.S,Fp)) + np.sum(np.multiply(self.W, Fdc)) + np.sum(np.multiply(self.G, Fr))
+#         Zcp = np.sum(np.multiply(self.Q, Cp))
+#         Zct = C_trans * (np.sum(np.multiply(self.v_ij, l_ij)) + np.sum(np.multiply(self.v_jk, l_jk)) + np.sum(np.multiply(self.v_im, l_im)) + np.sum(np.multiply(self.v_jm, l_jm)) + np.sum(np.multiply(self.v_km, l_km)))
+#         Zch = np.sum(np.multiply(self.v_ij, Ch))
+#         Zcr = np.sum(np.multiply(self.v_im, Cr)) + np.sum(np.multiply(self.v_jm, Cr)) + np.sum(np.multiply(self.v_km, Cr))
+#         Zcd = np.transpose(self.v_im.transpose() - np.multiply(self.Q, alpha_p)) + np.transpose(self.v_jm.transpose() - np.multiply(self.v_ij, alpha_dc)) #+ np.transpose(self.v_km.transpose() - np.multiply(self.v_jk, alpha_retail))
+#         print(Zcd)
+#         return Zcf+Zcp+Zct+Zch+Zcr
 
 
 
-myDNA = DNA()
+# myDNA = DNA()
 
-print(myDNA.z_cost)
+# print(myDNA.z_cost)
