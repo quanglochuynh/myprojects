@@ -16,7 +16,7 @@ population = []
 population_size = 100
 crossover_rate = 0.8
 mutation_rate = 0.1
-
+ope = [2, 2, 2, 2, 2, 1, 2, 3]
 class Operation:
     def __init__(self, name, duration, machine):
         self.name = name
@@ -50,7 +50,7 @@ for k in range(8):
 
 class DNA:
     def __init__(self, num_of_job, num_of_operation=None, ma=None):
-        if (ma==None):
+        if (num_of_operation!=None):
             matrix = np.zeros((num_of_job, max(num_of_operation)+3), dtype=np.int8)
             # print(np.shape(matrix))
             for i in range(num_of_job):
@@ -67,8 +67,12 @@ class DNA:
                     else:
                         matrix[i][j+1] = -1
             self.matrix = matrix
+            self.num_of_operation = num_of_operation
+            self.num_of_job = num_of_job
         else:
             self.matrix = np.array(ma)
+            self.num_of_job = num_of_job
+            self.num_of_operation = ope
         self.fitness = self.calc_fitness()
 
     def calc_fitness(self):
@@ -87,6 +91,23 @@ class DNA:
                     ma_stt[b-1] = max(ma_stt[b-1], ef[i]) + duration
                     ef[i] = max(ef[i],ma_stt[b-1])
         return max(ef)
+
+    def mutation(self):
+        for i in range(self.num_of_job):
+                for j in range(1,self.num_of_operation[i]+2):
+                    if (self.matrix[i][j+1] == -1) or (self.matrix[i][j+1] == 0):
+                        continue
+                    else:    
+                        if (rd.rand() < mutation_rate):
+                            while True:
+                                machine = floor(rd.rand()*num_of_machine)+1
+                                duration = int(job_array[i].data[j-1][machine-1])
+                                if duration!=0:
+                                    self.matrix[i][j]=machine
+                                    # print('fuck yeah')
+                                    break
+                            
+
 
 def curve(x):
     return int(np.floor(3000 * np.power(10,-0.0008*x)))
@@ -120,9 +141,8 @@ def mutation(dna):
 
 def init_population():
     for i in range(population_size):
-        population.append(DNA(8, [2, 2, 2, 2, 2, 1, 2, 3]))
-        # population[i].fitness = calc_fitness(population[i].matrix)
-        print(population[i].fitness)
+        population.append(DNA(8, ope))
+        # print(population[i].fitness)
 
 
 init_population()
@@ -158,14 +178,15 @@ for it in range(num_of_iteration):
         else:
             # new_DNA = crossover(population[id1], DNA(8, [2, 2, 2, 2, 2, 1, 2, 3]))
             new_DNA = population[id1]
-        new_DNA = mutation(new_DNA)
-        new_DNA.fitness = DNA.calc_fitness(new_DNA)
-        new_population.append(new_DNA)
+        new_DNA.mutation()
+
+        # new_DNA.fitness = DNA.calc_fitness(new_DNA)
+        new_population.append(DNA(8, num_of_operation=None,ma=new_DNA.matrix))
         if new_population[i].fitness < best_DNA.fitness:
             # best =  new_population[i].fitness
             best_id = i
             best_DNA = new_population[i]
-        print(new_population[i].fitness)
+        # print(new_population[i].fitness)
     population = new_population
     print("Best make span: " + str(best_DNA.fitness))
 
@@ -206,10 +227,10 @@ print(repr(best_DNA.matrix))
 #        [ 0,  3,  0, -1,  0,  0],
 #        [ 0,  8,  8,  0, -1,  0],
 #        [ 0,  1,  8,  3,  0, -1]]
-ar = list(best_DNA.matrix)
-a = DNA(8, [2, 2, 2, 2, 2, 1, 2, 3], ar)
+# ar = list(best_DNA.matrix)
+# a = DNA(8, [2, 2, 2, 2, 2, 1, 2, 3], ar)
 
-a.calc_fitness()
+# a.calc_fitness()
 
-print(a.matrix)
-print(a.fitness)
+# print(a.matrix)
+# print(a.fitness)
