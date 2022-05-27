@@ -138,7 +138,7 @@ def init_population():
 
 
 init_population()
-print(population[0].matrix)
+# print(population[0].matrix)
 
 br = False
 for it in range(num_of_iteration):
@@ -166,6 +166,7 @@ for it in range(num_of_iteration):
         new_DNA = mutation(new_DNA)
         new_population.append(new_DNA)
         new_population[i].fitness = calc_fitness(new_population[i].matrix)
+    population = new_population
     sort_DNA()
     print("Best make span: " + str(population[len(population)-1].fitness))
 
