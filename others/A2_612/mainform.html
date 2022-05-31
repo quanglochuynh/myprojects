@@ -51,7 +51,14 @@
                             
                                 <h3 >Số lượng</h3>
                                 <textarea class="multiline_edtx" id="edtx_so_luong"></textarea>
+                                <h3>Upload hình ảnh </h3>
+                                <input type="file" id="picture_upload" accept="image/jpg, image/png, image/jpeg" onchange="processImage(event)">
+                                
                             </div>
+                            
+                        </div>
+                        <div id="image_div">
+                            <image id="image_view"/>
                         </div>
                         <div class="submit_div">
                             <button id="btn_submit">Gửi Form</button>

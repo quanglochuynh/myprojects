@@ -217,3 +217,46 @@ select{
     margin: 2vh 0 2vh 0;
 }
 
+#image_view{
+    width: calc(10vh + 40vw);
+}
+
+#image_div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#picture_upload::-webkit-file-upload-button{
+    visibility: hidden;
+}
+
+#picture_upload::before {
+    margin: 5px 0px 15px 0px;
+    height: calc((20vh - 4vw) / 6);
+    width:fit-content;
+    content: 'Chọn ảnh';
+    display: inline-block;
+    background: linear-gradient(top, #f9f9f9, #e3e3e3);
+    border: 1px solid #999;
+    border-radius: 3px;
+    padding: 15px 18px;
+    outline: none;
+    white-space: nowrap;
+    user-select: none;
+    cursor: pointer;
+    text-shadow: 1px 1px #fff;
+    font-weight: 700;
+    font-size: calc((2.5vh - 0.5vw));
+    text-align: center;
+  }
+
+  #picture_upload:hover::before {
+    border-color: black;
+    background-color: rgb(229, 80, 97);
+    /* text-decoration-color: #e3e3e3; */
+  }
+
+  #picture_upload:active::before {
+    background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+  }

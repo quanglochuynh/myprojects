@@ -6,7 +6,18 @@ arrayVanDe.push(new VanDe(3, "Nước sinh hoạt",["Không có nước", "Nư�
 arrayVanDe.push(new VanDe(4, "Nhà vệ sinh, khuôn viên",["Gạch bể", "Cửa nhà vệ sinh hư", "Lavabo rò nước", "Hư ổ khóa", "Đèn tinh dầu hư", "Không có nước", "Bể kính", "Hộp giấy hư", "Hộp đựng xà phòng hư", "Hư đèn", "Mất điện", "Khác"]))
 arrayVanDe.push(new VanDe(5, "Khác",[""]))
 
-
+function processImage(event){
+    // const reader = new FileReader();
+    // reader.addEventListener("load", () => {
+    //   const uploaded_image = reader.result;
+    //   document.querySelector("#image_view").style.backgroundImage = `url(${uploaded_image})`;
+    // });
+    // reader.readAsDataURL(this.files[0]);
+    image = event.target.files[0];
+    dir = URL.createObjectURL(image);
+    document.getElementById("image_view").src = dir;
+    console.log(dir);    
+}
 
 
 let id = 0;
@@ -22,6 +33,8 @@ function setup(){
         option_array.push(option.outerHTML);
     }
     dropdownVanDe.insertAdjacentHTML('beforeEnd', option_array.join('\n'));
+
+
 }
 
 function initRequirement(id){
