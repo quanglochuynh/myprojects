@@ -16,7 +16,7 @@ function processImage(event){
     image = event.target.files[0];
     dir = URL.createObjectURL(image);
     document.getElementById("image_view").src = dir;
-    console.log(dir);    
+    console.log(dir);     
 }
 
 
