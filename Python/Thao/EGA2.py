@@ -1,3 +1,4 @@
+from matplotlib import pyplot as plt
 import numpy as np
 import math
 from numpy import float32, random as rd
@@ -5,18 +6,19 @@ from math import floor
 import csv
 import os
 
-num_of_iteration = 1000
+num_of_iteration = 100
 
 num_of_jobs = 8
 num_of_machine = 12
 
 job_array = []
 population = []
+
 population_size = 100
 crossover_rate = 0.8
 mutation_rate = 0.5
 ope = [2, 2, 2, 2, 2, 1, 2, 3]
-
+makespan = []
 
 def partition(array, low, high):
   pivot = array[high].fitness
@@ -64,6 +66,8 @@ for k in range(8):
             i=i+1
             data.append(row)
         job_array.append(Job(i, data))
+
+
 
 
 class DNA:
@@ -125,15 +129,13 @@ class DNA:
                                     break
                             
 
-def curve(x):
-    return int(np.floor(200 * np.power(15,-0.008*x)))
 
+def curve(x):
+    return int(np.floor(400 * np.power(15,-0.002*x)))
 
 def natural_select(population):
     pool = []
     for i in range(population_size):
-        k = curve(population[i].fitness)
-        # print('k=', k)
         for j in range(curve(population[i].fitness)):
             pool.append(i)
     return pool
@@ -145,7 +147,6 @@ def crossover(dna1, dna2):
             #crossover
             new_dna.matrix[i] = dna2.matrix[i][:] #take row of this job
     return new_dna
-
 
 def mutation(dna):
     new_dna = dna
@@ -164,57 +165,36 @@ def init_population():
     for i in range(population_size):
         population.append(DNA(8, ope))
         # print(population[i].fitness)
-        
+
 
 init_population()
-maximum_trial=500
-
-best_id = 0
-br = False
-best_DNA = population[0]
-# best = best_DNA.fitness
 
 for it in range(num_of_iteration):
     print("Iteration " + str(it))
     #Natural selection
     pool = natural_select(population)
-    n = 0 
-    while len(pool)==0:
-        n = n+1
-        # print(n)
-        if n == maximum_trial:
-            br = True
-            break
-        # init_population()
-        pool = natural_select(population)
-    if br:
-        break
     new_population = []
-    new_population.append(best_DNA)
     for i in range(floor(population_size*0.8)):
         id1 = rd.choice(pool)
         id2 = rd.choice(pool)
         if id1!=id2:
             new_DNA = crossover(population[id1], population[id2])
-        else:
-            # new_DNA = crossover(population[id1], DNA(8, [2, 2, 2, 2, 2, 1, 2, 3]))
-            new_DNA = population[id1]
         new_DNA.mutation()
-
-        # new_DNA.fitness = DNA.calc_fitness(new_DNA)
         new_population.append(DNA(8, num_of_operation=None,ma=new_DNA.matrix))
-        if new_population[i].fitness < best_DNA.fitness:
-            # best =  new_population[i].fitness
-            best_id = i
-            best_DNA = new_population[i]
-        # print(new_population[i].fitness)
+    new_population = new_population + population[floor(0.8*population_size):population_size]
+    # print(len(new_population))
     population = new_population
     sort_DNA()
-    print("Best make span: " + str(best_DNA.fitness))
+    print("Best make span: " + str(population[population_size-1].fitness))
+    makespan.append(population[population_size-1].fitness)
+    if (it>50):
+        if makespan[it-50]-makespan[it]<1:
+            break
 
-# print("Solution: ")
-# print(repr(best_DNA.matrix))
-
+print("Solution: ")
+print(repr(population[population_size-1].matrix))
+plt.plot(np.linspace(0,len(makespan)-1, len(makespan)), makespan)
+plt.show()
 # fit = []
 
 # for i in range(population_size):
@@ -241,3 +221,18 @@ for it in range(num_of_iteration):
 
 # l = crossover(k,h)
 # print(l.matrix)
+# ar = [[ 0, 11,  7,  0, -1,  0],
+#        [ 0,  2, 10,  0, -1,  0],
+#        [ 0, 12,  9,  0, -1,  0],
+#        [ 0,  9,  9,  0, -1,  0],
+#        [ 0, 11,  4,  0, -1,  0],
+#        [ 0,  3,  0, -1,  0,  0],
+#        [ 0,  8,  8,  0, -1,  0],
+#        [ 0,  1,  8,  3,  0, -1]]
+# ar = list(best_DNA.matrix)
+# a = DNA(8, [2, 2, 2, 2, 2, 1, 2, 3], ar)
+
+# a.calc_fitness()
+
+# print(a.matrix)
+# print(a.fitness)
