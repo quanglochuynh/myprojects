@@ -5,11 +5,7 @@ from math import floor
 import csv
 import os
 
-<<<<<<< HEAD
 num_of_iteration = 1000
-=======
-num_of_iteration = 3
->>>>>>> 54dd74d56bbedac0263376a3ac647e0dbe71fc30
 
 num_of_jobs = 8
 num_of_machine = 12
@@ -19,11 +15,7 @@ population = []
 
 population_size = 100
 crossover_rate = 0.8
-<<<<<<< HEAD
 mutation_rate = 0.5
-=======
-mutation_rate = 0.1
->>>>>>> 54dd74d56bbedac0263376a3ac647e0dbe71fc30
 ope = [2, 2, 2, 2, 2, 1, 2, 3]
 class Operation:
     def __init__(self, name, duration, machine):
@@ -112,10 +104,7 @@ class DNA:
                                 duration = int(job_array[i].data[j-1][machine-1])
                                 if duration!=0:
                                     self.matrix[i][j]=machine
-<<<<<<< HEAD
-=======
                                     # print('fuck yeah')
->>>>>>> 54dd74d56bbedac0263376a3ac647e0dbe71fc30
                                     break
                             
 
