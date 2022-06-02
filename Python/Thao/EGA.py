@@ -167,7 +167,11 @@ def init_population():
         
 
 init_population()
+<<<<<<< HEAD
 maximum_trial=500
+=======
+# print(population[0].matrix)
+>>>>>>> 54dd74d56bbedac0263376a3ac647e0dbe71fc30
 
 best_id = 0
 br = False
@@ -197,6 +201,7 @@ for it in range(num_of_iteration):
         if id1!=id2:
             new_DNA = crossover(population[id1], population[id2])
         else:
+<<<<<<< HEAD
             # new_DNA = crossover(population[id1], DNA(8, [2, 2, 2, 2, 2, 1, 2, 3]))
             new_DNA = population[id1]
         new_DNA.mutation()
@@ -208,6 +213,12 @@ for it in range(num_of_iteration):
             best_id = i
             best_DNA = new_population[i]
         # print(new_population[i].fitness)
+=======
+            new_DNA = crossover(population[id1], DNA(3, [3, 4, 3]))
+        new_DNA = mutation(new_DNA)
+        new_population.append(new_DNA)
+        new_population[i].fitness = calc_fitness(new_population[i].matrix)
+>>>>>>> 54dd74d56bbedac0263376a3ac647e0dbe71fc30
     population = new_population
     sort_DNA()
     print("Best make span: " + str(best_DNA.fitness))
