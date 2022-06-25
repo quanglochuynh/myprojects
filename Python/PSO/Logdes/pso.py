@@ -1,6 +1,5 @@
-from email import header
 import numpy as np
-from numpy import float32, int32, random as rd
+from numpy import float32, random as rd
 import matplotlib.pyplot as plt
 import os
 import csv
