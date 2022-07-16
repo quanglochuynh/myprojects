@@ -4,19 +4,25 @@ from numpy import float32, random as rd
 from math import floor
 import csv
 import os
+import matplotlib.pyplot as plt
+import time
+
+start_time = time.time()
 
 num_of_iteration = 1000
 
-num_of_jobs = 8
+
+num_of_jobs = 18
 num_of_machine = 12
 
 job_array = []
 population = []
 
 population_size = 100
-crossover_rate = 0.8
-mutation_rate = 0.5
-ope = [2, 2, 2, 2, 2, 1, 2, 3]
+crossover_rate = 0.5
+mutation_rate = 0.8
+ope = [2,1,2,2,2,1,2,2,1,2,2,2,2,3,2,1,2,2]
+makespan = []
 class Operation:
     def __init__(self, name, duration, machine):
         self.name = name
@@ -34,15 +40,16 @@ class Job:
 
 
 # Doc file
-for k in range(8):
+for k in range(18):
     cwd = os.getcwd()
-    with open(cwd+'/data1/job' + str(k+1) + '.csv') as csv_file:
+    with open(cwd+'/data2/job' + str(k+1) + '.csv') as csv_file:
         data = []
         i=0
         csv_reader = csv.reader(csv_file, delimiter=',')
         for row in csv_reader:
             i=i+1
-            data.append(row)
+            print(k, row)
+            data.append(np.asarray(row, dtype=np.float32))
         job_array.append(Job(i, data))
 
 
@@ -51,7 +58,7 @@ for k in range(8):
 class DNA:
     def __init__(self, num_of_job, num_of_operation=None, ma=None):
         if (num_of_operation!=None):
-            matrix = np.zeros((num_of_job, max(num_of_operation)+3), dtype=np.int8)
+            matrix = np.zeros((num_of_job, max(num_of_operation)+3), dtype= float)
             # print(np.shape(matrix))
             for i in range(num_of_job):
                 for j in range(1,num_of_operation[i]+2):
@@ -60,7 +67,7 @@ class DNA:
                     if (j<=num_of_operation[i]):
                         while True:
                             machine = floor(rd.rand()*num_of_machine)+1
-                            duration = int(job_array[i].data[j-1][machine-1])
+                            duration = float(job_array[i].data[j-1][machine-1])
                             if duration!=0:
                                 matrix[i][j] = machine
                                 break
@@ -83,9 +90,10 @@ class DNA:
                 if (self.matrix[i][j+1] == -1) or (self.matrix[i][j+1] == 0):
                     continue
                 else:    
-                    a = self.matrix[i][j]
-                    b = self.matrix[i][j+1]
-                    duration = int(job_array[i].data[j][self.matrix[i][j+1]-1])
+                    # a = self.matrix[i][j]
+                    b = int(self.matrix[i][j+1])
+                    # print(b-1)
+                    duration = job_array[i].data[j][b-1]
                     if duration == 0:
                         duration = 1000
                     ma_stt[b-1] = max(ma_stt[b-1], ef[i]) + duration
@@ -101,10 +109,9 @@ class DNA:
                         if (rd.rand() < mutation_rate):
                             while True:
                                 machine = floor(rd.rand()*num_of_machine)+1
-                                duration = int(job_array[i].data[j-1][machine-1])
+                                duration = float(job_array[i].data[j-1][machine-1])
                                 if duration!=0:
                                     self.matrix[i][j]=machine
-                                    # print('fuck yeah')
                                     break
                             
 
@@ -137,13 +144,14 @@ def mutation(dna):
                     if (rd.rand() < mutation_rate):
                         #Mutate
                         new_dna.matrix[i][j] = floor(rd.rand()*num_of_machine)+1
-    print(new_dna.matrix)
+    # print(new_dna.matrix)
     return new_dna
 
 def init_population():
     for i in range(population_size):
-        population.append(DNA(8, ope))
+        population.append(DNA(18, ope))
         # print(population[i].fitness)
+        # print(population[i].matrix)
 
 
 init_population()
@@ -182,7 +190,7 @@ for it in range(num_of_iteration):
         new_DNA.mutation()
 
         # new_DNA.fitness = DNA.calc_fitness(new_DNA)
-        new_population.append(DNA(8, num_of_operation=None,ma=new_DNA.matrix))
+        new_population.append(DNA(18, num_of_operation=None,ma=new_DNA.matrix))
         if new_population[i].fitness < best_DNA.fitness:
             # best =  new_population[i].fitness
             best_id = i
@@ -190,16 +198,36 @@ for it in range(num_of_iteration):
         # print(new_population[i].fitness)
     population = new_population
     print("Best make span: " + str(best_DNA.fitness))
+    makespan.append(best_DNA.fitness)
+    if (it>100):
+        if makespan[it-100]-makespan[it]<1:
+            break
+    
+
+# dna1 = population[34]
+# print(dna1.matrix)
+# dna2=population[35]
+# print(dna2.matrix)
+# print(crossover(dna1, dna2).matrix)
+
+# dna.mutation()
+# print(dna.matrix)
+
 
 print("Solution: ")
-print(repr(best_DNA.matrix))
+print(repr(population[population_size-1].matrix))
+print("--- %s seconds ---" % (time.time() - start_time))
 
-# fit = []
+plt.plot(np.linspace(0,len(makespan)-1, len(makespan)), makespan)
+plt.show()
+fit = []
 
-# for i in range(population_size):
-#     fit.append(population[i].fitness)
+for i in range(population_size):
+    fit.append(population[i].fitness)
 
-# print(min(fit))
+print(min(fit))
+
+np.savetxt("makespan.csv", makespan, delimiter=",")
 
 # a = [[0, 1, 3, 2, -1, 0, 0],
 #      [0, 3, 4, 1, 1, -1, 0],

@@ -1,23 +1,24 @@
-from matplotlib import pyplot as plt
 import numpy as np
 import math
 from numpy import float32, random as rd
 from math import floor
 import csv
 import os
+import matplotlib.pyplot as plt
+import time
+start_time = time.time()
 
-num_of_iteration = 100
+num_of_iteration = 1000
 
-num_of_jobs = 8
+num_of_jobs = 18
 num_of_machine = 12
 
 job_array = []
 population = []
-
 population_size = 100
-crossover_rate = 0.8
-mutation_rate = 0.5
-ope = [2, 2, 2, 2, 2, 1, 2, 3]
+crossover_rate = 0.5
+mutation_rate = 0.8
+ope = [2,1,2,2,2,1,2,2,1,2,2,2,2,3,2,1,2,2]
 makespan = []
 
 def partition(array, low, high):
@@ -56,18 +57,17 @@ class Job:
 
 
 # Doc file
-for k in range(8):
+for k in range(18):
     cwd = os.getcwd()
-    with open(cwd+'/data1/job' + str(k+1) + '.csv') as csv_file:
+    with open(cwd+'/data2/job' + str(k+1) + '.csv') as csv_file:
         data = []
         i=0
         csv_reader = csv.reader(csv_file, delimiter=',')
         for row in csv_reader:
             i=i+1
-            data.append(row)
+            print(k, row)
+            data.append(np.asarray(row, dtype=np.float32))
         job_array.append(Job(i, data))
-
-
 
 
 class DNA:
@@ -82,7 +82,7 @@ class DNA:
                     if (j<=num_of_operation[i]):
                         while True:
                             machine = floor(rd.rand()*num_of_machine)+1
-                            duration = int(job_array[i].data[j-1][machine-1])
+                            duration = float(job_array[i].data[j-1][machine-1])
                             if duration!=0:
                                 matrix[i][j] = machine
                                 break
@@ -105,9 +105,10 @@ class DNA:
                 if (self.matrix[i][j+1] == -1) or (self.matrix[i][j+1] == 0):
                     continue
                 else:    
-                    a = self.matrix[i][j]
-                    b = self.matrix[i][j+1]
-                    duration = int(job_array[i].data[j][self.matrix[i][j+1]-1])
+                    # a = self.matrix[i][j]
+                    b = int(self.matrix[i][j+1])
+                    # print(b-1)
+                    duration = job_array[i].data[j][b-1]
                     if duration == 0:
                         duration = 1000
                     ma_stt[b-1] = max(ma_stt[b-1], ef[i]) + duration
@@ -129,9 +130,9 @@ class DNA:
                                     break
                             
 
-
 def curve(x):
     return int(np.floor(400 * np.power(15,-0.002*x)))
+
 
 def natural_select(population):
     pool = []
@@ -148,6 +149,7 @@ def crossover(dna1, dna2):
             new_dna.matrix[i] = dna2.matrix[i][:] #take row of this job
     return new_dna
 
+
 def mutation(dna):
     new_dna = dna
     for j in range(1, np.shape(new_dna.matrix)[1]-1):
@@ -163,11 +165,17 @@ def mutation(dna):
 
 def init_population():
     for i in range(population_size):
-        population.append(DNA(8, ope))
+        population.append(DNA(18, ope))
         # print(population[i].fitness)
-
+        
 
 init_population()
+maximum_trial=500
+
+best_id = 0
+br = False
+best_DNA = population[0]
+# best = best_DNA.fitness
 
 for it in range(num_of_iteration):
     print("Iteration " + str(it))
@@ -180,27 +188,31 @@ for it in range(num_of_iteration):
         if id1!=id2:
             new_DNA = crossover(population[id1], population[id2])
         new_DNA.mutation()
-        new_population.append(DNA(8, num_of_operation=None,ma=new_DNA.matrix))
+        new_population.append(DNA(18, num_of_operation=None,ma=new_DNA.matrix))
     new_population = new_population + population[floor(0.8*population_size):population_size]
     # print(len(new_population))
     population = new_population
     sort_DNA()
     print("Best make span: " + str(population[population_size-1].fitness))
     makespan.append(population[population_size-1].fitness)
-    if (it>50):
-        if makespan[it-50]-makespan[it]<1:
+    if (it>100):
+        if makespan[it-100]-makespan[it]<1:
             break
 
 print("Solution: ")
 print(repr(population[population_size-1].matrix))
+print("--- %s seconds ---" % (time.time() - start_time))
+
 plt.plot(np.linspace(0,len(makespan)-1, len(makespan)), makespan)
 plt.show()
-# fit = []
 
-# for i in range(population_size):
-#     fit.append(population[i].fitness)
 
-# print(min(fit))
+fit = []
+
+for i in range(population_size):
+    fit.append(population[i].fitness)
+
+print(min(fit))
 
 # a = [[0, 1, 3, 2, -1, 0, 0],
 #      [0, 3, 4, 1, 1, -1, 0],
@@ -221,18 +233,3 @@ plt.show()
 
 # l = crossover(k,h)
 # print(l.matrix)
-# ar = [[ 0, 11,  7,  0, -1,  0],
-#        [ 0,  2, 10,  0, -1,  0],
-#        [ 0, 12,  9,  0, -1,  0],
-#        [ 0,  9,  9,  0, -1,  0],
-#        [ 0, 11,  4,  0, -1,  0],
-#        [ 0,  3,  0, -1,  0,  0],
-#        [ 0,  8,  8,  0, -1,  0],
-#        [ 0,  1,  8,  3,  0, -1]]
-# ar = list(best_DNA.matrix)
-# a = DNA(8, [2, 2, 2, 2, 2, 1, 2, 3], ar)
-
-# a.calc_fitness()
-
-# print(a.matrix)
-# print(a.fitness)
