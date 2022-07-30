@@ -166,6 +166,8 @@ for it in range(num_of_iteration):
     print("Iteration " + str(it))
     #Natural selection
     pool = natural_select(population)
+    print(pool)
+    break
     n = 0 
     while len(pool)==0:
         n = n+1
