@@ -1,8 +1,8 @@
 const pop_size = 40;
-const velMax = 5;
-let w = 2;
-const c1 = 0.05;
-const c2 = 0.05;
+const velMax = 4;
+let w = 1;
+const c1 = 0.02;
+const c2 = 0.02;
 const wDamp = 0.999;
 let population = [];
 let gBest = undefined;
@@ -23,7 +23,9 @@ class Particle{
     calcFitness(){
         // x = this.position.x;
         // y = this.position.y;
-        this.fitness = Math.pow(this.position.x,2) - 10*Math.cos(2*Math.PI * this.position.x) + Math.pow(this.position.y,2) - 10*Math.cos(2*Math.PI*this.position.y)
+        this.fitness = Math.pow(0.002*this.position.x,2) - 100*Math.cos(0.02*Math.PI * this.position.x) + Math.pow(0.002*this.position.y,2) - 100*Math.cos(0.02*Math.PI*this.position.y) + 200
+        // self.fitness = (self.dvar[0]**2 - 10 * np.cos(2 * np.pi * self.dvar[0])) + (self.dvar[1]**2 - 10 * np.cos(2 * np.pi * self.dvar[1])) + 20
+        // this.fitness = (Math.pow(this.position.x,2) - 10 ) + () + 20
     }
 
     draw(){
@@ -73,10 +75,10 @@ function setup(){
 
 function draw(){
     it++;
-    if (it>400){
-        // init()
-        // it = 0;
-        noLoop()
+    if (it>500){
+        init()
+        it = 0;
+        console.log(gBest.fitness);
     }
     translate(400, 400)
     background(50);
