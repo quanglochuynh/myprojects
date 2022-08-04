@@ -48,7 +48,7 @@ class Population{
     naturalSelection(){
         let lUT = [];
         for(let i in this.community){
-            let n = this.community[i].fitness *1000;
+            let n = this.community[i].fitness *100;
             for (let k=0; k<n; k++){
                 lUT.push(i);
             }

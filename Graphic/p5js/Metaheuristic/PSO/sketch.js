@@ -1,9 +1,9 @@
-const pop_size = 50;
-const velMax = 40;
-let w = 1;
-const c1 = 2;
-const c2 = 2;
-const wDamp = 0.998;
+const pop_size = 40;
+const velMax = 5;
+let w = 2;
+const c1 = 0.05;
+const c2 = 0.05;
+const wDamp = 0.999;
 let population = [];
 let gBest = undefined;
 let it = 0;
@@ -21,12 +21,14 @@ class Particle{
     }
 
     calcFitness(){
-        this.fitness = this.position.mag()
+        // x = this.position.x;
+        // y = this.position.y;
+        this.fitness = Math.pow(this.position.x,2) - 10*Math.cos(2*Math.PI * this.position.x) + Math.pow(this.position.y,2) - 10*Math.cos(2*Math.PI*this.position.y)
     }
 
     draw(){
         circle(this.position.x, this.position.y, 10)
-        let head = p5.Vector.sub(this.position, this.velocity)
+        let head = p5.Vector.sub(this.position, p5.Vector.mult(this.velocity,8))
         line(this.position.x, this.position.y, head.x, head.y)
     }
 
@@ -55,17 +57,23 @@ function init(){
 
 function setup(){
     createCanvas(800,800);
+    frameRate(60)
     background(50);
-    frameRate(25)
+    translate(400, 400)
     fill(255)
     strokeWeight(4)
     stroke(255)
     init();
+    for (let i=0; i<pop_size; i++){
+        population[i].draw();
+    }
+
+    // noLoop()
 }
 
 function draw(){
     it++;
-    if (it>100){
+    if (it>400){
         // init()
         // it = 0;
         noLoop()
@@ -77,15 +85,19 @@ function draw(){
         population[i].draw();
         // update vel
 
-        v0 = population[i].velocity.mult(w).mult(random(1));
+        v0 = population[i].velocity.mult(w * random(1))
         v1 = p5.Vector.sub(population[i].pBest.position, population[i].position).mult(random(1));
         v2 = p5.Vector.sub(gBest.position, population[i].position).mult(random(1));
         population[i].velocity = p5.Vector.add(v0, v1.mult(c1))
         population[i].velocity = p5.Vector.add(population[i].velocity, v2.mult(c2))
 
-        population[i].velocity.x = min(population[i].velocity.x, velMax)
-        population[i].velocity.y = min(population[i].velocity.y, velMax)
-        
+        // population[i].velocity.x = min(population[i].velocity.x, velMax)
+        // population[i].velocity.y = min(population[i].velocity.y, velMax)
+        // console.log(population[i].velocity.mag());
+
+        if (population[i].velocity.mag()>velMax){
+            population[i].velocity.setMag(velMax)
+        }
 
         population[i].updatePosition()
         
@@ -100,6 +112,5 @@ function draw(){
         }
     }
     w = w * wDamp;
-    // console.log(w);
-    console.log(gBest.velocity.mag())
+    // noLoop()
 }
