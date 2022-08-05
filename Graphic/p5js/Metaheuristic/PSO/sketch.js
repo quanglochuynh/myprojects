@@ -7,6 +7,10 @@ const wDamp = 0.999;
 let population = [];
 let gBest = undefined;
 let it = 0;
+
+function func(x,y){
+    return Math.pow(0.002*(x-50),2) - 100*Math.cos(0.02*Math.PI * (x-50)) + Math.pow(0.002*(y-50),2) - 100*Math.cos(0.02*Math.PI*(y-50)) + 200
+}
 class Particle{
     constructor(vec){
         if (vec!=undefined){
@@ -23,9 +27,11 @@ class Particle{
     calcFitness(){
         // x = this.position.x;
         // y = this.position.y;
-        this.fitness = Math.pow(0.002*this.position.x,2) - 100*Math.cos(0.02*Math.PI * this.position.x) + Math.pow(0.002*this.position.y,2) - 100*Math.cos(0.02*Math.PI*this.position.y) + 200
+        // this.fitness = Math.pow(0.002*this.position.x,2) - 100*Math.cos(0.02*Math.PI * this.position.x) + Math.pow(0.002*this.position.y,2) - 100*Math.cos(0.02*Math.PI*this.position.y) + 200
         // self.fitness = (self.dvar[0]**2 - 10 * np.cos(2 * np.pi * self.dvar[0])) + (self.dvar[1]**2 - 10 * np.cos(2 * np.pi * self.dvar[1])) + 20
         // this.fitness = (Math.pow(this.position.x,2) - 10 ) + () + 20
+        this.fitness = func(this.position.x, this.position.y)
+        
     }
 
     draw(){
@@ -78,7 +84,7 @@ function draw(){
     if (it>500){
         init()
         it = 0;
-        console.log(gBest.fitness);
+        console.log(gBest.position);
     }
     translate(400, 400)
     background(50);
