@@ -1,15 +1,15 @@
 const pop_size = 40;
-const velMax = 4;
+const velMax = 20;
 let w = 1;
-const c1 = 0.02;
-const c2 = 0.02;
-const wDamp = 0.999;
+const c1 = 0.1;
+const c2 = 0.1;
+const wDamp = 0.998;
 let population = [];
 let gBest = undefined;
 let it = 0;
 
 function func(x,y){
-    return Math.pow(0.002*(x-50),2) - 100*Math.cos(0.02*Math.PI * (x-50)) + Math.pow(0.002*(y-50),2) - 100*Math.cos(0.02*Math.PI*(y-50)) + 200
+    return Math.pow(0.05*(x-50),2) - 100*Math.cos(0.02*Math.PI * (x-50)) + Math.pow(0.05*(y-50),2) - 100*Math.cos(0.02*Math.PI*(y-50)) + 200
 }
 class Particle{
     constructor(vec){
@@ -88,7 +88,7 @@ function draw(){
     }
     translate(400, 400)
     background(50);
-    circle(0,0,10)
+    circle(50,50,10)
     for (let i=0; i<pop_size; i++){
         population[i].draw();
         // update vel
@@ -120,5 +120,10 @@ function draw(){
         }
     }
     w = w * wDamp;
+    fill('red')
+    stroke('red')
+    gBest.draw()
+    fill(255)
+    stroke(255)
     // noLoop()
 }

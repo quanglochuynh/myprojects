@@ -1,5 +1,5 @@
-const pop_size = 40;
-const velMax = 4;
+const pop_size = 100;
+const velMax = 6;
 let a = 2;
 let max_iter = 400;
 let da = a/max_iter;
@@ -8,43 +8,33 @@ let it = 0;
 let alpha = undefined;
 let beta  = undefined;
 let gamma = undefined;
+let plane = undefined;
 
-let lut = [-180, -160, -140, -120, -100, -80, -60, -40, -20, 0, 20, 40, 60, 80, 100, 120, 140, 160, 180]
 
 function func(x,y){
-    return Math.pow(0.002*(x-50),2) - 100*Math.cos(0.02*Math.PI * (x-50)) + Math.pow(0.002*(y-50),2) - 100*Math.cos(0.02*Math.PI*(y-50)) + 200
-}
-
-class Vector extends p5.Vector{
-    constructor(x,y){
-        super(x,y)
-    }
-
-    abs(){
-        this.x = Math.abs(this.x)
-        this.y = Math.abs(this.y)   
-    }
+    return Math.pow(0.05*(x-50),2) - 100*Math.cos(0.02*Math.PI * (x-50)) + Math.pow(0.05*(y-50),2) - 100*Math.cos(0.02*Math.PI*(y-50)) + 200
 }
 class Wolf{
     constructor(vec){
         if (vec!=undefined){
             this.position = vec;
         }else{
-            this.position = new Vector(random(-width/2, width/2), random(-height/2, height/2));
+            // this.position = new Vector(random(-width/2, width/2), random(-height/2, height/2));
+            this.position = math.matrix([random(-width/2, width/2), random(-height/2, height/2)])
         }
         this.velocity = undefined;
         this.fitness = 0;
     }
 
     calcFitness(){
-        this.fitness = func(this.position.x, this.position.y)
+        this.fitness = func(this.position._data[0], this.position._data[1])
     }
 
     draw(){
-        circle(this.position.x, this.position.y, 10)
+        circle(this.position._data[0], this.position._data[1], 10)
         if (this.velocity!=undefined){
-            let head = p5.Vector.sub(this.position, p5.Vector.mult(this.velocity,8))
-            line(this.position.x, this.position.y, head.x, head.y)
+            let head = math.subtract(this.position, this.velocity)
+            line(this.position._data[0], this.position._data[1], head._data[0], head._data[1])
         }
 
     }
@@ -59,11 +49,12 @@ class Wolf{
 }
 
 function init(){
+    // plane = new OXY(height, width, 1);
     a=2
     population = []
-    alpha = new Wolf(new Vector(random(lut), -390))
-    beta  = new Wolf(new Vector(random(lut), -390))
-    gamma = new Wolf(new Vector(random(lut), -390))
+    alpha = new Wolf()
+    beta  = new Wolf()
+    gamma = new Wolf()
     noStroke();
     fill(255,0,127)
     alpha.draw()
@@ -78,7 +69,9 @@ function init(){
     gamma.calcFitness()
 
     for (let i=0; i<pop_size; i++){
-        population.push(new Wolf(new Vector(random(lut), -390)))
+        // population.push(new Wolf(new Vector(random(lut), -390)))
+        population.push(new Wolf())
+
         population[i].calcFitness()
         if (population[i].fitness<alpha.fitness){
             [alpha, population[i]] = [population[i], alpha]
@@ -109,6 +102,8 @@ function setup(){
 }
 
 function draw(){
+    background(50);
+    // plane.drawPlane()
     it++;
     if (it>max_iter){
         // init()
@@ -117,11 +112,7 @@ function draw(){
         noLoop();
     }
     translate(400, 400);
-    background(color('rgba(0,0,0,0.0005)'));
-    circle(0,0,10);
-    // let new_alpha = new Wolf();
-    // let new_beta = new Wolf();
-    // let new_gamma = new Wolf();
+    circle(50,50,20);
     let new_alpha = alpha
     let new_beta = beta
     let new_gamma = gamma
@@ -133,39 +124,25 @@ function draw(){
         let C1 = random(2);
         let C2 = random(2);
         let C3 = random(2);
-        let sa = alpha.position.mult(C1)
-        let sb = beta.position.mult(C2)
-        let sc = gamma.position.mult(C3)
-        let dA = Vector.sub(sa, population[i].position);
-        let dB = Vector.sub(sb, population[i].position);
-        let dC = Vector.sub(sc, population[i].position);
-        dA.x, dA.y = Math.abs(dA.x), Math.abs(dA.y);;
-        dB.x, dB.y = Math.abs(dB.x), Math.abs(dB.y);;
-        dC.x, dC.y = Math.abs(dC.x), Math.abs(dC.y);;
-        dA.mult(A1)
-        dB.mult(A2)
-        dC.mult(A3)
+        let X1 = math.subtract(alpha.position, math.multiply(math.abs(math.subtract(math.multiply(alpha.position,C1), population[i].position)),A1))
+        let X2 = math.subtract(beta.position, math.multiply(math.abs(math.subtract(math.multiply(beta.position,C2), population[i].position)),A2))
+        let X3 = math.subtract(gamma.position, math.multiply(math.abs(math.subtract(math.multiply(gamma.position,C3), population[i].position)),A3))
+        let X = math.divide(math.add(X1, X2, X3),3)
+        population[i].velocity = math.subtract(X, population[i].position)
+        // if (math.distance(population[i].velocity, [0,0])>velMax){
 
-        let X1 = Vector.sub(alpha.position, dA)
-        let X2 = Vector.sub(beta.position, dB)
-        let X3 = Vector.sub(gamma.position, dC)
-        let X = Vector.add(X1, Vector.add(X2, X3)).mult(1/3);
-        let d = Vector.sub(X, population[i].position)
-        if (d.mag()>velMax){
-            d.setMag(velMax)
-        }
-        population[i].velocity = d;
-        population[i].position.add(d)
+        // }
+        population[i].position = X
         population[i].calcFitness();
         if (population[i].fitness < new_alpha.fitness){
-            // [new_alpha, population[i]] = [population[i], new_alpha]
-            new_alpha = population[i];
+            [new_alpha, population[i]] = [population[i], new_alpha]
+            // new_alpha = population[i];
         }else if (population[i].fitness < new_beta.fitness){
-            // [new_beta, population[i]] = [population[i], new_beta]
-            new_beta = population[i];
+            [new_beta, population[i]] = [population[i], new_beta]
+            // new_beta = population[i];
         }else if (population[i].fitness < new_gamma.fitness){
-            // [new_gamma, population[i]] = [population[i], new_gamma]
-            new_gamma = population[i];
+            [new_gamma, population[i]] = [population[i], new_gamma]
+            // new_gamma = population[i];
         }
         
     }
@@ -181,9 +158,9 @@ function draw(){
     gamma.draw()
     fill(255)
     stroke(255)
-    console.log(alpha.position);
-    console.log(beta.position);
-    console.log(gamma.position);
+    console.log(alpha.position._data);
+    // console.log(beta.position);
+    // console.log(gamma.position);
     a = a-da;
     it+=1;
     // console.log(it);
