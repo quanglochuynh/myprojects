@@ -1,15 +1,15 @@
-const pop_size = 40;
-const velMax = 20;
+const pop_size = 100;
+const velMax = 8;
 let w = 1;
 const c1 = 0.1;
 const c2 = 0.1;
-const wDamp = 0.998;
+const wDamp = 0.9995;
 let population = [];
 let gBest = undefined;
 let it = 0;
 
 function func(x,y){
-    return Math.pow(0.05*(x-50),2) - 100*Math.cos(0.02*Math.PI * (x-50)) + Math.pow(0.05*(y-50),2) - 100*Math.cos(0.02*Math.PI*(y-50)) + 200
+    return Math.pow(0.1*(x-50),2) - 100*Math.cos(0.02*Math.PI * (x-50)) + Math.pow(0.1*(y-50),2) - 100*Math.cos(0.02*Math.PI*(y-50)) + 200
 }
 class Particle{
     constructor(vec){
@@ -85,6 +85,7 @@ function draw(){
         init()
         it = 0;
         console.log(gBest.position);
+        console.log(gBest.fitness);
     }
     translate(400, 400)
     background(50);

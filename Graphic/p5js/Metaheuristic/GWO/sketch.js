@@ -86,6 +86,46 @@ function init(){
     console.log(gamma.position);
 }
 
+function gwoIterate(){
+    let new_alpha = alpha
+    let new_beta = beta
+    let new_gamma = gamma
+    let new_pop = population
+    for (let i=0; i<pop_size; i++){
+          
+        let A1 = a * random(-1,1);
+        let A2 = a * random(-1,1);
+        let A3 = a * random(-1,1);
+        let C1 = random(2);
+        let C2 = random(2);
+        let C3 = random(2);
+        let X1 = math.subtract(alpha.position, math.multiply(math.abs(math.subtract(math.multiply(alpha.position,C1), population[i].position)),A1))
+        let X2 = math.subtract(beta.position, math.multiply(math.abs(math.subtract(math.multiply(beta.position,C2), population[i].position)),A2))
+        let X3 = math.subtract(gamma.position, math.multiply(math.abs(math.subtract(math.multiply(gamma.position,C3), population[i].position)),A3))
+        let X = math.divide(math.add(X1, X2, X3),3)
+        new_pop[i].velocity = math.subtract(X, population[i].position)
+        new_pop[i].position = X
+        new_pop[i].calcFitness();
+        if (new_pop[i].fitness < new_alpha.fitness){
+            [new_alpha, new_pop[i]] = [new_pop[i], new_alpha]
+            // new_alpha = population[i];
+        }else if (new_pop[i].fitness < new_beta.fitness){
+            [new_beta, new_pop[i]] = [new_pop[i], new_beta]
+            // new_beta = population[i];
+        }else if (new_pop[i].fitness < new_gamma.fitness){
+            [new_gamma, new_pop[i]] = [new_pop[i], new_gamma]
+            // new_gamma = population[i];
+        }
+        new_pop[i].draw(); 
+    }
+    alpha = new_alpha;
+    beta = new_beta;
+    gamma = new_gamma;
+    a = a-da;
+    it+=1;
+    return new_pop
+}
+
 function setup(){
     createCanvas(800,800);
     frameRate(20)
@@ -113,42 +153,12 @@ function draw(){
     }
     translate(400, 400);
     circle(50,50,20);
-    let new_alpha = alpha
-    let new_beta = beta
-    let new_gamma = gamma
-    for (let i=0; i<pop_size; i++){
-        population[i].draw();   
-        let A1 = a * random(-1,1);
-        let A2 = a * random(-1,1);
-        let A3 = a * random(-1,1);
-        let C1 = random(2);
-        let C2 = random(2);
-        let C3 = random(2);
-        let X1 = math.subtract(alpha.position, math.multiply(math.abs(math.subtract(math.multiply(alpha.position,C1), population[i].position)),A1))
-        let X2 = math.subtract(beta.position, math.multiply(math.abs(math.subtract(math.multiply(beta.position,C2), population[i].position)),A2))
-        let X3 = math.subtract(gamma.position, math.multiply(math.abs(math.subtract(math.multiply(gamma.position,C3), population[i].position)),A3))
-        let X = math.divide(math.add(X1, X2, X3),3)
-        population[i].velocity = math.subtract(X, population[i].position)
-        // if (math.distance(population[i].velocity, [0,0])>velMax){
 
-        // }
-        population[i].position = X
-        population[i].calcFitness();
-        if (population[i].fitness < new_alpha.fitness){
-            [new_alpha, population[i]] = [population[i], new_alpha]
-            // new_alpha = population[i];
-        }else if (population[i].fitness < new_beta.fitness){
-            [new_beta, population[i]] = [population[i], new_beta]
-            // new_beta = population[i];
-        }else if (population[i].fitness < new_gamma.fitness){
-            [new_gamma, population[i]] = [population[i], new_gamma]
-            // new_gamma = population[i];
-        }
-        
-    }
-    alpha = new_alpha;
-    beta = new_beta;
-    gamma = new_gamma;
+    let new_population = gwoIterate();
+
+    
+
+    population = new_population
     noStroke();
     fill(255,0,127)
     alpha.draw()
@@ -159,10 +169,4 @@ function draw(){
     fill(255)
     stroke(255)
     console.log(alpha.position._data);
-    // console.log(beta.position);
-    // console.log(gamma.position);
-    a = a-da;
-    it+=1;
-    // console.log(it);
-    // noLoop()
 }
