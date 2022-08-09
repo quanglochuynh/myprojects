@@ -1,18 +1,17 @@
 const fps = 60;
 const duration = 1; //second(s)
-const distance = 700; //pixel(s)
+const distance = 500; //pixel(s)
 const period = duration*2
 const total_frame = fps*duration;
 const i_a = (2*distance)/(total_frame*total_frame);
-const m_a = -i_a;
-let da = duration/fps
+// const m_a = -i_a;
 let v = 0;
 let x = 50;
 let t = 0
 
-function calc_v(t, dis, dur, fps){
+function calc_v(t, dur, fps){
   tf = fps*dur;
-  return (dis/2)*(Math.PI/tf)*Math.sin(Math.PI*t/tf)
+  return (0.5)*(Math.PI/tf)*Math.sin(Math.PI*t/tf)
 }
 
 
@@ -30,7 +29,7 @@ function draw() {
   background(50);
   circle(x, height/2, 50);
 
-  v = calc_v(t, distance, duration, fps)
+  v = distance * calc_v(t, duration, fps)
   // console.log(v);
 
   x = x+v;
