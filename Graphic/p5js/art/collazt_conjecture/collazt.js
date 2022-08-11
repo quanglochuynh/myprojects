@@ -1,11 +1,11 @@
 let numbOfBranch = 100;
-let branchLength = 15;
+let branchLength = 20;
 let angle = 0;
 let slider;
 let dir = true;
 
 function setup(){
-    createCanvas(800, 800);
+    createCanvas(1200 , 1200);
     background(0);
     strokeWeight(2);
     //frameRate(24);
@@ -52,7 +52,7 @@ function draw(){
     //angle = slider.value();
     for (let i = 2; i <= numbOfBranch + 1; i++){
         resetMatrix();
-        translate(400, 400);
+        translate(600, 600);
         process(i);
     }
 }
