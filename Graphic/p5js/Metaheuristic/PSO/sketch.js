@@ -1,9 +1,9 @@
 const pop_size = 50;
-const velMax = 4;
+const velMax = 80;
 let w = 1;
-const c1 = 1;
-const c2 = 1;
-const wDamp = 0.995;
+const c1 = 1.5;
+const c2 = 1.5;
+const wDamp = 0.9999;
 let population = [];
 let gBest = undefined;
 let it = 0;
@@ -24,8 +24,8 @@ function setMg(x, l){
     return math.matrix([l*cos(a), l*sin(a)]);
 }
 
-function mag(x){
-    return sqrt(sqr(x._data[0]) + sqr(x._data[1]));
+function magnitude(x){
+    return Math.sqrt(Math.pow(x._data[0],2) + Math.pow(x._data[1],2));
 }
 class Particle{
     constructor(vec){
@@ -35,7 +35,7 @@ class Particle{
             this.position = math.matrix([random(-width/2, width/2), random(-height/2, height/2)]);
         }
         this.velocity = math.matrix([random(-width/2, width/2), random(-height/2, height/2)]);
-        // this.velocity = setMg(this.velocity, velMax);
+        this.velocity = setMg(this.velocity, velMax);
         this.pBest = undefined;
         this.fitness = 0;
     }
@@ -46,8 +46,8 @@ class Particle{
 
     draw(){
         circle(this.position._data[0], this.position._data[1], 10)
-        let head = math.subtract(this.position, math.multiply(this.velocity,8))
-        line(this.position._data[0], this.position._data[1], head.x, head.y)
+        // let head = math.subtract(this.position, math.multiply(this.velocity,16))
+        // line(this.position._data[0], this.position._data[1], head.x, head.y)
     }
 
     updatePosition(){
@@ -66,7 +66,7 @@ function init(){
     for (let i=0; i<pop_size; i++){
         population.push(new Particle())
         population[i].calcFitness()
-        population[i].pBest = new Particle();
+        population[i].pBest = population[i];
         if (gBest.fitness > population[i].fitness){
             gBest = population[i]
         }
@@ -75,7 +75,7 @@ function init(){
 
 function setup(){
     createCanvas(800,800);
-    frameRate(30)
+    frameRate(20)
     background(50);
     translate(400, 400)
     fill(255)
@@ -109,15 +109,10 @@ function draw(){
         v2 = math.multiply(math.subtract(gBest.position, population[i].position),random(1));
         population[i].velocity = math.add(v0, math.multiply(v1,c1), math.multiply(v2,c2))
 
-        // population[i].velocity.x = min(population[i].velocity.x, velMax)
-        // population[i].velocity.y = min(population[i].velocity.y, velMax)
-        // console.log(population[i].velocity.mag());
 
-        // if (mag(population[i].velocity)>velMax){
-        //     population[i].velocity = setMg(population[i].velocity, velMax)
-        // }
-
-        // population[i].updatePosition()
+        if (magnitude(population[i].velocity)>velMax){
+            population[i].velocity = setMg(population[i].velocity, velMax)
+        }
         population[i].position = math.add(population[i].position, population[i].velocity);
         
         population[i].calcFitness()
