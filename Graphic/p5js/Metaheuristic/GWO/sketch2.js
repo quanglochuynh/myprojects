@@ -8,7 +8,7 @@ let v = 0;
 let x = 50;
 let t = 0;
 let a = 2;
-let max_iter = 300;
+let max_iter = 200;
 let da = a/max_iter;
 let population = [];
 let it = 0;
@@ -29,10 +29,22 @@ function func(x,y){
     return Math.pow(0.07*(x-px),2) - 100*Math.cos(0.02*Math.PI * (x-px)) + Math.pow(0.07*(y-py),2) - 100*Math.cos(0.02*Math.PI*(y-py)) + 200
 }
 
-function calc_x(t){
-    return -(Math.cos(Math.PI*t/total_frame) + 1)/2
+function randRotate(x){
+    let l = magnitude(x);
+    let a = 0;
+    if (x._data[0] < 0){
+        a = atan(x._data[1]/x._data[0]) + Math.PI;
+    }else{
+        a = atan(x._data[1]/x._data[0]);
+    }
+    a = a + random(-Math.PI, Math.PI);
+    return math.matrix([l*cos(a), l*sin(a)]);
 }
-  
+
+function magnitude(x){
+    return Math.sqrt(Math.pow(x._data[0],2) + Math.pow(x._data[1],2));
+}
+
 class Wolf{
     constructor(vec){
         if (vec!=undefined){
@@ -68,7 +80,6 @@ class Wolf{
 }
 
 function init(){
-    // plane = new OXY(height, width, 1);
     t=0;
     a=2;
     it=0;
@@ -124,9 +135,9 @@ function gwoIterate(){
         let X1 = math.subtract(alpha.position, math.multiply(math.abs(math.subtract(math.multiply(alpha.position,C1), population[i].position)),A1))
         let X2 = math.subtract(beta.position, math.multiply(math.abs(math.subtract(math.multiply(beta.position,C2), population[i].position)),A2))
         let X3 = math.subtract(gamma.position, math.multiply(math.abs(math.subtract(math.multiply(gamma.position,C3), population[i].position)),A3))
-        let X = math.divide(math.add(X1, X2, X3),3)
-        new_pop[i].velocity = math.subtract(X, population[i].position)
-        new_pop[i].position = X;
+        let X = math.divide(math.add(X1, X2, X3),3);
+        new_pop[i].velocity = math.subtract(X, population[i].position);
+        new_pop[i].position = math.add(X, randRotate(math.multiply(new_pop[i].velocity,0.15)));
         new_pop[i].calcFitness();
         if (new_pop[i].fitness < new_alpha.fitness){
             [new_alpha, new_pop[i]] = [new_pop[i], new_alpha]
@@ -182,7 +193,6 @@ function draw(){
 }
 
 function mousePressed(){
-    // console.log("test");
     px = mouseX-width/2;
     py = mouseY-height/2;
     noLoop();

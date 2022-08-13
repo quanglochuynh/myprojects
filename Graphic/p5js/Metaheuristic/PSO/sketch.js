@@ -1,8 +1,10 @@
+const fps = 20;
+const max_it = 300;
 const pop_size = 50;
-const velMax = 80;
+const velMax = 120;
 let w = 1;
-const c1 = 1.5;
-const c2 = 1.5;
+const c1 = 2;
+const c2 = 2;
 const wDamp = 0.9999;
 let population = [];
 let gBest = undefined;
@@ -60,6 +62,7 @@ class Particle{
 }
 
 function init(){
+    it = 0;
     population = []
     gBest = new Particle()
     gBest.calcFitness()
@@ -75,9 +78,9 @@ function init(){
 
 function setup(){
     createCanvas(800,800);
-    frameRate(20)
+    frameRate(fps);
     background(50);
-    translate(400, 400)
+    translate(400, 400);
     fill(255)
     strokeWeight(4)
     stroke(255)
@@ -91,11 +94,8 @@ function setup(){
 
 function draw(){
     it++;
-    if (it>500){
-        init()
-        it = 0;
-        console.log(gBest.position);
-        console.log(gBest.fitness);
+    if (it>max_it){
+        noLoop();
     }
     translate(400, 400)
     background(50);
@@ -130,8 +130,14 @@ function draw(){
     stroke('red')
     gBest.draw()
     fill(255)
+    noStroke();
+    textSize(16);
+    text('Iteration ' + it, -380,380);
+    text('Alpha.x = ' + Math.round(gBest.position._data[0]*100000)/100000, -250, 380);
+    text('Alpha.y = ' + Math.round(gBest.position._data[1]*100000)/100000, -80, 380);
+    text('Expected x = ' + px, -250, 360);
+    text('Expected y = ' + py, -80, 360);
     stroke(255)
-    // noLoop()
 }
 
 function mousePressed(){
