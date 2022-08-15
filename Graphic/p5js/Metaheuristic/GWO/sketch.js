@@ -8,7 +8,7 @@ let v = 0;
 let x = 50;
 let t = 0;
 let a = 2;
-let max_iter = 400;
+let max_iter = 200;
 let da = a/max_iter;
 let population = [];
 let it = 0;
@@ -32,13 +32,29 @@ function func(x,y){
 function calc_x(t){
     return -(Math.cos(Math.PI*t/total_frame) + 1)/2
 }
+
+function randRotate(x){
+    let l = magnitude(x);
+    let a = 0;
+    if (x._data[0] < 0){
+        a = atan(x._data[1]/x._data[0]) + Math.PI;
+    }else{
+        a = atan(x._data[1]/x._data[0]);
+    }
+    a = a + random(-Math.PI, Math.PI);
+    return math.matrix([l*cos(a), l*sin(a)]);
+}
+
+function magnitude(x){
+    return Math.sqrt(Math.pow(x._data[0],2) + Math.pow(x._data[1],2));
+}
   
 class Wolf{
     constructor(vec){
         if (vec!=undefined){
             this.position = vec;
         }else{
-            this.position = new Vector(random(-width/2, width/2), random(-height/2, height/2));
+            // this.position = new Vector(random(-width/2, width/2), random(-height/2, height/2));
             this.position = math.matrix([random(-width/2, width/2), random(-height/2, height/2)])
         }
         this.velocity = undefined;
@@ -68,7 +84,6 @@ class Wolf{
 }
 
 function init(){
-    // plane = new OXY(height, width, 1);
     t=0;
     a=2;
     it=0;
@@ -123,20 +138,15 @@ function gwoIterate(){
         let X3 = math.subtract(gamma.position, math.multiply(math.abs(math.subtract(math.multiply(gamma.position,C3), population[i].position)),A3))
         let X = math.divide(math.add(X1, X2, X3),3)
         new_pop[i].velocity = math.subtract(X, population[i].position)
-        // new_pop[i].updatePosition(new_pop[i].velocity)
-        new_pop[i].position = X;
+        new_pop[i].position = math.add(X, randRotate(math.multiply(new_pop[i].velocity,random(0.25))));
         new_pop[i].calcFitness();
         if (new_pop[i].fitness < new_alpha.fitness){
             [new_alpha, new_pop[i]] = [new_pop[i], new_alpha]
-            // new_alpha = population[i];
         }else if (new_pop[i].fitness < new_beta.fitness){
             [new_beta, new_pop[i]] = [new_pop[i], new_beta]
-            // new_beta = population[i];
         }else if (new_pop[i].fitness < new_gamma.fitness){
             [new_gamma, new_pop[i]] = [new_pop[i], new_gamma]
-            // new_gamma = population[i];
         }
-        // new_pop[i].draw(); 
     }
     alpha = new_alpha;
     beta = new_beta;
@@ -144,7 +154,6 @@ function gwoIterate(){
     a = a-da;
     it+=1;
     if (it>max_iter){
-        // init()
         it = 0;
         console.log(alpha.position);
         noLoop();
@@ -191,16 +200,18 @@ function draw(){
         new_population = gwoIterate();
         t = 0;
     }
+    text('Iteration ' + it, -380,380);
+    text('Alpha.x = ' + Math.round(alpha.position._data[0]*100000)/100000, -250, 380);
+    text('Alpha.y = ' + Math.round(alpha.position._data[1]*100000)/100000, -80, 380);
+    text('Expected x = ' + px, -250, 360);
+    text('Expected y = ' + py, -80, 360);
 }
 
 function mousePressed(){
-    // console.log("test");
     px = mouseX-width/2;
     py = mouseY-height/2;
     noLoop();
     init();
     loop();
-    
     console.log(px + " " + py)
-
 }
