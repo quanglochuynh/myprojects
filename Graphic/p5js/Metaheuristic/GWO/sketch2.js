@@ -50,7 +50,6 @@ class Wolf{
         if (vec!=undefined){
             this.position = vec;
         }else{
-            this.position = new Vector(random(-width/2, width/2), random(-height/2, height/2));
             this.position = math.matrix([random(-width/2, width/2), random(-height/2, height/2)])
         }
         this.velocity = undefined;
@@ -138,7 +137,8 @@ function gwoIterate(){
         let X3 = math.subtract(population[gammaID].position, math.multiply(math.abs(math.subtract(math.multiply(population[gammaID].position,C3), population[i].position)),A3))
         let X = math.divide(math.add(X1, X2, X3),3);
         new_pop[i].velocity = math.subtract(X, population[i].position);
-        new_pop[i].position = math.add(X, randRotate(math.multiply(new_pop[i].velocity,random(0.25))));
+        new_pop[i].position = math.add(X, randRotate(math.multiply(new_pop[i].velocity,random(0.1))));
+        // new_pop[i].position = X;
         new_pop[i].calcFitness();
         if (population[i].fitness<population[alphaID].fitness){
             alphaID = i;
