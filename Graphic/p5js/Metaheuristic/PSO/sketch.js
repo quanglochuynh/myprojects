@@ -110,9 +110,9 @@ function draw(){
         population[i].velocity = math.add(v0, math.multiply(v1,c1), math.multiply(v2,c2))
 
 
-        if (magnitude(population[i].velocity)>velMax){
-            population[i].velocity = setMg(population[i].velocity, velMax)
-        }
+        // if (magnitude(population[i].velocity)>velMax){
+        //     population[i].velocity = setMg(population[i].velocity, velMax)
+        // }
         population[i].position = math.add(population[i].position, population[i].velocity);
         
         population[i].calcFitness()
