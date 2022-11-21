@@ -5,7 +5,7 @@ let noseY = 0;
 let eye1X, eye1Y, eye2X, eye2Y;
 
 function setup() {
-  createCanvas(640, 480);
+  createCanvas(1920, 1080);
   video = createCapture(VIDEO);
   video.hide();
   poseNet = ml5.poseNet(video, modelReady);
@@ -38,6 +38,21 @@ function draw() {
   
   eye(eye1X, eye1Y, 80, 1);
   eye(eye2X, eye2Y, 80, -1);
+
+  let eVec = createVector(eye2X-eye1X, eye2Y-eye1Y);
+  let ang = eVec.heading();
+  // console.log(ang)
+  textAlign(CENTER,CENTER);
+  fill(255)
+  textSize(eVec.mag()/1.5)
+  push();
+  translate(noseX,noseY);
+  rotate(ang+PI); 
+  translate(0, -2.5*eVec.mag());
+
+  // circle(0,0,10);
+  text("GDSC-IU",0,0)
+  pop();
 }
 
 function eye(x, y, size, n) {
