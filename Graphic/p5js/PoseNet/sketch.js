@@ -5,7 +5,7 @@ let noseY = 0;
 let eye1X, eye1Y, eye2X, eye2Y;
 
 function setup() {
-  createCanvas(1920, 1080);
+  createCanvas(640, 480);
   video = createCapture(VIDEO);
   video.hide();
   poseNet = ml5.poseNet(video, modelReady);
