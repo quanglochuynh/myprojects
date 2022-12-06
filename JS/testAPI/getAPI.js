@@ -1,12 +1,14 @@
 let token;
-
 let body = {
     "reqid": "GetDataYardPlan",
     "data": {
-        "moreExp": true
+        "moreExp": "DepotID=32",
+        "sortExp":"ID",
+        "current_index":"1",
+        "next_index":"50",
+        // "moreExp": true
     }
 };
-
 fetch('https://apiedepot.gsotgroup.vn/api/data/util/gettoken',
     {
         method:"POST",
@@ -22,20 +24,15 @@ fetch('https://apiedepot.gsotgroup.vn/api/data/util/gettoken',
     loadDepot(token)
 })
 
-
-
 function loadDepot(tk){
     let body = {
         "token":tk.token,
         "reqtime":tk.reqtime,
         "data":{
-            // "moreExp":'SELECT * FROM Depot'
-            "moreExp":true
+            "moreExp":true,
         },
         "appversion":17
     }
-    console.log(body);
-
     fetch('https://apiedepot.gsotgroup.vn/api/data/process/GetDataYardPlan',
     {
         method:"POST",
