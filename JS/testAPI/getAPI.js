@@ -2,9 +2,8 @@ let token;
 let data = {
     "moreExp": "DepotID=32",
     "sortExp":"ID",
-    "current_index":"100",
-    "next_index":"29",
-    // "moreExp": true
+    "current_index":"2",
+    "next_index":"1000",
 };
 
 let body = {
