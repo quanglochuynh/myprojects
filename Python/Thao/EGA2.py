@@ -1,6 +1,5 @@
 import numpy as np
-import math
-from numpy import float32, random as rd
+from numpy import random as rd
 from math import floor
 import csv
 import os
