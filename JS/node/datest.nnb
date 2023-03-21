@@ -1,0 +1,24 @@
+{
+    "cells": [
+        {
+            "language": "javascript",
+            "source": [
+                "// require('/Users/locqhuynh/.npm-global/lib/node_modules/datejs')\nlet date = new Date().toLocaleString('vi-VN', {formatMatcher:'best fit'})\nconsole.log(date);\nconsole.log(date.toString('dddd, dd, MM, yyyy'));\n"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.stdout",
+                            "value": [
+                                "11:55:22, 21/3/2023",
+                                "11:55:22, 21/3/2023",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
